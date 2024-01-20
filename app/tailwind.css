@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    box-sizing: border-box;
+    font-family: "Zyzol", sans-serif;
+  }
+}
+
+@layer components {
+  .text-shadow {
+    text-shadow: 6px 6px 0px #212121;
+    -webkit-text-stroke-width: 4px;
+    -webkit-text-stroke-color: #212121;
+  }
+
+  .box-shadow {
+    border: 6px solid #212121;
+    box-shadow: 6px 6px 0px 0px #212121;
+  }
+
+  .input {
+    @apply w-[31.625rem] py-4 px-2 rounded-full box-shadow  text-black text-opacity-90;
+  }
+}
+
+@font-face {
+  font-family: "Zyzol Round";
+  src: url("./assets/font/ZyzolRound.woff2") format("woff2"),
+    url("./assets/font/ZyzolRound.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Zyzol";
+  src: url("./assets/font/ZyzolRegular.woff2") format("woff2"),
+    url("./assets/font/ZyzolRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Zyzol Outline";
+  src: url("./assets/font/ZyzolOutline.woff2") format("woff2"),
+    url("./assets/font/ZyzolOutline.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
