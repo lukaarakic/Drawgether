@@ -3,9 +3,9 @@ import LogoOnly from "~/assets/logos/logo_only.svg";
 
 const Navbar = () => {
   return (
-    <nav className="w-[76.56%] bg-blue h-28 rounded-full px-28 text-40 box-shadow flex items-center justify-between">
+    <nav className="w-[76.56%] bg-blue h-[11.3rem] rounded-full px-[11.2rem]  text-40 box-shadow flex items-center justify-between">
       <NavLink
-        unstable_viewTransition
+        data-text="HOME"
         to={"/app/home"}
         className={({ isActive }) =>
           isActive
@@ -17,6 +17,7 @@ const Navbar = () => {
         Home
       </NavLink>
       <NavLink
+        data-text="SEARch"
         to={"/app/search"}
         className={({ isActive }) =>
           isActive
@@ -28,10 +29,15 @@ const Navbar = () => {
         Search
       </NavLink>
       <NavLink to={"/app/home"}>
-        <img src={LogoOnly} alt="Logo of drawgether" className="w-44 h-32" />
+        <img
+          src={LogoOnly}
+          alt="Logo of drawgether"
+          className="w-[17.6rem] h-[12.8rem]"
+        />
       </NavLink>
       <NavLink
-        to={"/app/profile"}
+        data-text="profile"
+        to={"/app/artist/netrunners"}
         className={({ isActive }) =>
           isActive
             ? "activeNavLink uppercase text-border text-white"
@@ -42,6 +48,7 @@ const Navbar = () => {
         Profile
       </NavLink>
       <NavLink
+        data-text="play"
         to={"/app/play"}
         className={({ isActive }) =>
           isActive

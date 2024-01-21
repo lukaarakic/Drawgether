@@ -20,20 +20,24 @@ export default function Index() {
         <img src={PinkLogo} alt="Drawgether logo" />
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full mt-28">
-        <h1 className="mb-4 leading-none tracking-tighter text-white text-128 rotate-2 text-shadow">
+      <div className="flex flex-col items-center justify-center w-full mt-40">
+        <h1
+          className="mb-10 leading-none tracking-tighter text-white text-128 rotate-2 text-border drop-shadow-filter"
+          data-text="UNLEASH YOUR
+        CREATIVE SIDE"
+        >
           UNLEASH YOUR <br />
           CREATIVE SIDE
         </h1>
 
         <div className="px-4 mb-24 -rotate-2 bg-pink box-shadow">
-          <p className="leading-tight text-white font-zyzolOutline text-80">
+          <p className="leading-tight text-white font-zyzolOutline text-90">
             with your friends!
           </p>
         </div>
 
         <Link
-          className="flex items-center justify-center uppercase transition-transform rounded-full w-36 h-36 bg-pink box-shadow hover:scale-105 active:scale-90"
+          className="flex items-center justify-center uppercase transition-transform rounded-full w-[14.5rem] h-[14.5rem] bg-pink box-shadow hover:scale-105 active:scale-90"
           to={`/auth/login`}
           prefetch="intent"
         >
@@ -45,12 +49,12 @@ export default function Index() {
         <img
           src={LeftCloud}
           alt="Left corner cloud"
-          className="absolute bottom-0 left-0 pointer-events-none"
+          className="absolute bottom-0 left-0 pointer-events-none w-1/3"
         />
         <img
           src={RightCloud}
           alt="Right corner cloud"
-          className="absolute bottom-0 right-0 pointer-events-none"
+          className="absolute bottom-0 right-0 pointer-events-none w-1/3"
         />
       </div>
     </main>

@@ -25,10 +25,10 @@ const SignUpPage = () => {
     <div>
       <Form
         method="POST"
-        className="flex flex-col items-center gap-4 mb-8 text-20"
+        className="flex flex-col items-center gap-4 mb-12 text-20"
       >
         <div className="relative">
-          <div className="w-20 h-20 border-only bg-white rounded-full absolute -top-1 left-1 z-10 flex items-center justify-center">
+          <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-1 left-1 z-10 flex items-center justify-center">
             {debouncedUsername ? (
               <img
                 src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${debouncedUsername}`}
@@ -43,7 +43,7 @@ const SignUpPage = () => {
             id="username"
             name="username"
             placeholder="Username"
-            className="input pl-24 rotate-[1.4deg]"
+            className="input pl-40 rotate-[1.4deg]"
             defaultValue={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -60,14 +60,14 @@ const SignUpPage = () => {
           name="password"
           id="password"
           placeholder="********"
-          className="input rotate-[1.7deg]"
+          className="input rotate-[1.7deg] mb-4"
         />
-        <BoxButton degree={1} type="submit">
-          Register
+        <BoxButton degree={1} type="submit" className="px-24">
+          <p className="text-60">Register</p>
         </BoxButton>
       </Form>
 
-      <div className="text-center text-white text-25">
+      <div className="text-center text-white text-25 drop-shadow-filter-sm">
         <p>
           Already registered?{" "}
           <Link to={"/auth/login"} className="underline text-pink">

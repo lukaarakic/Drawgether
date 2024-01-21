@@ -22,7 +22,10 @@ export async function loader() {
 export default function Index() {
   return (
     <main className="h-screen bg-blue">
-      <Link to={"/"} className="flex items-center justify-center mb-20 pt-11">
+      <Link
+        to={"/"}
+        className="flex items-center justify-center mb-36 pt-[4.5rem]"
+      >
         <img src={FullPinkLogo} alt="Drawgether logo" />
       </Link>
 

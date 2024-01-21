@@ -7,14 +7,16 @@ interface BoxLabelProps {
 
 const BoxLabel: FC<BoxLabelProps> = ({ children }) => {
   return (
-    <p
-      className="bg-pink box-shadow text-shadow text-white text-36 px-4 text-nowrap whitespace-nowrap"
+    <div
+      className="bg-black p-2 drop-shadow-filter"
       style={{
         rotate: `${generateRandomNumber()}deg`,
       }}
     >
-      {children}
-    </p>
+      <div className="bg-pink text-white px-2 flex items-center justify-start">
+        {children}
+      </div>
+    </div>
   );
 };
 

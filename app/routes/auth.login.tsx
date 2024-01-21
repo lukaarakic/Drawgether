@@ -27,10 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function Index() {
   return (
     <div className="flex flex-col">
-      <Form
-        method="POST"
-        className="flex flex-col items-center gap-4 mb-8 text-20"
-      >
+      <Form method="POST" className="flex flex-col items-center gap-4 mb-8">
         <input
           type="email"
           name="email"
@@ -43,15 +40,15 @@ export default function Index() {
           name="password"
           id="password"
           placeholder="********"
-          className="input -rotate-[1.18deg]"
+          className="input -rotate-[1.18deg] mb-4"
         />
 
-        <BoxButton degree={1.35} type="submit">
-          Log in
+        <BoxButton degree={1.35} type="submit" className="px-32">
+          <p className="text-60">Log in</p>
         </BoxButton>
       </Form>
 
-      <div className="text-center text-white text-25">
+      <div className="text-center text-white text-25 drop-shadow-filter-sm">
         <p>
           Don’t have an account?{" "}
           <Link
