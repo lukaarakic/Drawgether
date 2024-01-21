@@ -12,8 +12,14 @@
 @layer components {
   .text-shadow {
     text-shadow: 6px 6px 0px #212121;
-    -webkit-text-stroke-width: 4px;
+
+    -webkit-text-stroke-width: 3px;
     -webkit-text-stroke-color: #212121;
+  }
+
+  .text-border {
+    text-shadow: -2px -2px 0 #212121, 2px -2px 0 #212121, -2px 2px 0 #212121,
+      2px 2px 0 #212121;
   }
 
   .box-shadow {
@@ -21,8 +27,32 @@
     box-shadow: 6px 6px 0px 0px #212121;
   }
 
+  .border-only {
+    border: 6px solid #212121;
+  }
+
+  .drop-shadow {
+    filter: drop-shadow(4px 4px #212121);
+  }
+
+  .activeNavLink {
+    position: relative;
+    z-index: 20;
+  }
+
+  .activeNavLink::before {
+    content: "";
+    top: 50%;
+    left: 50%;
+    border: 6px solid #212121;
+
+    transform: translate(-50%, -50%);
+    @apply absolute inline-block bg-pink
+      w-[140%] h-[130%] -z-10;
+  }
+
   .input {
-    @apply w-[31.625rem] py-4 px-2 rounded-full box-shadow  text-black text-opacity-90;
+    @apply w-[31.625rem] py-4 px-4 rounded-full box-shadow text-25 text-black text-opacity-90 h-20;
   }
 }
 

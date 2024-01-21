@@ -1,5 +1,11 @@
+import Art from "~/components/Art";
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Art />
+    </div>
+  );
 };
 
 export default Home;
