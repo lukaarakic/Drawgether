@@ -4,11 +4,13 @@ import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthenticityTokenInput } from "remix-utils/csrf/react";
 import { HoneypotInputs } from "remix-utils/honeypot/react";
 import { useDebounce } from "use-debounce";
 import { z } from "zod";
 import BoxButton from "~/components/BoxButton";
 import ErrorList from "~/components/ErrorList";
+import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 
 const RegisterSchema = z.object({
@@ -19,6 +21,8 @@ const RegisterSchema = z.object({
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  await checkCSRF(formData, request);
 
   const submission = parse(formData, {
     schema: RegisterSchema,
@@ -56,6 +60,7 @@ const SignUpPage = () => {
         {...form.props}
       >
         <HoneypotInputs />
+        <AuthenticityTokenInput />
 
         <div className="relative text-center">
           <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-1 left-1 z-10 flex items-center justify-center">

@@ -7,10 +7,12 @@ import {
   redirect,
 } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
+import { AuthenticityTokenInput } from "remix-utils/csrf/react";
 import { HoneypotInputs } from "remix-utils/honeypot/react";
 import { z } from "zod";
 import BoxButton from "~/components/BoxButton";
 import ErrorList from "~/components/ErrorList";
+import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 
 export const meta: MetaFunction = () => {
@@ -27,6 +29,8 @@ const LoginSchema = z.object({
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  await checkCSRF(formData, request);
 
   const submission = parse(formData, {
     schema: LoginSchema,
@@ -61,6 +65,7 @@ export default function Index() {
         {...form.props}
       >
         <HoneypotInputs />
+        <AuthenticityTokenInput />
 
         <input
           placeholder="lets@drawgether.com"
@@ -72,7 +77,7 @@ export default function Index() {
         <input
           type="password"
           placeholder="********"
-          className="input -rotate-[1.18deg] mb-4 transition-all"
+          className="input -rotate-[1.18deg] mb-4"
           {...conform.input(fields.password)}
         />
         <ErrorList
