@@ -10,7 +10,7 @@
   }
   @media only screen and (max-width: 160em) {
     html {
-      font-size: calc(100vw / 2560 * 10);
+      font-size: calc(100vw / 2560 * 12);
     }
   }
   @media only screen and (max-width: 120em) {
