@@ -45,6 +45,11 @@
     -webkit-text-stroke: 0px;
   }
 
+  .text-border-sm {
+    -webkit-text-stroke: 4px #212121;
+    filter: drop-shadow(2px 2px #212121);
+  }
+
   .box-shadow {
     border: 0.5rem solid #212121;
     filter: drop-shadow(0.6rem 0.6rem #212121);
