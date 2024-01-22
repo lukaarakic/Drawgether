@@ -37,7 +37,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         data-text="profile"
-        to={"/app/artist/netrunners"}
+        to={"/app/artist/netrunner"}
         className={({ isActive }) =>
           isActive
             ? "activeNavLink uppercase text-border text-white"

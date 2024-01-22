@@ -15,6 +15,7 @@ import { honeypot } from "./utils/honeypot.server";
 import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { csrf } from "./utils/csrf.server";
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
+import { GeneralErrorBoundary } from "./components/ErrorBoundry";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -38,6 +39,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function App() {
+  return <Document></Document>;
+}
+
+export function Document({ children }: { children?: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -47,6 +52,7 @@ export function App() {
         <Links />
       </head>
       <body>
+        {children}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
@@ -65,5 +71,15 @@ export default function AppWithProvider() {
         <App />
       </HoneypotProvider>
     </AuthenticityTokenProvider>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <Document>
+      <div className="h-full">
+        <GeneralErrorBoundary />
+      </div>
+    </Document>
   );
 }

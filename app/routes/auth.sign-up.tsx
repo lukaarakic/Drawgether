@@ -10,6 +10,7 @@ import { useDebounce } from "use-debounce";
 import { z } from "zod";
 import BoxButton from "~/components/BoxButton";
 import ErrorList from "~/components/ErrorList";
+import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
 import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 
@@ -140,3 +141,7 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />;
+}

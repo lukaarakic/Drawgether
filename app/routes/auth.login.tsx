@@ -12,6 +12,7 @@ import { HoneypotInputs } from "remix-utils/honeypot/react";
 import { z } from "zod";
 import BoxButton from "~/components/BoxButton";
 import ErrorList from "~/components/ErrorList";
+import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
 import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 
@@ -122,4 +123,8 @@ export default function Index() {
       </div>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />;
 }

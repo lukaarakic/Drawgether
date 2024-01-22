@@ -1,21 +1,19 @@
-import { Link } from "react-router-dom";
 import { generateRandomNumber } from "~/utils/getRandomDeg";
 
-const SmallArt = () => {
+const SmallArt = ({ art }: { art: string }) => {
   return (
-    <Link
-      to="#"
-      className="w-[23rem] h-[23rem] box-shadow bg-black bg-opacity-30 overflow-hidden"
+    <div
+      className="w-[23rem] h-[23rem] box-shadow bg-black bg-opacity-30 overflow-hidden cursor-pointer"
       style={{
         rotate: `${generateRandomNumber()}deg`,
       }}
     >
       <img
-        src="https://images.unsplash.com/photo-1682687220247-9f786e34d472?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8"
+        src={art}
         alt=""
-        className="object-cover object-center"
+        className="object-center object-fill w-full h-full"
       />
-    </Link>
+    </div>
   );
 };
 
