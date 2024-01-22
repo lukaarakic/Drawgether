@@ -52,7 +52,7 @@ async function seed() {
   await prisma.artist.create({
     data: {
       email: "netrunners.work@gmail.com",
-      username: "netrunner",
+      username: "netrunners",
       avatar: "https://i.imgur.com/dhFOxNO.png",
       arts: {
         create: {

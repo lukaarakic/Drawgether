@@ -60,7 +60,18 @@ const Profile = () => {
         </BoxLabel>
       </div>
 
-      {data.user.arts ? <ProfileArtContainer arts={data.user.arts} /> : null}
+      {data.user.arts.length > 0 ? (
+        <ProfileArtContainer arts={data.user.arts} />
+      ) : (
+        <BoxLabel>
+          <p
+            className="text-32 text-white text-border text-border-sm text-center w-full"
+            data-text="No arts available"
+          >
+            No arts available
+          </p>
+        </BoxLabel>
+      )}
     </div>
   );
 };
