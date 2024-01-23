@@ -3,7 +3,7 @@ import LogoOnly from "~/assets/logos/logo_only.svg";
 
 const Navbar = () => {
   return (
-    <nav className="w-[76.56%] bg-blue h-[11.3rem] rounded-full px-[11.2rem]  text-40 box-shadow flex items-center justify-between">
+    <nav className="fixed top-11 left-1/2 -translate-x-1/2 w-[147rem] bg-blue h-[11.3rem] rounded-full px-[11.2rem] text-40 box-shadow flex items-center justify-between">
       <NavLink
         data-text="HOME"
         to={"/app/home"}

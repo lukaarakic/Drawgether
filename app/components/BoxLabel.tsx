@@ -8,7 +8,7 @@ interface BoxLabelProps {
 const BoxLabel: FC<BoxLabelProps> = ({ children }) => {
   return (
     <div
-      className="bg-black p-2 drop-shadow-filter"
+      className="bg-black p-2 drop-shadow-filter-lg"
       style={{
         rotate: `${generateRandomNumber()}deg`,
       }}

@@ -35,7 +35,7 @@ export function GeneralErrorBoundary({
 
   return (
     <div
-      className={`flex items-center justify-center h-screen w-full p-20 text-60 text-pink drop-shadow-filter ${className}`}
+      className={`flex items-center justify-center h-full w-full p-20 text-60 text-pink drop-shadow-filter ${className}`}
     >
       {isRouteErrorResponse(error)
         ? (statusHandlers?.[error.status] ?? defaultStatusHandler)({

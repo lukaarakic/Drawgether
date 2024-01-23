@@ -5,7 +5,7 @@ import SearchIcon from "~/assets/misc/searchIcon.svg";
 
 const SearchPage = () => {
   return (
-    <>
+    <main className="mt-60">
       <Form className="flex gap-6 items-center">
         <input
           type="text"
@@ -25,7 +25,7 @@ const SearchPage = () => {
           <img src={SearchIcon} alt="" className="w-[5.5rem] h-[5.5rem]" />
         </BoxButton>
       </Form>
-    </>
+    </main>
   );
 };
 

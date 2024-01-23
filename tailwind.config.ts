@@ -27,6 +27,9 @@ export default {
         20: "2rem",
         18: "1.8rem",
       },
+      gridTemplateColumns: {
+        "auto-fit": "repeat(auto-fit, minmax(20rem, 25rem))",
+      },
     },
   },
   plugins: [],

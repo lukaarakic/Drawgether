@@ -4,7 +4,7 @@ import Navbar from "~/components/Navbar";
 const AppIndex = () => {
   return (
     <>
-      <header className="mt-12 flex items-center justify-center">
+      <header>
         <Navbar />
       </header>
       <main className="mt-20 flex items-center justify-center">

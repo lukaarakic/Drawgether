@@ -64,7 +64,7 @@ const SignUpPage = () => {
         <AuthenticityTokenInput />
 
         <div className="relative text-center">
-          <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-1 left-1 z-10 flex items-center justify-center">
+          <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-2 left-0 z-10 flex items-center justify-center">
             {debouncedUsername ? (
               <img
                 src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${debouncedUsername}`}

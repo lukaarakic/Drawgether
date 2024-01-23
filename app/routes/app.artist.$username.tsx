@@ -38,8 +38,8 @@ const Profile = () => {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col">
-      <div className="mt-44 flex items-center gap-12 mb-32">
+    <div className="w-[80rem] mx-auto mt-24">
+      <div className="mt-44 flex items-center justify-center gap-12 mb-32">
         <ArtistCircle
           size={16.9}
           avatar={{
@@ -48,9 +48,9 @@ const Profile = () => {
           }}
         />
         <BoxLabel>
-          <div className="flex items-center justify-between gap-20 py-4 px-8">
+          <div className="flex items-center justify-between gap-20 px-4 w-[41.3rem] h-40">
             <p
-              className="text-border text-25"
+              className="text-border text-32"
               data-text={`@${data.user?.username}`}
             >
               @{data.user?.username}

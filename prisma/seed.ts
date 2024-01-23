@@ -16,8 +16,9 @@ async function seed() {
   await prisma.art.deleteMany();
   console.timeEnd("🧹 Cleaned up the database...");
 
-  const totalArtists = 5;
+  const totalArtists = 7;
 
+  console.log("👤 Creating artists...");
   console.time(`👤 Created ${totalArtists} users...`);
   for (let index = 0; index < totalArtists; index++) {
     await prisma.artist
@@ -27,11 +28,11 @@ async function seed() {
             return faker.internet.email();
           }),
           username: uniqueUsernameEnforce.enforce(() => {
-            return faker.internet.userName().slice(0, 29);
+            return faker.internet.userName().slice(0, 15);
           }),
           arts: {
             create: Array.from({
-              length: faker.number.int({ min: 0, max: 3 }),
+              length: faker.number.int({ min: 0, max: 6 }),
             }).map(() => {
               return {
                 art: faker.internet.avatar(),
@@ -48,7 +49,9 @@ async function seed() {
   }
   console.timeEnd(`👤 Created ${totalArtists} users...`);
 
-  console.time(`👺 Creating admin user "netrunner"`);
+  console.log('👺 Creating admin user "netrunners"');
+  console.time(`👺 Created admin user "netrunners"`);
+
   await prisma.artist.create({
     data: {
       email: "netrunners.work@gmail.com",
@@ -62,7 +65,8 @@ async function seed() {
       },
     },
   });
-  console.timeEnd(`👺 Created admin user "netrunner"`);
+
+  console.timeEnd(`👺 Created admin user "netrunners"`);
 
   console.timeEnd("🌱 Database has been seeded");
 }
