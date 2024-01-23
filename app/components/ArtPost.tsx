@@ -1,27 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import BoxLabel from "./BoxLabel";
 import LikeIcon from "~/assets/misc/like.svg";
 import CommentIcon from "~/assets/misc/comment.svg";
 import { Link } from "@remix-run/react";
 import { generateRandomNumber } from "~/utils/getRandomDeg";
+import { FC } from "react";
 import ArtistCircle from "./ArtistCircle";
 
-const Art = () => {
+interface ArtPostProps {
+  theme: string;
+  artUrl: string;
+  likesCount: number;
+  artists: any;
+  comments: any;
+  likes: any;
+}
+
+const ArtPost: FC<ArtPostProps> = ({
+  theme,
+  artUrl,
+  artists,
+  // Ovo skloni kad dodas like i comment
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  likesCount,
+  likes,
+  comments,
+}) => {
   return (
-    <article className="w-[57.2rem] h-[57.2rem]">
+    <article className="w-[57.2rem] mb-80">
       <BoxLabel>
-        <p
-          data-text="A blue man in a purple jacket."
-          className="text-border p-2 text-32"
-        >
-          A blue man in a purple jacket.
+        <p data-text={theme} className="text-border p-2 text-32">
+          {theme}
         </p>
       </BoxLabel>
 
       <div className="relative mb-24">
         <img
-          src="https://e1.pxfuel.com/desktop-wallpaper/107/890/desktop-wallpaper-drawing-for-kids-drawing-for-kids-png-cliparts-on-clipart-library.jpg"
+          src={artUrl}
           alt=""
-          className="box-shadow mt-5 object-cover"
+          className="box-shadow mt-5 object-cover w-[57.2rem] h-[57.2rem]"
         />
 
         <div className="absolute flex -bottom-16 -left-5">
@@ -30,9 +48,19 @@ const Art = () => {
         </div>
 
         <div className="absolute flex items-baseline -bottom-16 -right-8">
-          <ArtistCircle avatarSeed="netrunners" size={6} />
-          <ArtistCircle avatarSeed="luka" size={6} className="-ml-8" />
-          <ArtistCircle avatarSeed="nikola" size={6} className="-ml-8" />
+          {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            artists.map((artist: any) => (
+              <ArtistCircle
+                size={6.8}
+                avatar={{
+                  avatarUrl: artist.avatar,
+                  seed: artist.username,
+                }}
+                key={artist.id}
+              />
+            ))
+          }
         </div>
       </div>
 
@@ -82,4 +110,4 @@ const Art = () => {
   );
 };
 
-export default Art;
+export default ArtPost;
