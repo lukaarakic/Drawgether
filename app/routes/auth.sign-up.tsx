@@ -19,7 +19,7 @@ import {
   UsernameSchema,
 } from "~/utils/user-validation";
 import { prisma } from "~/utils/db.server";
-import { signup } from "~/utils/auth.server";
+import { requireAnonymous, signup } from "~/utils/auth.server";
 
 const RegisterSchema = z.object({
   username: UsernameSchema,
@@ -28,6 +28,7 @@ const RegisterSchema = z.object({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
+  await requireAnonymous(request);
   const formData = await request.formData();
 
   await checkCSRF(formData, request);

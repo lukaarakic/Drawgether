@@ -1,10 +1,11 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 
 // Assets
 import FullPinkLogo from "~/assets/logos/full_pink_logo.svg";
 import LeftCloud from "~/assets/clouds/left_white.svg";
 import RightCloud from "~/assets/clouds/right_white.svg";
-import { Link, Outlet, json, redirect } from "@remix-run/react";
+import { Link, Outlet, json } from "@remix-run/react";
+import { requireAnonymous } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,9 +14,8 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
-  redirect("/auth/login", 301);
-
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireAnonymous(request);
   return json({});
 }
 

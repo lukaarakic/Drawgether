@@ -16,7 +16,7 @@ export function ErrorBoundary() {
 
   return (
     <GeneralErrorBoundary
-      className="bg-blue"
+      className="bg-blue h-screen"
       statusHandlers={{
         404: () => (
           <div className="h-full flex flex-col items-center justify-center ">
@@ -35,7 +35,7 @@ export function ErrorBoundary() {
               </pre>
             </div>
             <Link
-              to="/"
+              to="/app/home"
               className="text-border underline"
               data-text="Back to home"
             >

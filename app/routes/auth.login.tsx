@@ -17,7 +17,11 @@ import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 import { EmailSchema, PasswordSchema } from "~/utils/user-validation";
 import { sessionStorage } from "~/utils/session.server";
-import { getSessionExpirationDate, login } from "~/utils/auth.server";
+import {
+  getSessionExpirationDate,
+  login,
+  requireAnonymous,
+} from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -33,6 +37,8 @@ const LoginSchema = z.object({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
+  await requireAnonymous(request);
+
   const formData = await request.formData();
 
   await checkCSRF(formData, request);

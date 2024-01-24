@@ -1,10 +1,43 @@
 import { Artist, Password } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db.server";
+import { sessionStorage } from "./session.server";
+import { redirect } from "@remix-run/node";
+import { safeRedirect } from "remix-utils/safe-redirect";
+import { combineResponseInits } from "./misc";
 
 const SESSION_EXPIRATION_TIME = 30 * 24 * 60 * 60 * 1000;
 export function getSessionExpirationDate() {
   return new Date(Date.now() + SESSION_EXPIRATION_TIME);
+}
+
+export async function getArtistId(request: Request) {
+  const cookieSession = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+
+  const artistId = cookieSession.get("artistId");
+  if (!artistId) return null;
+
+  const artist = await prisma.artist.findUnique({
+    select: { id: true },
+    where: { id: artistId },
+  });
+  if (!artist) return logout({ request: request });
+
+  return artist.id;
+}
+
+export async function requireAnonymous(request: Request) {
+  const artistId = await getArtistId(request);
+  if (artistId) throw redirect("/app/home");
+}
+
+export async function requireArtistId(request: Request) {
+  const artistId = await getArtistId(request);
+  if (!artistId) throw redirect("/auth/login");
+
+  return artistId;
 }
 
 export async function login({
@@ -14,7 +47,7 @@ export async function login({
   email: Artist["email"];
   password: string;
 }) {
-  return verifyUserPassword({ email }, password);
+  return verifyArtistPassword({ email }, password);
 }
 
 export async function signup({
@@ -44,12 +77,35 @@ export async function signup({
   return artist;
 }
 
+export async function logout(
+  {
+    request,
+    redirectTo = "/",
+  }: {
+    request: Request;
+    redirectTo?: string;
+  },
+  responseInit?: ResponseInit
+) {
+  const cookieSession = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  throw redirect(
+    safeRedirect(redirectTo),
+    combineResponseInits(responseInit, {
+      headers: {
+        "set-cookie": await sessionStorage.destroySession(cookieSession),
+      },
+    })
+  );
+}
+
 export async function getPasswordHash(password: string) {
   const hash = await bcrypt.hash(password, 10);
   return hash;
 }
 
-export async function verifyUserPassword(
+export async function verifyArtistPassword(
   where: Pick<Artist, "email"> | Pick<Artist, "id">,
   password: Password["hash"]
 ) {

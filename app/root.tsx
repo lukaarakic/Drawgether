@@ -40,10 +40,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
         select: {
           id: true,
           username: true,
-          email: true,
-          avatar: true,
-          arts: true,
-          email_verified: true,
         },
       })
     : null;
