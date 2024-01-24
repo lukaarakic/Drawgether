@@ -2,6 +2,11 @@ import { Artist, Password } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db.server";
 
+const SESSION_EXPIRATION_TIME = 30 * 24 * 60 * 60 * 1000;
+export function getSessionExpirationDate() {
+  return new Date(Date.now() + SESSION_EXPIRATION_TIME);
+}
+
 export async function login({
   email,
   password,

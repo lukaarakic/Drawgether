@@ -1,41 +1,21 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import ArtistCircle from "~/components/ArtistCircle";
 import BoxLabel from "~/components/BoxLabel";
 import SettingsIcon from "~/assets/misc/settings.svg";
 import ProfileArtContainer from "~/components/ProfileArtContainer";
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
-import { prisma } from "~/utils/db.server";
-import { invariantResponse } from "~/utils/misc";
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  const user = await prisma.artist.findUnique({
-    where: {
-      username: params.username,
-    },
-    select: {
-      avatar: true,
-      username: true,
-      arts: {
-        select: {
-          id: true,
-          art: true,
-        },
-      },
-    },
-  });
-
-  if (!user) {
-    invariantResponse(user, `User does not exist`, { status: 404 });
-  }
-
-  return json({
-    user,
-  });
-}
+import { useUser } from "~/utils/artist";
+import Modal from "~/components/Modal";
+import { useState } from "react";
+import BoxButton from "~/components/BoxButton";
+import { Form } from "@remix-run/react";
+import { AuthenticityTokenInput } from "remix-utils/csrf/react";
 
 const Profile = () => {
-  const data = useLoaderData<typeof loader>();
+  const artist = useUser();
+
+  const [isModalOpen, setIsOpen] = useState(false);
+
+  const maskedEmail = maskEmail(artist.email);
 
   return (
     <div className="w-[80rem] mx-auto mt-24">
@@ -43,25 +23,27 @@ const Profile = () => {
         <ArtistCircle
           size={16.9}
           avatar={{
-            avatarUrl: data.user?.avatar,
-            seed: data?.user?.username,
+            avatarUrl: artist.avatar,
+            seed: artist.username,
           }}
         />
         <BoxLabel>
           <div className="flex items-center justify-between gap-20 px-4 w-[41.3rem] h-40">
             <p
               className="text-border text-32"
-              data-text={`@${data.user?.username}`}
+              data-text={`@${artist.username}`}
             >
-              @{data.user?.username}
+              @{artist.username}
             </p>
-            <img src={SettingsIcon} alt="" className="w-20" />
+            <button onClick={() => setIsOpen(true)}>
+              <img src={SettingsIcon} alt="" className="w-20" />
+            </button>
           </div>
         </BoxLabel>
       </div>
 
-      {data.user.arts.length > 0 ? (
-        <ProfileArtContainer arts={data.user.arts} />
+      {artist.arts.length > 0 ? (
+        <ProfileArtContainer arts={artist.arts} />
       ) : (
         <BoxLabel>
           <p
@@ -72,6 +54,47 @@ const Profile = () => {
           </p>
         </BoxLabel>
       )}
+
+      <Modal
+        setIsOpen={setIsOpen}
+        isModalOpen={isModalOpen}
+        className="flex flex-col items-center mt-12"
+      >
+        <p
+          className="text-blue text-32 text-border text-center mb-12"
+          data-text="Settings"
+        >
+          Settings
+        </p>
+
+        <ArtistCircle
+          size={16.9}
+          avatar={{ avatarUrl: artist.avatar, seed: artist.username }}
+        />
+
+        <p className="text-29 text-black mt-8">Username: 🎨{artist.username}</p>
+        <p className="text-29 text-black">Email: {maskedEmail}</p>
+
+        <p
+          className={`text-29 capitalize mb-10 mt-8 ${
+            artist.email_verified ? "text-blue" : "text-pink"
+          }`}
+        >
+          {artist.email_verified ? "Email Verified" : "email not verified!"}
+        </p>
+
+        <Form method="POST" action="/auth/logout">
+          <AuthenticityTokenInput />
+          <BoxButton>
+            <p
+              className="text-38 px-12 py-2 font-zyzol text-border uppercase"
+              data-text="Log out"
+            >
+              Log out
+            </p>
+          </BoxButton>
+        </Form>
+      </Modal>
     </div>
   );
 };
@@ -88,6 +111,13 @@ export function ErrorBoundary() {
       }}
     />
   );
+}
+
+function maskEmail(email: string): string {
+  const [username, domain] = email.split("@");
+  const maskedUsername =
+    username.charAt(0) + "*".repeat(3) + username.charAt(username.length - 1);
+  return maskedUsername + "@" + domain;
 }
 
 export default Profile;

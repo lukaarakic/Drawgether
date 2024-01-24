@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
   json,
+  redirect,
   useLoaderData,
 } from "@remix-run/react";
 import tailwindStylesheet from "~/tailwind.css";
@@ -40,9 +41,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
           id: true,
           username: true,
           email: true,
+          avatar: true,
+          arts: true,
+          email_verified: true,
         },
       })
     : null;
+
+  if (artistId && !artist) {
+    throw redirect("/", {
+      headers: {
+        "set-cookie": await sessionStorage.destroySession(cookieSession),
+      },
+    });
+  }
 
   return json(
     { honeyProps, csrfToken, artist },

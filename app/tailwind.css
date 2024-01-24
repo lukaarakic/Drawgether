@@ -31,6 +31,8 @@
 }
 
 @layer components {
+  /* Shadows */
+
   .text-border {
     display: inline-block;
     position: relative;
@@ -67,6 +69,8 @@
     border: 0.6rem solid #212121;
   }
 
+  /* Navigation */
+
   .activeNavLink {
     position: relative;
     z-index: 20;
@@ -82,8 +86,32 @@
       w-[140%] h-[130%] -z-10 border-only;
   }
 
+  /* Input */
   .input {
     @apply w-[55rem] h-36 py-12 px-14 inline-block rounded-full box-shadow text-32 text-black text-opacity-90;
+  }
+
+  /* Check box */
+  .checkbox {
+    position: relative;
+    display: block;
+    width: 25rem;
+    height: 60px;
+  }
+  .check {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    opacity: 0;
+  }
+  .path1 {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    transition: 0.5s all;
+  }
+
+  .check:checked + label svg g path {
+    stroke-dashoffset: 0;
   }
 }
 

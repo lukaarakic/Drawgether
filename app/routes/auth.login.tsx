@@ -17,7 +17,7 @@ import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
 import { EmailSchema, PasswordSchema } from "~/utils/user-validation";
 import { sessionStorage } from "~/utils/session.server";
-import { login } from "~/utils/auth.server";
+import { getSessionExpirationDate, login } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,6 +29,7 @@ export const meta: MetaFunction = () => {
 const LoginSchema = z.object({
   email: EmailSchema,
   password: PasswordSchema,
+  remember: z.boolean().optional(),
 });
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -67,16 +68,18 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ status: "error", submission } as const, { status: 400 });
   }
 
-  const { artist } = submission.value;
+  const { artist, remember } = submission.value;
 
   const cookieSession = await sessionStorage.getSession(
     request.headers.get("cookie")
   );
   cookieSession.set("artistId", artist.id);
 
-  throw redirect("/app/home", {
+  return redirect("/app/home", {
     headers: {
-      "set-cookie": await sessionStorage.commitSession(cookieSession),
+      "set-cookie": await sessionStorage.commitSession(cookieSession, {
+        expires: remember ? getSessionExpirationDate() : undefined,
+      }),
     },
   });
 }
@@ -120,6 +123,47 @@ export default function Index() {
           id={fields.password.errorId}
           errors={fields.password.errors}
         />
+
+        <div>
+          <div className="checkbox">
+            <input type="checkbox" className="check" id="check2" />
+            <label
+              htmlFor="check2"
+              className="flex items-center justify-center"
+            >
+              <svg
+                width="50"
+                height="50"
+                viewBox="0 0 100 100"
+                className="drop-shadow-filter"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r={28}
+                  strokeWidth="4"
+                  stroke="#212121"
+                  fill="#ffffff"
+                />
+                <g transform="translate(0,-952.36222)">
+                  <path
+                    d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4 "
+                    stroke="#de6b9b"
+                    strokeWidth="5"
+                    fill="none"
+                    className="path1"
+                  />
+                </g>
+              </svg>
+              <span
+                className="text-20 text-border text-border-sm text-white"
+                data-text="Remember me?"
+              >
+                Remember me?
+              </span>
+            </label>
+          </div>
+        </div>
 
         <ErrorList id={form.errorId} errors={form.errors} />
         <BoxButton degree={1.35} type="submit" className="px-32">

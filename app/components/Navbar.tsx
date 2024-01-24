@@ -1,10 +1,10 @@
 import { NavLink } from "@remix-run/react";
 import LogoOnly from "~/assets/logos/logo_only.svg";
 
-const Navbar = () => {
+const Navbar = ({ username }: { username: string }) => {
   return (
     <>
-      <div className="fixed z-40 h-12 bg-white top-0 left-0 w-screen"></div>
+      <div className="fixed z-30 h-12 bg-white top-0 left-0 w-screen"></div>
       <nav className="fixed z-50 top-11 left-1/2 -translate-x-1/2 w-[147rem] bg-blue h-[11.3rem] rounded-full px-[11.2rem] text-40 box-shadow flex items-center justify-between">
         <NavLink
           data-text="HOME"
@@ -39,7 +39,7 @@ const Navbar = () => {
         </NavLink>
         <NavLink
           data-text="profile"
-          to={"/app/artist/netrunners"}
+          to={`/app/artist/${username}`}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink uppercase text-border text-white"

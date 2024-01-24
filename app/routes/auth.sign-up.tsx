@@ -145,6 +145,8 @@ const SignUpPage = () => {
           />
         </div>
 
+        <ErrorList id={form.errorId} errors={form.errors} />
+
         <BoxButton degree={1} type="submit" className="px-24">
           <p className="text-60">Register</p>
         </BoxButton>
