@@ -15,6 +15,9 @@ import ErrorList from "~/components/ErrorList";
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
 import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
+import { EmailSchema, PasswordSchema } from "~/utils/user-validation";
+import { sessionStorage } from "~/utils/session.server";
+import { login } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,26 +27,58 @@ export const meta: MetaFunction = () => {
 };
 
 const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(30),
+  email: EmailSchema,
+  password: PasswordSchema,
 });
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   await checkCSRF(formData, request);
-
-  const submission = parse(formData, {
-    schema: LoginSchema,
-  });
-
   checkHoneypot(formData);
 
-  if (!submission.value) {
-    return json({ status: "error", submission }, { status: 400 });
+  const submission = await parse(formData, {
+    schema: (intent) =>
+      LoginSchema.transform(async (data, ctx) => {
+        if (intent !== "submit") return { ...data, artist: null };
+
+        const artist = await login(data);
+        if (!artist) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Invalid username or password",
+          });
+          return z.NEVER;
+        }
+
+        return { ...data, artist };
+      }),
+    async: true,
+  });
+  delete submission.payload.password;
+
+  if (submission.intent !== "submit") {
+    // @ts-expect-error - conform
+    delete submission.value?.password;
+    return json({ status: "idle", submission } as const);
   }
 
-  throw redirect("/app/home");
+  if (!submission.value?.artist) {
+    return json({ status: "error", submission } as const, { status: 400 });
+  }
+
+  const { artist } = submission.value;
+
+  const cookieSession = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  cookieSession.set("artistId", artist.id);
+
+  throw redirect("/app/home", {
+    headers: {
+      "set-cookie": await sessionStorage.commitSession(cookieSession),
+    },
+  });
 }
 
 export default function Index() {
@@ -86,6 +121,7 @@ export default function Index() {
           errors={fields.password.errors}
         />
 
+        <ErrorList id={form.errorId} errors={form.errors} />
         <BoxButton degree={1.35} type="submit" className="px-32">
           <p className="text-60">Log in</p>
         </BoxButton>

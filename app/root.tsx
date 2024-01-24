@@ -16,6 +16,8 @@ import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { csrf } from "./utils/csrf.server";
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
 import { GeneralErrorBoundary } from "./components/ErrorBoundry";
+import { sessionStorage } from "./utils/session.server";
+import { prisma } from "./utils/db.server";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -25,9 +27,25 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   const honeyProps = honeypot.getInputProps();
   const [csrfToken, csrfCookieHeader] = await csrf.commitToken(request);
+  const cookieSession = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  const artistId = cookieSession.get("artistId");
+  const artist = artistId
+    ? await prisma.artist.findUnique({
+        where: {
+          id: artistId,
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+        },
+      })
+    : null;
 
   return json(
-    { honeyProps, csrfToken },
+    { honeyProps, csrfToken, artist },
     {
       headers: csrfCookieHeader
         ? {

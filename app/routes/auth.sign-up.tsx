@@ -13,26 +13,55 @@ import ErrorList from "~/components/ErrorList";
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
 import { checkCSRF } from "~/utils/csrf.server";
 import { checkHoneypot } from "~/utils/honeypot.server";
+import {
+  EmailSchema,
+  PasswordSchema,
+  UsernameSchema,
+} from "~/utils/user-validation";
+import { prisma } from "~/utils/db.server";
+import { signup } from "~/utils/auth.server";
 
 const RegisterSchema = z.object({
-  username: z.string().min(3).max(15),
-  email: z.string().email(),
-  password: z.string().min(8).max(30),
+  username: UsernameSchema,
+  email: EmailSchema,
+  password: PasswordSchema,
 });
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   await checkCSRF(formData, request);
-
-  const submission = parse(formData, {
-    schema: RegisterSchema,
-  });
-
   checkHoneypot(formData);
 
-  if (!submission.value) {
-    return json({ status: "error", submission }, { status: 400 });
+  const submission = await parse(formData, {
+    schema: RegisterSchema.superRefine(async (data, ctx) => {
+      const existingArtist = await prisma.artist.findUnique({
+        where: { username: data.username },
+        select: {
+          id: true,
+        },
+      });
+
+      if (existingArtist) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "An Artist already exists with this username",
+        });
+        return;
+      }
+    }).transform(async (data) => {
+      const artist = signup(data);
+      return { ...data, artist };
+    }),
+    async: true,
+  });
+
+  if (submission.intent !== "submit") {
+    return json({ status: "idle", submission } as const);
+  }
+
+  if (!submission.value?.artist) {
+    return json({ status: "error", submission } as const, { status: 400 });
   }
 
   throw redirect("/app/home");

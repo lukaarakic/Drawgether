@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import { UniqueEnforcer } from "enforce-unique";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -21,15 +22,22 @@ async function seed() {
   console.log("👤 Creating artists...");
   console.time(`👤 Created ${totalArtists} users...`);
   for (let index = 0; index < totalArtists; index++) {
+    const username = uniqueUsernameEnforce.enforce(() => {
+      return faker.internet.userName().slice(0, 15);
+    });
+
     await prisma.artist
       .create({
         data: {
           email: uniqueEmailEnforce.enforce(() => {
             return faker.internet.email();
           }),
-          username: uniqueUsernameEnforce.enforce(() => {
-            return faker.internet.userName().slice(0, 15);
-          }),
+          username,
+          password: {
+            create: {
+              hash: bcrypt.hashSync(username, 10),
+            },
+          },
           arts: {
             create: Array.from({
               length: faker.number.int({ min: 0, max: 6 }),
@@ -56,6 +64,11 @@ async function seed() {
     data: {
       email: "netrunners.work@gmail.com",
       username: "netrunners",
+      password: {
+        create: {
+          hash: bcrypt.hashSync("runningthenets", 10),
+        },
+      },
       avatar: "https://i.imgur.com/dhFOxNO.png",
       arts: {
         create: {
