@@ -22,6 +22,7 @@ import {
   login,
   requireAnonymous,
 } from "~/utils/auth.server";
+import scribbleSfx from "~/assets/audio/scribble.wav";
 
 export const meta: MetaFunction = () => {
   return [
@@ -102,6 +103,10 @@ export default function Index() {
     },
   });
 
+  function play() {
+    new Audio(scribbleSfx).play();
+  }
+
   return (
     <div className="flex flex-col">
       <Form
@@ -132,9 +137,14 @@ export default function Index() {
 
         <div>
           <div className="checkbox">
-            <input type="checkbox" className="check" id="check2" />
+            <input
+              type="checkbox"
+              className="check"
+              {...conform.input(fields.remember, { type: "checkbox" })}
+              onChange={play}
+            />
             <label
-              htmlFor="check2"
+              htmlFor={fields.remember.id}
               className="flex items-center justify-center"
             >
               <svg
