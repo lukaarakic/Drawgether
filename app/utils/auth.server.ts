@@ -11,6 +11,19 @@ export function getSessionExpirationDate() {
   return new Date(Date.now() + SESSION_EXPIRATION_TIME);
 }
 
+export async function requireArtist(request: Request) {
+  const artistId = await requireArtistId(request);
+
+  const artist = await prisma.artist.findUnique({
+    where: { id: artistId },
+    select: { id: true, username: true },
+  });
+
+  if (!artist) throw await logout({ request });
+
+  return artist;
+}
+
 export async function getArtistId(request: Request) {
   const cookieSession = await sessionStorage.getSession(
     request.headers.get("cookie")
@@ -66,6 +79,7 @@ export async function signup({
     data: {
       email: email.toLowerCase(),
       username: username.toLowerCase(),
+      roles: { connect: { name: "user" } },
       password: {
         create: {
           hash: hashedPassword,

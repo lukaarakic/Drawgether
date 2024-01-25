@@ -25,6 +25,7 @@ model Artist {
   comments       Comment[]
   likes          Like[]
   arts           Art[]
+  roles          Role[]
 
   @@index([username])
 }
@@ -60,15 +61,12 @@ model Comment {
 }
 
 model Like {
-  id         String   @id @default(cuid())
+  id       String @id @default(cuid())
   // 
-  artId      String
-  art        Art      @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artistId   String
-  artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  // 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  artId    String
+  art      Art    @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([artId])
   @@index([artistId])
@@ -79,6 +77,33 @@ model Password {
   // 
   artistId String @unique
   user     Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  action      String // CRUD
+  entity      String // Art or artist
+  access      String // own or any
+  description String?  @default("")
+  // 
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  //
+  roles       Role[]
+
+  @@unique([action, access, entity])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?  @default("")
+  // 
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  permissions Permission[]
+  artists     Artist[]
 }
 
 model Verification {
