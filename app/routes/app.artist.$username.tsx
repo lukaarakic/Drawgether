@@ -46,7 +46,7 @@ const Profile = () => {
 
   return (
     <div className="w-[80rem] mx-auto mt-24">
-      <div className="mt-44 flex items-center justify-center gap-12 mb-32">
+      <div className="mt-44 flex items-center justify-center gap-16 mb-32">
         <ArtistCircle
           size={16.9}
           avatar={{
@@ -54,7 +54,7 @@ const Profile = () => {
             seed: artist.username,
           }}
         />
-        <BoxLabel>
+        <BoxLabel degree={-2}>
           <div className="flex items-center justify-between gap-20 px-4 w-[41.3rem] h-40">
             <p
               className="text-border text-32"

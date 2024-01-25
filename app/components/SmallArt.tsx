@@ -1,11 +1,13 @@
-import { generateRandomNumber } from "~/utils/getRandomDeg";
+import generateRandomRotation from "~/utils/getRandomRotation";
 
-const SmallArt = ({ art }: { art: string }) => {
+const SmallArt = ({ art, index }: { art: string; index: number }) => {
+  const rotations = [-1.02, 0.78, -1.21, 1.08, -0.93, 1.24];
+
   return (
     <div
       className="w-[23rem] h-[23rem] box-shadow bg-black bg-opacity-30 overflow-hidden cursor-pointer"
       style={{
-        rotate: `${generateRandomNumber()}deg`,
+        rotate: `${generateRandomRotation(index % 6, rotations)}deg`,
       }}
     >
       <img

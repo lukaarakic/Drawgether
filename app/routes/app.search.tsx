@@ -1,6 +1,5 @@
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import BoxButton from "~/components/BoxButton";
-import { generateRandomNumber } from "~/utils/getRandomDeg";
 import SearchIcon from "~/assets/misc/searchIcon.svg";
 
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
@@ -8,6 +7,7 @@ import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { prisma } from "~/utils/db.server";
 import ArtistCircle from "~/components/ArtistCircle";
 import BoxLabel from "~/components/BoxLabel";
+import generateRandomRotation from "~/utils/getRandomRotation";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchTerm = new URL(request.url).searchParams.get("search");
@@ -44,7 +44,7 @@ const SearchPage = () => {
 
   return (
     <main className="mt-60">
-      <Form method="GET" className="flex gap-6 items-center">
+      <Form method="GET" className="flex gap-12 items-center">
         <input
           type="text"
           name="search"
@@ -52,14 +52,10 @@ const SearchPage = () => {
           className="input"
           placeholder="Search..."
           style={{
-            rotate: `${generateRandomNumber()}deg`,
+            rotate: `${-1.87}deg`,
           }}
         />
-        <BoxButton
-          type="submit"
-          className="p-4"
-          degree={generateRandomNumber()}
-        >
+        <BoxButton type="submit" className="p-4" degree={6.32}>
           <img src={SearchIcon} alt="" className="w-[5.5rem] h-[5.5rem]" />
         </BoxButton>
       </Form>
@@ -75,7 +71,7 @@ const SearchPage = () => {
         ) : null}
 
         {data.artists.length ? (
-          data.artists.map((artist) => (
+          data.artists.map((artist, index) => (
             <Link
               to={`/app/artist/${artist.username}`}
               key={artist.id}
@@ -89,7 +85,7 @@ const SearchPage = () => {
                 }}
               />
 
-              <BoxLabel>
+              <BoxLabel degree={generateRandomRotation(index % 4)}>
                 <div className="flex items-center justify-between gap-20 px-4 w-[29rem] h-28">
                   <p
                     className="text-border text-32"

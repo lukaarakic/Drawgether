@@ -4,9 +4,9 @@ import BoxLabel from "./BoxLabel";
 import LikeIcon from "~/assets/misc/like.svg";
 import CommentIcon from "~/assets/misc/comment.svg";
 import { Link } from "@remix-run/react";
-import { generateRandomNumber } from "~/utils/getRandomDeg";
 import { FC } from "react";
 import ArtistCircle from "./ArtistCircle";
+import generateRandomRotation from "~/utils/getRandomRotation";
 
 interface ArtPostProps {
   theme: string;
@@ -15,12 +15,14 @@ interface ArtPostProps {
   artists: any;
   comments: any;
   likes: any;
+  index: number;
 }
 
 const ArtPost: FC<ArtPostProps> = ({
   theme,
   artUrl,
   artists,
+  index = 0,
   // Ovo skloni kad dodas like i comment
   /* eslint-disable @typescript-eslint/no-unused-vars */
   likesCount,
@@ -29,13 +31,18 @@ const ArtPost: FC<ArtPostProps> = ({
 }) => {
   return (
     <article className="w-[57.2rem] mb-80">
-      <BoxLabel>
+      <BoxLabel degree={generateRandomRotation((index % 10) + 1)}>
         <p data-text={theme} className="text-border p-2 text-32">
           {theme}
         </p>
       </BoxLabel>
 
-      <div className="relative mb-24">
+      <div
+        className="relative mb-24"
+        style={{
+          rotate: `${generateRandomRotation(index % 10) / 2}deg`,
+        }}
+      >
         <img
           src={artUrl}
           alt=""
@@ -67,7 +74,7 @@ const ArtPost: FC<ArtPostProps> = ({
       <div
         className="bg-blue box-shadow text-white text-20 px-6 py-6"
         style={{
-          rotate: `${generateRandomNumber()}deg`,
+          rotate: `${generateRandomRotation((index % 10) + 2)}deg`,
         }}
       >
         <div>

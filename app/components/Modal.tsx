@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 
 // Assets
 import CloseSVG from "~/assets/misc/close.svg";
-import { generateRandomNumber } from "~/utils/getRandomDeg";
+import { generateRandomNumber } from "~/utils/getRandomRotation";
 
 interface ModalProps {
   children: ReactNode;
@@ -26,7 +26,7 @@ const Modal: FC<ModalProps> = ({
       <div
         className={`w-[55rem] h-[64rem] box-shadow bg-white top-1/2 fixed left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50`}
         style={{
-          rotate: `${generateRandomNumber() + 0.5}deg`,
+          rotate: `${generateRandomNumber()}deg`,
         }}
       >
         <button
