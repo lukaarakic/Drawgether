@@ -78,9 +78,9 @@ const Profile = () => {
         <BoxLabel>
           <p
             className="text-32 text-white text-border text-border-sm text-center w-full"
-            data-text="No arts available"
+            data-text="No artworks available"
           >
-            No arts available
+            No artworks available
           </p>
         </BoxLabel>
       )}

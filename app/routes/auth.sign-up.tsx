@@ -95,14 +95,14 @@ const SignUpPage = () => {
 
         <div className="relative text-center">
           <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-2 left-0 z-10 flex items-center justify-center">
-            {debouncedUsername ? (
-              <img
-                src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${debouncedUsername}`}
-                alt="Usernames avatar"
-                width="95%"
-                height="95%"
-              />
-            ) : null}
+            <img
+              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${
+                debouncedUsername ? debouncedUsername : "drawgether"
+              }`}
+              alt="Usernames avatar"
+              width="95%"
+              height="95%"
+            />
           </div>
 
           <input
@@ -115,10 +115,12 @@ const SignUpPage = () => {
             onChange={(e) => setUsername(e.target.value)}
             {...conform.input(fields.username)}
           />
-          <ErrorList
-            id={fields.username.errorId}
-            errors={fields.username.errors}
-          />
+          <div className="w-[55rem]">
+            <ErrorList
+              id={fields.username.errorId}
+              errors={fields.username.errors}
+            />
+          </div>
         </div>
 
         <div className="text-center">

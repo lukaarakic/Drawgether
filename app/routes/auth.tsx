@@ -22,16 +22,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   return (
     <div className="h-screen bg-blue">
-      <Link
-        to={"/"}
-        className="flex items-center justify-center mb-36 pt-[4.5rem]"
-      >
-        <img
-          src={FullPinkLogo}
-          alt="Drawgether logo"
-          className="w-[29.5rem] h-[21.6rem]"
-        />
-      </Link>
+      <header className="flex items-center justify-center mb-36 pt-[4.5rem]">
+        <Link to={"/"}>
+          <img
+            src={FullPinkLogo}
+            alt="Drawgether logo"
+            className="w-[29.5rem] h-[21.6rem]"
+          />
+        </Link>
+      </header>
 
       <main className="flex items-center justify-center">
         <Outlet />

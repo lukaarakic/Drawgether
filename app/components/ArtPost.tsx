@@ -7,6 +7,7 @@ import { Link } from "@remix-run/react";
 import { FC } from "react";
 import ArtistCircle from "./ArtistCircle";
 import generateRandomRotation from "~/utils/getRandomRotation";
+import TrashIcon from "~/assets/misc/trash.svg";
 
 interface ArtPostProps {
   theme: string;
@@ -51,7 +52,8 @@ const ArtPost: FC<ArtPostProps> = ({
 
         <div className="absolute flex -bottom-16 -left-5">
           <img src={LikeIcon} alt="Like" width={56} />
-          <img src={CommentIcon} alt="Comment" />
+          <img src={CommentIcon} alt="Comment" width={56} />
+          <img src={TrashIcon} alt="Trash" width={50} />
         </div>
 
         <div className="absolute flex items-baseline -bottom-16 -right-8">
