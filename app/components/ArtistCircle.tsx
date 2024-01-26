@@ -1,21 +1,18 @@
-import { Link } from "@remix-run/react";
-import { FC } from "react";
+import { FC } from "react"
 
 interface ArtistCircleProps {
   avatar: {
-    avatarUrl: string | null | undefined;
-    seed: string | undefined;
-  };
-  size: number;
-  className?: string;
+    avatarUrl: string | null | undefined
+    seed: string | undefined
+  }
+  size: number
+  className?: string
 }
 
 const ArtistCircle: FC<ArtistCircleProps> = ({ avatar, size, className }) => {
   return (
-    <Link
-      to={`/app/artist/${avatar.seed}`}
-      rel="noreferrer"
-      className={`${className} w-[${size}rem] h-[${size}rem] rounded-full box-shadow bg-white flex items-center justify-center overflow-hidden`}
+    <div
+      className={`${className} w-[${size}rem] h-[${size}rem] box-shadow flex items-center justify-center overflow-hidden rounded-full bg-white`}
     >
       <img
         src={
@@ -29,8 +26,8 @@ const ArtistCircle: FC<ArtistCircleProps> = ({ avatar, size, className }) => {
           height: `${size * 0.9}rem`,
         }}
       />
-    </Link>
-  );
-};
+    </div>
+  )
+}
 
-export default ArtistCircle;
+export default ArtistCircle

@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react"
+import { ModalDataType } from "~/routes/app.home"
 import generateRandomRotation from "~/utils/getRandomRotation"
 
 type CommentsType = {
@@ -11,7 +12,19 @@ type CommentsType = {
   }
 }[]
 
-const Comments = ({ comments }: { comments: CommentsType }) => {
+const Comments = ({
+  comments,
+  artwork,
+  setModalData,
+  setIsOpen,
+}: {
+  comments: CommentsType
+  artwork: ModalDataType
+  setModalData: React.Dispatch<React.SetStateAction<ModalDataType | null>>
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const hasComments = comments.length > 0
+
   return (
     <div
       className="box-shadow bg-blue px-6 py-6 text-20 text-white"
@@ -19,7 +32,7 @@ const Comments = ({ comments }: { comments: CommentsType }) => {
         rotate: `${generateRandomRotation((new Date().getHours() % 10) + 2)}deg`,
       }}
     >
-      {comments.length > 0
+      {hasComments
         ? comments.slice(0, 2).map((comment) => (
             <div key={comment.id}>
               <Link
@@ -40,14 +53,18 @@ const Comments = ({ comments }: { comments: CommentsType }) => {
         : null}
 
       <button
+        onClick={() => {
+          setModalData(artwork)
+          setIsOpen(true)
+        }}
         data-text={
-          comments.length > 0
+          hasComments
             ? "View more..."
             : "Be the first to comment on this artwork"
         }
-        className="text-border mt-5"
+        className={`text-border ${hasComments ? "mt-5" : ""}`}
       >
-        {comments.length > 0
+        {hasComments
           ? "View more..."
           : "Be the first to comment on this artwork"}
       </button>

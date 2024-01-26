@@ -1,7 +1,12 @@
 import { NavLink } from "@remix-run/react"
 import LogoOnly from "~/assets/logos/logo_only.svg"
+import BloopSFX from "~/assets/audio/bloop.wav"
 
 const Navbar = ({ username }: { username: string }) => {
+  function play() {
+    new Audio(BloopSFX).play()
+  }
+
   return (
     <>
       <div className="fixed left-0 top-0 z-30 h-12 w-screen bg-white"></div>
@@ -15,6 +20,7 @@ const Navbar = ({ username }: { username: string }) => {
               : "text-border uppercase text-white"
           }
           prefetch="intent"
+          onClick={() => play()}
         >
           Home
         </NavLink>
@@ -27,10 +33,12 @@ const Navbar = ({ username }: { username: string }) => {
               : "text-border uppercase text-white"
           }
           prefetch="intent"
+          onClick={() => play()}
         >
           Search
         </NavLink>
-        <NavLink to={"/app/home"}>
+
+        <NavLink to={"/app/home"} onClick={() => play()}>
           <img
             src={LogoOnly}
             alt="Logo of drawgether"
@@ -46,6 +54,7 @@ const Navbar = ({ username }: { username: string }) => {
               : "text-border uppercase text-white"
           }
           prefetch="intent"
+          onClick={() => play()}
         >
           Profile
         </NavLink>
@@ -58,6 +67,7 @@ const Navbar = ({ username }: { username: string }) => {
               : "text-border uppercase text-white"
           }
           prefetch="intent"
+          onClick={() => play()}
         >
           Play
         </NavLink>
