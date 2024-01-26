@@ -64,7 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
     await like({ artist, artworkId })
   }
 
-  return json({ artworkId })
+  return json({})
 }
 
 const Home = () => {

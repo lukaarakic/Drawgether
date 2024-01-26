@@ -40,7 +40,7 @@ model Art {
   updated_at DateTime  @updatedAt
   // 
   comments   Comment[]
-  likedBy    Like[]
+  likes      Like[]
   artists    Artist[]
 }
 
