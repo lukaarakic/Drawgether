@@ -1,7 +1,11 @@
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import ArtPost from "~/components/ArtPost";
-import { prisma } from "~/utils/db.server";
+import { ActionFunctionArgs, json } from "@remix-run/node"
+import { useLoaderData } from "@remix-run/react"
+import ArtPost from "~/components/ArtPost"
+import { useUser } from "~/utils/artist"
+import { requireArtist } from "~/utils/auth.server"
+import { prisma } from "~/utils/db.server"
+import { invariantResponse } from "~/utils/misc"
+import { like } from "~/utils/socalFunctions.server"
 
 export async function loader() {
   const arts = await prisma.art.findMany({
@@ -15,7 +19,19 @@ export async function loader() {
           username: true,
         },
       },
-      comments: true,
+      comments: {
+        select: {
+          id: true,
+          content: true,
+          artist: {
+            select: {
+              id: true,
+              avatar: true,
+              username: true,
+            },
+          },
+        },
+      },
       id: true,
       likes: true,
       likesCount: true,
@@ -24,15 +40,32 @@ export async function loader() {
     orderBy: {
       created_at: "desc",
     },
-  });
+  })
 
   return json({
     arts,
-  });
+  })
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const artist = await requireArtist(request)
+
+  const formData = await request.formData()
+  const artworkId = formData.get("artworkId") as string
+  const intent = formData.get("intent")
+
+  invariantResponse(artworkId, "Artwork ID not found 🥲")
+
+  if (intent === "like") {
+    await like({ artist, artworkId })
+  }
+
+  return json({ artworkId })
 }
 
 const Home = () => {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>()
+  const artist = useUser()
 
   return (
     <div className="mt-60">
@@ -43,15 +76,16 @@ const Home = () => {
             theme={art.theme}
             artUrl={art.art}
             artists={art.artists}
-            comments={art.comments}
             likes={art.likes}
             likesCount={art.likesCount}
             index={i}
+            artId={art.id}
+            currentArtist={artist}
           />
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

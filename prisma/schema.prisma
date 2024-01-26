@@ -40,8 +40,20 @@ model Art {
   updated_at DateTime  @updatedAt
   // 
   comments   Comment[]
-  likes      Like[]
+  likedBy    Like[]
   artists    Artist[]
+}
+
+model Like {
+  id       String @id @default(cuid())
+  // 
+  artId    String
+  art      Art    @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([artId])
+  @@index([artistId])
 }
 
 model Comment {
@@ -55,18 +67,6 @@ model Comment {
   // 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  @@index([artId])
-  @@index([artistId])
-}
-
-model Like {
-  id       String @id @default(cuid())
-  // 
-  artId    String
-  art      Art    @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artistId String
-  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([artId])
   @@index([artistId])

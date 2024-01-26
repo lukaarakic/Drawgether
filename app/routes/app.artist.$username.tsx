@@ -1,7 +1,6 @@
 import ArtistCircle from "~/components/ArtistCircle"
 import BoxLabel from "~/components/BoxLabel"
 import SettingsIcon from "~/assets/misc/settings.svg"
-import ProfileArtContainer from "~/components/ProfileArtContainer"
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
 import { useOptionalUser } from "~/utils/artist"
 import Modal from "~/components/Modal"
@@ -12,6 +11,7 @@ import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { prisma } from "~/utils/db.server"
 import { invariantResponse } from "~/utils/misc"
+import SmallArt from "~/components/SmallArt"
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const artist = await prisma.artist.findFirst({
@@ -73,7 +73,11 @@ const Profile = () => {
       </div>
 
       {artist.arts.length > 0 ? (
-        <ProfileArtContainer arts={artist.arts} />
+        <div className="grid grid-cols-auto-fit items-center justify-items-center gap-x-4 gap-y-8">
+          {artist.arts.map((art, index) => (
+            <SmallArt art={art.art} key={art.id} index={index} />
+          ))}
+        </div>
       ) : (
         <BoxLabel>
           <p

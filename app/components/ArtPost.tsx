@@ -1,22 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import BoxLabel from "./BoxLabel"
-import LikeIcon from "~/assets/misc/like.svg"
 import CommentIcon from "~/assets/misc/comment.svg"
 import { Link } from "@remix-run/react"
 import { FC } from "react"
 import ArtistCircle from "./ArtistCircle"
 import generateRandomRotation from "~/utils/getRandomRotation"
 import TrashIcon from "~/assets/misc/trash.svg"
+import LikePost from "./Like"
+import { Like } from "@prisma/client"
 
 interface ArtPostProps {
   theme: string
   artUrl: string
-  likesCount: number
   artists: any
-  comments: any
-  likes: any
+  likesCount: number
   index: number
+  artId: string
+  currentArtist: {
+    id: string
+    username: string
+  }
+  likes: Like[]
 }
 
 const ArtPost: FC<ArtPostProps> = ({
@@ -24,12 +29,15 @@ const ArtPost: FC<ArtPostProps> = ({
   artUrl,
   artists,
   index = 0,
-  // Ovo skloni kad dodas like i comment
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+  artId,
   likesCount,
+  currentArtist,
   likes,
-  comments,
 }) => {
+  const isLiked =
+    likes.filter((like) => like.artistId === currentArtist.id).length > 0
+  console.log(isLiked)
+
   return (
     <article className="mx-auto mb-80 w-[90%] xs:w-[57.2rem]">
       <BoxLabel degree={generateRandomRotation((index % 10) + 1)}>
@@ -51,7 +59,7 @@ const ArtPost: FC<ArtPostProps> = ({
         />
 
         <div className="absolute -bottom-12 -left-5 flex">
-          <img src={LikeIcon} alt="Like" className="h-24 w-24" />
+          <LikePost artId={artId} likesCount={likesCount} isLiked={isLiked} />
           <img src={CommentIcon} alt="Comment" className="h-24 w-24" />
           <img src={TrashIcon} alt="Trash" className="h-24 w-24" />
         </div>
