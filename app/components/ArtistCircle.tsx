@@ -14,7 +14,6 @@ const ArtistCircle: FC<ArtistCircleProps> = ({ avatar, size, className }) => {
   return (
     <Link
       to={`/app/artist/${avatar.seed}`}
-      target="_blank"
       rel="noreferrer"
       className={`${className} w-[${size}rem] h-[${size}rem] rounded-full box-shadow bg-white flex items-center justify-center overflow-hidden`}
     >

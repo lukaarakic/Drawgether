@@ -19,12 +19,19 @@ import {
   UsernameSchema,
 } from "~/utils/user-validation";
 import { prisma } from "~/utils/db.server";
-import { requireAnonymous, signup } from "~/utils/auth.server";
+import {
+  getSessionExpirationDate,
+  requireAnonymous,
+  signup,
+} from "~/utils/auth.server";
+import { sessionStorage } from "~/utils/session.server";
+import scribbleSfx from "~/assets/audio/scribble.wav";
 
 const RegisterSchema = z.object({
   username: UsernameSchema,
   email: EmailSchema,
   password: PasswordSchema,
+  remember: z.boolean().optional(),
 });
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -51,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
         return;
       }
     }).transform(async (data) => {
-      const artist = signup(data);
+      const artist = await signup(data);
       return { ...data, artist };
     }),
     async: true,
@@ -65,7 +72,20 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ status: "error", submission } as const, { status: 400 });
   }
 
-  throw redirect("/app/home");
+  const { artist, remember } = submission.value;
+
+  const cookieSession = await sessionStorage.getSession(
+    request.headers.get("cookie")
+  );
+  cookieSession.set("artistId", artist.id);
+
+  throw redirect("/app/home", {
+    headers: {
+      "set-cookie": await sessionStorage.commitSession(cookieSession, {
+        expires: remember ? getSessionExpirationDate() : undefined,
+      }),
+    },
+  });
 }
 
 const SignUpPage = () => {
@@ -82,6 +102,10 @@ const SignUpPage = () => {
       return parse(formData, { schema: RegisterSchema });
     },
   });
+
+  function play() {
+    new Audio(scribbleSfx).play();
+  }
 
   return (
     <div>
@@ -146,6 +170,52 @@ const SignUpPage = () => {
             id={fields.password.errorId}
             errors={fields.password.errors}
           />
+        </div>
+
+        <div>
+          <div className="checkbox">
+            <input
+              type="checkbox"
+              className="check"
+              {...conform.input(fields.remember, { type: "checkbox" })}
+              onChange={play}
+            />
+            <label
+              htmlFor={fields.remember.id}
+              className="flex items-center justify-center"
+            >
+              <svg
+                width="50"
+                height="50"
+                viewBox="0 0 100 100"
+                className="drop-shadow-filter"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r={28}
+                  strokeWidth="4"
+                  stroke="#212121"
+                  fill="#ffffff"
+                />
+                <g transform="translate(0,-952.36222)">
+                  <path
+                    d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4 "
+                    stroke="#de6b9b"
+                    strokeWidth="5"
+                    fill="none"
+                    className="path1"
+                  />
+                </g>
+              </svg>
+              <span
+                className="text-20 text-border text-border-sm text-white"
+                data-text="Remember me?"
+              >
+                Remember me?
+              </span>
+            </label>
+          </div>
         </div>
 
         <ErrorList id={form.errorId} errors={form.errors} />

@@ -3,7 +3,7 @@ import { singleton } from "./singleton.server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = singleton("prisma", () => {
-  const logThreshold = 15;
+  const logThreshold = 10;
 
   const client = new PrismaClient({
     log: [

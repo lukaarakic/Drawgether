@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 export default {
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
@@ -18,6 +18,7 @@ export default {
       fontSize: {
         128: "12.8rem",
         90: "9rem",
+        75: "7.5rem",
         60: "6rem",
         45: "4.5rem",
         40: "4rem",
@@ -32,7 +33,10 @@ export default {
       gridTemplateColumns: {
         "auto-fit": "repeat(auto-fit, minmax(20rem, 25rem))",
       },
+      screens: {
+        xs: "560px",
+      },
     },
   },
   plugins: [],
-} satisfies Config;
+} satisfies Config

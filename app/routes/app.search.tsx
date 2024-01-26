@@ -1,19 +1,19 @@
-import { Form, Link, useLoaderData } from "@remix-run/react";
-import BoxButton from "~/components/BoxButton";
-import SearchIcon from "~/assets/misc/searchIcon.svg";
+import { Form, Link, useLoaderData } from "@remix-run/react"
+import BoxButton from "~/components/BoxButton"
+import SearchIcon from "~/assets/misc/searchIcon.svg"
 
-import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { prisma } from "~/utils/db.server";
-import ArtistCircle from "~/components/ArtistCircle";
-import BoxLabel from "~/components/BoxLabel";
-import generateRandomRotation from "~/utils/getRandomRotation";
+import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
+import { prisma } from "~/utils/db.server"
+import ArtistCircle from "~/components/ArtistCircle"
+import BoxLabel from "~/components/BoxLabel"
+import generateRandomRotation from "~/utils/getRandomRotation"
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const searchTerm = new URL(request.url).searchParams.get("search");
+  const searchTerm = new URL(request.url).searchParams.get("search")
 
   if (searchTerm === "") {
-    throw redirect("/app/search");
+    throw redirect("/app/search")
   }
 
   const artists = searchTerm
@@ -30,40 +30,40 @@ export async function loader({ request }: LoaderFunctionArgs) {
           avatar: true,
         },
       })
-    : [];
+    : []
 
-  const noSearch = searchTerm === null;
+  const noSearch = searchTerm === null
 
-  return json({ artists, noSearch });
+  return json({ artists, noSearch })
 }
 
 const SearchPage = () => {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>()
 
-  console.log(data.artists.length);
+  console.log(data.artists.length)
 
   return (
     <main className="mt-60">
-      <Form method="GET" className="flex gap-12 items-center">
+      <Form method="GET" className="flex items-center justify-center gap-12">
         <input
           type="text"
           name="search"
           id="search"
-          className="input"
+          className="input w-[70%] md:w-[55rem]"
           placeholder="Search..."
           style={{
             rotate: `${-1.87}deg`,
           }}
         />
         <BoxButton type="submit" className="p-4" degree={6.32}>
-          <img src={SearchIcon} alt="" className="w-[5.5rem] h-[5.5rem]" />
+          <img src={SearchIcon} alt="" className="h-[5.5rem] w-[5.5rem]" />
         </BoxButton>
       </Form>
 
       <div className="mt-16 flex flex-col items-center">
         {data.artists.length ? (
           <p
-            className="text-blue text-32 text-border text-center tracking-[1rem] mb-12"
+            className="text-border mb-12 text-center text-32 tracking-[1rem] text-blue"
             data-text="Search results:"
           >
             Search results:
@@ -75,7 +75,7 @@ const SearchPage = () => {
             <Link
               to={`/app/artist/${artist.username}`}
               key={artist.id}
-              className="flex items-center gap-8 mb-8"
+              className="mb-8 flex items-center gap-8"
             >
               <ArtistCircle
                 size={11.8}
@@ -86,7 +86,7 @@ const SearchPage = () => {
               />
 
               <BoxLabel degree={generateRandomRotation(index % 4)}>
-                <div className="flex items-center justify-between gap-20 px-4 w-[29rem] h-28">
+                <div className="flex h-28 w-[29rem] items-center justify-between gap-20 px-4">
                   <p
                     className="text-border text-32"
                     data-text={artist.username}
@@ -99,7 +99,7 @@ const SearchPage = () => {
           ))
         ) : !data.noSearch ? (
           <p
-            className="text-white text-32 text-border text-center tracking-[1rem] mb-12"
+            className="text-border mb-12 text-center text-32 tracking-[1rem] text-white"
             data-text="No artists found"
           >
             No artists found
@@ -107,11 +107,11 @@ const SearchPage = () => {
         ) : null}
       </div>
     </main>
-  );
-};
-
-export function ErrorBoundary() {
-  return <GeneralErrorBoundary />;
+  )
 }
 
-export default SearchPage;
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />
+}
+
+export default SearchPage

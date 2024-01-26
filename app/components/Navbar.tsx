@@ -1,18 +1,18 @@
-import { NavLink } from "@remix-run/react";
-import LogoOnly from "~/assets/logos/logo_only.svg";
+import { NavLink } from "@remix-run/react"
+import LogoOnly from "~/assets/logos/logo_only.svg"
 
 const Navbar = ({ username }: { username: string }) => {
   return (
     <>
-      <div className="fixed z-30 h-12 bg-white top-0 left-0 w-screen"></div>
-      <nav className="fixed z-50 top-11 left-1/2 -translate-x-1/2 w-[147rem] bg-blue h-[11.3rem] rounded-full px-[11.2rem] text-40 box-shadow flex items-center justify-between">
+      <div className="fixed left-0 top-0 z-30 h-12 w-screen bg-white"></div>
+      <nav className="box-shadow fixed left-1/2 top-11 z-50 hidden h-[11.3rem] w-[90%] -translate-x-1/2 items-center justify-between rounded-full bg-blue px-28 text-32 md:flex lg:w-[147rem] lg:px-[11.2rem] lg:text-40">
         <NavLink
           data-text="HOME"
           to={"/app/home"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink uppercase text-border text-white"
-              : "uppercase text-border text-white"
+              ? "activeNavLink text-border uppercase text-white"
+              : "text-border uppercase text-white"
           }
           prefetch="intent"
         >
@@ -23,8 +23,8 @@ const Navbar = ({ username }: { username: string }) => {
           to={"/app/search"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink uppercase text-border text-white"
-              : "uppercase text-border text-white"
+              ? "activeNavLink text-border uppercase text-white"
+              : "text-border uppercase text-white"
           }
           prefetch="intent"
         >
@@ -34,7 +34,7 @@ const Navbar = ({ username }: { username: string }) => {
           <img
             src={LogoOnly}
             alt="Logo of drawgether"
-            className="w-[17.6rem] h-[12.8rem]"
+            className="h-[12.8rem] w-[17.6rem]"
           />
         </NavLink>
         <NavLink
@@ -42,8 +42,8 @@ const Navbar = ({ username }: { username: string }) => {
           to={`/app/artist/${username}`}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink uppercase text-border text-white"
-              : "uppercase text-border text-white"
+              ? "activeNavLink text-border uppercase text-white"
+              : "text-border uppercase text-white"
           }
           prefetch="intent"
         >
@@ -54,8 +54,8 @@ const Navbar = ({ username }: { username: string }) => {
           to={"/app/play"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink uppercase text-border text-white"
-              : "uppercase text-border text-white"
+              ? "activeNavLink text-border uppercase text-white"
+              : "text-border uppercase text-white"
           }
           prefetch="intent"
         >
@@ -63,7 +63,7 @@ const Navbar = ({ username }: { username: string }) => {
         </NavLink>
       </nav>
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import BoxLabel from "./BoxLabel";
-import LikeIcon from "~/assets/misc/like.svg";
-import CommentIcon from "~/assets/misc/comment.svg";
-import { Link } from "@remix-run/react";
-import { FC } from "react";
-import ArtistCircle from "./ArtistCircle";
-import generateRandomRotation from "~/utils/getRandomRotation";
-import TrashIcon from "~/assets/misc/trash.svg";
+import BoxLabel from "./BoxLabel"
+import LikeIcon from "~/assets/misc/like.svg"
+import CommentIcon from "~/assets/misc/comment.svg"
+import { Link } from "@remix-run/react"
+import { FC } from "react"
+import ArtistCircle from "./ArtistCircle"
+import generateRandomRotation from "~/utils/getRandomRotation"
+import TrashIcon from "~/assets/misc/trash.svg"
 
 interface ArtPostProps {
-  theme: string;
-  artUrl: string;
-  likesCount: number;
-  artists: any;
-  comments: any;
-  likes: any;
-  index: number;
+  theme: string
+  artUrl: string
+  likesCount: number
+  artists: any
+  comments: any
+  likes: any
+  index: number
 }
 
 const ArtPost: FC<ArtPostProps> = ({
@@ -31,9 +31,9 @@ const ArtPost: FC<ArtPostProps> = ({
   comments,
 }) => {
   return (
-    <article className="w-[57.2rem] mb-80">
+    <article className="mx-auto mb-80 w-[90%] xs:w-[57.2rem]">
       <BoxLabel degree={generateRandomRotation((index % 10) + 1)}>
-        <p data-text={theme} className="text-border p-2 text-32">
+        <p data-text={theme} className="text-border p-2 text-25 md:text-32">
           {theme}
         </p>
       </BoxLabel>
@@ -47,16 +47,16 @@ const ArtPost: FC<ArtPostProps> = ({
         <img
           src={artUrl}
           alt=""
-          className="box-shadow mt-5 object-cover w-[57.2rem] h-[57.2rem]"
+          className="box-shadow mt-5 h-[57.2rem] w-[57.2rem] object-cover"
         />
 
-        <div className="absolute flex -bottom-16 -left-5">
-          <img src={LikeIcon} alt="Like" width={56} />
-          <img src={CommentIcon} alt="Comment" width={56} />
-          <img src={TrashIcon} alt="Trash" width={50} />
+        <div className="absolute -bottom-12 -left-5 flex">
+          <img src={LikeIcon} alt="Like" className="h-24 w-24" />
+          <img src={CommentIcon} alt="Comment" className="h-24 w-24" />
+          <img src={TrashIcon} alt="Trash" className="h-24 w-24" />
         </div>
 
-        <div className="absolute flex items-baseline -bottom-16 -right-8">
+        <div className="absolute -bottom-16 -right-8 flex items-baseline">
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             artists.map((artist: any) => (
@@ -74,7 +74,7 @@ const ArtPost: FC<ArtPostProps> = ({
       </div>
 
       <div
-        className="bg-blue box-shadow text-white text-20 px-6 py-6"
+        className="box-shadow bg-blue px-6 py-6 text-20 text-white"
         style={{
           rotate: `${generateRandomRotation((index % 10) + 2)}deg`,
         }}
@@ -89,9 +89,9 @@ const ArtPost: FC<ArtPostProps> = ({
           </Link>
           <p
             className="text-border ml-2"
-            data-text=": Not going to lie, this was hard to make"
+            data-text=": Not going to lie, this was har..."
           >
-            : Not going to lie, this was hard to make
+            {`${": Not going to lie, this was hard to make".slice(0, 32)}...`}
           </p>
         </div>
 
@@ -116,7 +116,7 @@ const ArtPost: FC<ArtPostProps> = ({
         </Link>
       </div>
     </article>
-  );
-};
+  )
+}
 
-export default ArtPost;
+export default ArtPost
