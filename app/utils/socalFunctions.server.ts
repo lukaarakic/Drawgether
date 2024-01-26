@@ -10,7 +10,7 @@ export async function like({
     username: string
   }
 }) {
-  const liked = await prisma.art.findUnique({
+  const liked = await prisma.artwork.findUnique({
     where: {
       id: artworkId,
     },
@@ -49,7 +49,7 @@ export async function like({
           },
         }
 
-  await prisma.art.update({
+  await prisma.artwork.update({
     where: {
       id: artworkId,
     },

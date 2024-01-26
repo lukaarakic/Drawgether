@@ -75,6 +75,10 @@
     border: 0.6rem solid #212121;
   }
 
+  .stop-scroll {
+    overflow: hidden;
+  }
+
   /* Navigation */
 
   .activeNavLink {

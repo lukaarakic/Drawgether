@@ -15,14 +15,14 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <main className="h-svh bg-blue md:h-lvh">
-      <div className="mx-auto flex w-[42rem] items-center justify-center pt-16">
+    <main className="grid h-svh place-items-center bg-blue">
+      <div className="mx-auto mb-8 flex w-[42rem] items-center justify-center pt-8">
         <img src={PinkLogo} alt="Drawgether logo" className="w-full" />
       </div>
 
-      <div className="absolute left-1/2 top-[40%] mt-40 flex w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center">
+      <div className=" flex w-full flex-col items-center justify-center">
         <h1
-          className="text-border drop-shadow-filter text-75 mb-10 rotate-2 leading-none tracking-tighter text-white md:text-90 lg:text-128"
+          className="text-border drop-shadow-filter mb-10 rotate-2 text-75 leading-none tracking-tighter text-white md:text-90 lg:text-128"
           data-text="UNLEASH YOUR
         CREATIVE SIDE"
         >

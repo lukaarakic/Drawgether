@@ -2,7 +2,7 @@ import ArtistCircle from "~/components/ArtistCircle"
 import BoxLabel from "~/components/BoxLabel"
 import SettingsIcon from "~/assets/misc/settings.svg"
 import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
-import { useOptionalUser } from "~/utils/artist"
+import { useOptionalArtist } from "~/utils/artist"
 import Modal from "~/components/Modal"
 import { useState } from "react"
 import BoxButton from "~/components/BoxButton"
@@ -18,7 +18,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     select: {
       id: true,
       username: true,
-      arts: true,
+      artworks: true,
       avatar: true,
       email: true,
       email_verified: true,
@@ -39,7 +39,7 @@ const Profile = () => {
   const data = useLoaderData<typeof loader>()
   const artist = data.artist
 
-  const loggedInArtist = useOptionalUser()
+  const loggedInArtist = useOptionalArtist()
   const isLoggedInArtist = data.artist.id === loggedInArtist?.id
 
   const maskedEmail = maskEmail(artist.email)
@@ -72,10 +72,14 @@ const Profile = () => {
         </BoxLabel>
       </div>
 
-      {artist.arts.length > 0 ? (
+      {artist.artworks.length > 0 ? (
         <div className="grid grid-cols-auto-fit items-center justify-items-center gap-x-4 gap-y-8">
-          {artist.arts.map((art, index) => (
-            <SmallArt art={art.art} key={art.id} index={index} />
+          {artist.artworks.map((artwork, index) => (
+            <SmallArt
+              art={artwork.artworkImage}
+              key={artwork.id}
+              index={index}
+            />
           ))}
         </div>
       ) : (

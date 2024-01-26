@@ -27,8 +27,10 @@ export default {
         32: "3.2rem",
         29: "2.9rem",
         25: "2.5rem",
+        22: "2.2rem",
         20: "2rem",
         18: "1.8rem",
+        16: "1.6rem",
       },
       gridTemplateColumns: {
         "auto-fit": "repeat(auto-fit, minmax(20rem, 25rem))",

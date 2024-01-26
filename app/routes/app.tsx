@@ -1,17 +1,17 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { Outlet } from "@remix-run/react";
-import Navbar from "~/components/Navbar";
-import { useUser } from "~/utils/artist";
-import { requireArtistId } from "~/utils/auth.server";
+import { LoaderFunctionArgs, json } from "@remix-run/node"
+import { Outlet } from "@remix-run/react"
+import Navbar from "~/components/Navbar"
+import { useArtist } from "~/utils/artist"
+import { requireArtistId } from "~/utils/auth.server"
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requireArtistId(request);
+  await requireArtistId(request)
 
-  return json({});
+  return json({})
 }
 
 const AppIndex = () => {
-  const artist = useUser();
+  const artist = useArtist()
 
   return (
     <>
@@ -22,7 +22,7 @@ const AppIndex = () => {
         <Outlet />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default AppIndex;
+export default AppIndex

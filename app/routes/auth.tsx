@@ -21,8 +21,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Index() {
   return (
-    <div className="relative h-svh bg-blue">
-      <header className="mb-36 flex items-center justify-center pt-[4.5rem]">
+    <div className="relative grid h-svh place-items-center gap-6 bg-blue">
+      <header className="mb-36 flex items-center justify-center pt-8">
         <Link to={"/"}>
           <img
             src={FullPinkLogo}
@@ -32,7 +32,7 @@ export default function Index() {
         </Link>
       </header>
 
-      <main className="absolute left-1/2 top-[52.5%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+      <main className="-mt-40 flex items-center justify-center">
         <Outlet />
       </main>
 

@@ -1,29 +1,29 @@
-import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
-import { UniqueEnforcer } from "enforce-unique";
-import bcrypt from "bcryptjs";
+import { PrismaClient } from "@prisma/client"
+import { faker } from "@faker-js/faker"
+import { UniqueEnforcer } from "enforce-unique"
+import bcrypt from "bcryptjs"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
-const uniqueUsernameEnforce = new UniqueEnforcer();
-const uniqueEmailEnforce = new UniqueEnforcer();
+const uniqueUsernameEnforce = new UniqueEnforcer()
+const uniqueEmailEnforce = new UniqueEnforcer()
 
 async function seed() {
-  console.log("🌱 Seeding...");
-  console.time(`🌱 Database has been seeded`);
+  console.log("🌱 Seeding...")
+  console.time(`🌱 Database has been seeded`)
 
-  console.time("🧹 Cleaned up the database...");
-  await prisma.artist.deleteMany();
-  await prisma.art.deleteMany();
-  await prisma.permission.deleteMany();
-  await prisma.role.deleteMany();
-  console.timeEnd("🧹 Cleaned up the database...");
+  console.time("🧹 Cleaned up the database...")
+  await prisma.artist.deleteMany()
+  await prisma.artwork.deleteMany()
+  await prisma.permission.deleteMany()
+  await prisma.role.deleteMany()
+  console.timeEnd("🧹 Cleaned up the database...")
 
-  const entities = ["artist", "art"];
-  const actions = ["create", "read", "update", "delete"];
-  const accesses = ["own", "any"];
+  const entities = ["artist", "art"]
+  const actions = ["create", "read", "update", "delete"]
+  const accesses = ["own", "any"]
 
-  console.time("🛂 Created permissions");
+  console.time("🛂 Created permissions")
   for (const entity of entities) {
     for (const action of actions) {
       for (const access of accesses) {
@@ -33,13 +33,13 @@ async function seed() {
             action,
             access,
           },
-        });
+        })
       }
     }
   }
-  console.timeEnd("🛂 Created permissions");
+  console.timeEnd("🛂 Created permissions")
 
-  console.time("🛡️ Created user and admin role");
+  console.time("🛡️ Created user and admin role")
   await prisma.role.create({
     data: {
       name: "user",
@@ -51,7 +51,7 @@ async function seed() {
         }),
       },
     },
-  });
+  })
 
   await prisma.role.create({
     data: {
@@ -64,23 +64,23 @@ async function seed() {
         }),
       },
     },
-  });
-  console.timeEnd("🛡️ Created user and admin role");
+  })
+  console.timeEnd("🛡️ Created user and admin role")
 
-  const totalArtists = 7;
+  const totalArtists = 7
 
-  console.log("👤 Creating artists...");
-  console.time(`👤 Created ${totalArtists} artists...`);
+  console.log("👤 Creating artists...")
+  console.time(`👤 Created ${totalArtists} artists...`)
   for (let index = 0; index < totalArtists; index++) {
     const username = uniqueUsernameEnforce.enforce(() => {
-      return faker.internet.userName().slice(0, 15).toLowerCase();
-    });
+      return faker.internet.userName().slice(0, 15).toLowerCase()
+    })
 
     await prisma.artist
       .create({
         data: {
           email: uniqueEmailEnforce.enforce(() => {
-            return faker.internet.email();
+            return faker.internet.email()
           }),
           username,
           roles: {
@@ -93,27 +93,27 @@ async function seed() {
               hash: bcrypt.hashSync(username, 10),
             },
           },
-          arts: {
+          artworks: {
             create: Array.from({
               length: faker.number.int({ min: 0, max: 6 }),
             }).map(() => {
               return {
-                art: faker.internet.avatar(),
+                artworkImage: faker.internet.avatar(),
                 theme: faker.lorem.sentence(),
-              };
+              }
             }),
           },
         },
       })
       .catch((e) => {
-        console.error("Error creating an artists: ", e);
-        return null;
-      });
+        console.error("Error creating an artists: ", e)
+        return null
+      })
   }
-  console.timeEnd(`👤 Created ${totalArtists} artists...`);
+  console.timeEnd(`👤 Created ${totalArtists} artists...`)
 
-  console.log('👺 Creating admin user "netrunners"');
-  console.time(`👺 Created admin user "netrunners"`);
+  console.log('👺 Creating admin user "netrunners"')
+  console.time(`👺 Created admin user "netrunners"`)
 
   await prisma.artist.create({
     data: {
@@ -128,25 +128,25 @@ async function seed() {
         },
       },
       avatar: "https://i.imgur.com/dhFOxNO.png",
-      arts: {
+      artworks: {
         create: {
           theme: "A blue man in a purple jacket.",
-          art: "https://imgur.com/7YgVzCu.png",
+          artworkImage: "https://imgur.com/7YgVzCu.png",
         },
       },
     },
-  });
+  })
 
-  console.timeEnd(`👺 Created admin user "netrunners"`);
+  console.timeEnd(`👺 Created admin user "netrunners"`)
 
-  console.timeEnd("🌱 Database has been seeded");
+  console.timeEnd("🌱 Database has been seeded")
 }
 
 seed()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

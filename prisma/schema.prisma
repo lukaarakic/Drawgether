@@ -24,33 +24,33 @@ model Artist {
   // 
   comments       Comment[]
   likes          Like[]
-  arts           Art[]
+  artworks       Artwork[]
   roles          Role[]
 
   @@index([username])
 }
 
-model Art {
-  id         String    @id @default(cuid())
-  theme      String
-  art        String
-  likesCount Int       @default(0)
+model Artwork {
+  id           String    @id @default(cuid())
+  theme        String
+  artworkImage String
+  likesCount   Int       @default(0)
   // 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
   // 
-  comments   Comment[]
-  likes      Like[]
-  artists    Artist[]
+  comments     Comment[]
+  likes        Like[]
+  artists      Artist[]
 }
 
 model Like {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   // 
   artId    String
-  art      Art    @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  art      Artwork @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artistId String
-  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artist   Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([artId])
   @@index([artistId])
@@ -61,7 +61,7 @@ model Comment {
   content    String   @default("")
   // 
   artId      String
-  art        Art      @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  art        Artwork  @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artistId   String
   artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // 
