@@ -26,37 +26,33 @@ export async function like({
     },
   })
 
-  if (liked?.likes.length === 0) {
-    await prisma.art.update({
-      where: {
-        id: artworkId,
-      },
-      data: {
-        likes: {
-          create: {
-            artistId: artist.id,
+  const updateData =
+    liked?.likes.length === 0
+      ? {
+          likes: {
+            create: {
+              artistId: artist.id,
+            },
           },
-        },
-        likesCount: {
-          increment: 1,
-        },
-      },
-    })
-  } else {
-    await prisma.art.update({
-      where: {
-        id: artworkId,
-      },
-      data: {
-        likes: {
-          delete: {
-            id: liked?.likes[0].id,
+          likesCount: {
+            increment: 1,
           },
-        },
-        likesCount: {
-          decrement: 1,
-        },
-      },
-    })
-  }
+        }
+      : {
+          likes: {
+            delete: {
+              id: liked?.likes[0].id,
+            },
+          },
+          likesCount: {
+            decrement: 1,
+          },
+        }
+
+  await prisma.art.update({
+    where: {
+      id: artworkId,
+    },
+    data: updateData,
+  })
 }

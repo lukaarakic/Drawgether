@@ -8,7 +8,6 @@ import ArtistCircle from "./ArtistCircle"
 import generateRandomRotation from "~/utils/getRandomRotation"
 import TrashIcon from "~/assets/misc/trash.svg"
 import LikePost from "./Like"
-import { Like } from "@prisma/client"
 
 interface ArtPostProps {
   theme: string
@@ -21,7 +20,7 @@ interface ArtPostProps {
     id: string
     username: string
   }
-  likes: Like[]
+  likes: { artistId: string }[]
 }
 
 const ArtPost: FC<ArtPostProps> = ({
@@ -36,7 +35,6 @@ const ArtPost: FC<ArtPostProps> = ({
 }) => {
   const isLiked =
     likes.filter((like) => like.artistId === currentArtist.id).length > 0
-  console.log(isLiked)
 
   return (
     <article className="mx-auto mb-80 w-[90%] xs:w-[57.2rem]">

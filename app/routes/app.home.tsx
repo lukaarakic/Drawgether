@@ -19,6 +19,11 @@ export async function loader() {
           username: true,
         },
       },
+      likes: {
+        select: {
+          artistId: true,
+        },
+      },
       comments: {
         select: {
           id: true,
@@ -33,7 +38,6 @@ export async function loader() {
         },
       },
       id: true,
-      likes: true,
       likesCount: true,
       theme: true,
     },
