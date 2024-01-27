@@ -45,14 +45,14 @@ model Artwork {
 }
 
 model Like {
-  id       String  @id @default(cuid())
+  id        String  @id @default(cuid())
   // 
-  artId    String
-  art      Artwork @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artistId String
-  artist   Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkId String
+  artwork   Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artistId  String
+  artist    Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@index([artId])
+  @@index([artworkId])
   @@index([artistId])
 }
 
@@ -60,15 +60,15 @@ model Comment {
   id         String   @id @default(cuid())
   content    String   @default("")
   // 
-  artId      String
-  art        Artwork  @relation(fields: [artId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkId  String
+  artwork    Artwork  @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artistId   String
   artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@index([artId])
+  @@index([artworkId])
   @@index([artistId])
 }
 

@@ -73,7 +73,7 @@ export function ModalComment({
             </p>
           </BoxLabel>
         </div>
-        <p className="mt-4 w-[40rem] text-22 leading-none text-black">
+        <p className="mt-4 w-[40rem] break-words text-22 leading-none text-black">
           {comment.content}
         </p>
       </div>

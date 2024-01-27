@@ -1,45 +1,46 @@
-import { conform, useForm } from "@conform-to/react";
-import { getFieldsetConstraint, parse } from "@conform-to/zod";
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { AuthenticityTokenInput } from "remix-utils/csrf/react";
-import { HoneypotInputs } from "remix-utils/honeypot/react";
-import { useDebounce } from "use-debounce";
-import { z } from "zod";
-import BoxButton from "~/components/BoxButton";
-import ErrorList from "~/components/ErrorList";
-import { GeneralErrorBoundary } from "~/components/ErrorBoundry";
-import { checkCSRF } from "~/utils/csrf.server";
-import { checkHoneypot } from "~/utils/honeypot.server";
+import { conform, useForm } from "@conform-to/react"
+import { getFieldsetConstraint, parse } from "@conform-to/zod"
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
+import { Form, useActionData } from "@remix-run/react"
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
+import { HoneypotInputs } from "remix-utils/honeypot/react"
+import { useDebounce } from "use-debounce"
+import { z } from "zod"
+import BoxButton from "~/components/BoxButton"
+import ErrorList from "~/components/ErrorList"
+import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
+import { checkCSRF } from "~/utils/csrf.server"
+import { checkHoneypot } from "~/utils/honeypot.server"
 import {
   EmailSchema,
   PasswordSchema,
   UsernameSchema,
-} from "~/utils/user-validation";
-import { prisma } from "~/utils/db.server";
+} from "~/utils/user-validation"
+import { prisma } from "~/utils/db.server"
 import {
   getSessionExpirationDate,
   requireAnonymous,
   signup,
-} from "~/utils/auth.server";
-import { sessionStorage } from "~/utils/session.server";
-import scribbleSfx from "~/assets/audio/scribble.wav";
+} from "~/utils/auth.server"
+import { sessionStorage } from "~/utils/session.server"
+import scribbleSfx from "~/assets/audio/scribble.wav"
+import { useIsPending } from "~/utils/misc"
 
 const RegisterSchema = z.object({
   username: UsernameSchema,
   email: EmailSchema,
   password: PasswordSchema,
   remember: z.boolean().optional(),
-});
+})
 
 export async function action({ request }: ActionFunctionArgs) {
-  await requireAnonymous(request);
-  const formData = await request.formData();
+  await requireAnonymous(request)
+  const formData = await request.formData()
 
-  await checkCSRF(formData, request);
-  checkHoneypot(formData);
+  await checkCSRF(formData, request)
+  checkHoneypot(formData)
 
   const submission = await parse(formData, {
     schema: RegisterSchema.superRefine(async (data, ctx) => {
@@ -48,36 +49,36 @@ export async function action({ request }: ActionFunctionArgs) {
         select: {
           id: true,
         },
-      });
+      })
 
       if (existingArtist) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "An Artist already exists with this username",
-        });
-        return;
+        })
+        return
       }
     }).transform(async (data) => {
-      const artist = await signup(data);
-      return { ...data, artist };
+      const artist = await signup(data)
+      return { ...data, artist }
     }),
     async: true,
-  });
+  })
 
   if (submission.intent !== "submit") {
-    return json({ status: "idle", submission } as const);
+    return json({ status: "idle", submission } as const)
   }
 
   if (!submission.value?.artist) {
-    return json({ status: "error", submission } as const, { status: 400 });
+    return json({ status: "error", submission } as const, { status: 400 })
   }
 
-  const { artist, remember } = submission.value;
+  const { artist, remember } = submission.value
 
   const cookieSession = await sessionStorage.getSession(
-    request.headers.get("cookie")
-  );
-  cookieSession.set("artistId", artist.id);
+    request.headers.get("cookie"),
+  )
+  cookieSession.set("artistId", artist.id)
 
   throw redirect("/app/home", {
     headers: {
@@ -85,40 +86,41 @@ export async function action({ request }: ActionFunctionArgs) {
         expires: remember ? getSessionExpirationDate() : undefined,
       }),
     },
-  });
+  })
 }
 
 const SignUpPage = () => {
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<typeof action>()
+  const isPending = useIsPending()
 
-  const [username, setUsername] = useState("");
-  const [debouncedUsername] = useDebounce(username, 500);
+  const [username, setUsername] = useState("")
+  const [debouncedUsername] = useDebounce(username, 500)
 
   const [form, fields] = useForm({
     id: "register-form",
     constraint: getFieldsetConstraint(RegisterSchema),
     lastSubmission: actionData?.submission,
     onValidate({ formData }) {
-      return parse(formData, { schema: RegisterSchema });
+      return parse(formData, { schema: RegisterSchema })
     },
-  });
+  })
 
   function play() {
-    new Audio(scribbleSfx).play();
+    new Audio(scribbleSfx).play()
   }
 
   return (
     <div>
       <Form
         method="POST"
-        className="flex flex-col items-center gap-4 mb-12 text-20"
+        className="mb-12 flex flex-col items-center gap-4 text-20"
         {...form.props}
       >
         <HoneypotInputs />
         <AuthenticityTokenInput />
 
         <div className="relative text-center">
-          <div className="w-36 h-36 border-only bg-white rounded-full absolute -top-2 left-0 z-10 flex items-center justify-center">
+          <div className="border-only absolute -top-2 left-0 z-10 flex h-36 w-36 items-center justify-center rounded-full bg-white">
             <img
               src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${
                 debouncedUsername ? debouncedUsername : "drawgether"
@@ -132,7 +134,7 @@ const SignUpPage = () => {
           <input
             type="text"
             placeholder="Username"
-            className={`input pl-40 rotate-[1.4deg] ${
+            className={`input rotate-[1.4deg] pl-40 ${
               fields.username.error ? "mb-4" : ""
             }`}
             defaultValue={username}
@@ -163,7 +165,7 @@ const SignUpPage = () => {
           <input
             type="password"
             placeholder="********"
-            className="input rotate-[1.7deg] mb-4"
+            className="input mb-4 rotate-[1.7deg]"
             {...conform.input(fields.password)}
           />
           <ErrorList
@@ -209,7 +211,7 @@ const SignUpPage = () => {
                 </g>
               </svg>
               <span
-                className="text-20 text-border text-border-sm text-white"
+                className="text-border text-border-sm text-20 text-white"
                 data-text="Remember me?"
               >
                 Remember me?
@@ -220,12 +222,14 @@ const SignUpPage = () => {
 
         <ErrorList id={form.errorId} errors={form.errors} />
 
-        <BoxButton degree={1} type="submit" className="px-24">
-          <p className="text-60">Register</p>
+        <BoxButton degree={1} type="submit" className="px-32">
+          <p className={`text-60 ${isPending ? "animate-spin" : ""}`}>
+            {isPending ? "🌀" : "Register"}
+          </p>
         </BoxButton>
       </Form>
 
-      <div className="text-center text-white text-25">
+      <div className="text-center text-25 text-white">
         <p
           className="text-border text-border-sm"
           data-text="Already registered? "
@@ -233,7 +237,7 @@ const SignUpPage = () => {
           Already registered?{" "}
           <Link
             to={"/auth/login"}
-            className="text-border text-border-sm underline text-pink"
+            className="text-border text-border-sm text-pink underline"
             data-text="Log in."
           >
             Log in.
@@ -241,11 +245,11 @@ const SignUpPage = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUpPage;
+export default SignUpPage
 
 export function ErrorBoundary() {
-  return <GeneralErrorBoundary />;
+  return <GeneralErrorBoundary />
 }

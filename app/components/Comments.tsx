@@ -28,23 +28,27 @@ const Comments = ({
       }}
     >
       {hasComments
-        ? comments.slice(0, 2).map((comment) => (
-            <div key={comment.id}>
-              <Link
-                to={`/app/artist/${comment.artist.username}`}
-                className="text-border text-pink"
-                data-text={`@${comment.artist.username}:`}
-              >
-                @{comment.artist.username}:
-              </Link>
-              <p
-                className="text-border ml-2"
-                data-text={` ${comment.content.slice(0, 25)}...`}
-              >
-                {` ${comment.content.slice(0, 25)}...`}
-              </p>
-            </div>
-          ))
+        ? comments.slice(0, 2).map((comment) => {
+            const isCommentLong = comment.content.length > 25
+            const content = isCommentLong
+              ? `${comment.content.slice(0, 25)}...`
+              : comment.content
+
+            return (
+              <div key={comment.id}>
+                <Link
+                  to={`/app/artist/${comment.artist.username}`}
+                  className="text-border text-pink"
+                  data-text={`@${comment.artist.username}:`}
+                >
+                  @{comment.artist.username}:
+                </Link>
+                <p className="text-border ml-2" data-text={content}>
+                  {content}
+                </p>
+              </div>
+            )
+          })
         : null}
 
       <Link
