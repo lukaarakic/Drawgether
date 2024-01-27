@@ -34,18 +34,12 @@ export async function like({
               artistId: artist.id,
             },
           },
-          likesCount: {
-            increment: 1,
-          },
         }
       : {
           likes: {
             delete: {
               id: liked?.likes[0].id,
             },
-          },
-          likesCount: {
-            decrement: 1,
           },
         }
 

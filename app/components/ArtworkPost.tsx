@@ -67,7 +67,7 @@ const ArtworkPost = ({
         <div className="absolute -bottom-12 -left-5 flex">
           <LikePost
             artworkId={artwork.id}
-            likesCount={artwork.likesCount}
+            likes={artwork.likes}
             isLiked={
               artwork.likes.filter((like) => like.artistId === artist.id)
                 .length > 0
