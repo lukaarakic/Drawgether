@@ -72,7 +72,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await prisma.comment.create({
     data: {
       content,
-      artworkId: artworkId,
+      artworkId,
       artistId: artist.id,
     },
     select: {
