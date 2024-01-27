@@ -90,10 +90,10 @@
     content: "";
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-    @apply border-only absolute -z-10
-      inline-block h-[130%] w-[140%] bg-pink;
+
+    @apply border-only absolute -z-10 inline-block h-[130%] w-[140%] bg-pink
+      transition-transform;
   }
 
   /* Input */

@@ -1,4 +1,4 @@
-import { useFormAction, useNavigation } from "@remix-run/react";
+import { useFormAction, useNavigation } from "@remix-run/react"
 
 /**
  * Provide a condition and if that condition is falsey, this throws a 400
@@ -19,13 +19,13 @@ export function invariantResponse(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   condition: any,
   message: string | (() => string),
-  responseInit?: ResponseInit
+  responseInit?: ResponseInit,
 ): asserts condition {
   if (!condition) {
     throw new Response(typeof message === "function" ? message() : message, {
       status: 400,
       ...responseInit,
-    });
+    })
   }
 }
 
@@ -44,21 +44,21 @@ export function useIsPending({
   formMethod = "POST",
   state = "non-idle",
 }: {
-  formAction?: string;
-  formMethod?: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
-  state?: "submitting" | "loading" | "non-idle";
+  formAction?: string
+  formMethod?: "POST" | "GET" | "PUT" | "PATCH" | "DELETE"
+  state?: "submitting" | "loading" | "non-idle"
 } = {}) {
-  const contextualFormAction = useFormAction();
-  const navigation = useNavigation();
+  const contextualFormAction = useFormAction()
+  const navigation = useNavigation()
   const isPendingState =
     state === "non-idle"
       ? navigation.state !== "idle"
-      : navigation.state === state;
+      : navigation.state === state
   return (
     isPendingState &&
     navigation.formAction === (formAction ?? contextualFormAction) &&
     navigation.formMethod === formMethod
-  );
+  )
 }
 
 /**
@@ -67,14 +67,14 @@ export function useIsPending({
 export function combineHeaders(
   ...headers: Array<ResponseInit["headers"] | null>
 ) {
-  const combined = new Headers();
+  const combined = new Headers()
   for (const header of headers) {
-    if (!header) continue;
+    if (!header) continue
     for (const [key, value] of new Headers(header).entries()) {
-      combined.append(key, value);
+      combined.append(key, value)
     }
   }
-  return combined;
+  return combined
 }
 
 /**
@@ -83,14 +83,14 @@ export function combineHeaders(
 export function combineResponseInits(
   ...responseInits: Array<ResponseInit | undefined>
 ) {
-  let combined: ResponseInit = {};
+  let combined: ResponseInit = {}
   for (const responseInit of responseInits) {
     combined = {
       ...responseInit,
       headers: combineHeaders(combined.headers, responseInit?.headers),
-    };
+    }
   }
-  return combined;
+  return combined
 }
 
 /**
@@ -99,15 +99,15 @@ export function combineResponseInits(
  * @returns
  */
 export function getErrorMessage(error: unknown) {
-  if (typeof error === "string") return error;
+  if (typeof error === "string") return error
   if (
     error &&
     typeof error === "object" &&
     "message" in error &&
     typeof error.message === "string"
   ) {
-    return error.message;
+    return error.message
   }
-  console.error("Unable to get error message for error", error);
-  return "Unknown Error";
+  console.error("Unable to get error message for error", error)
+  return "Unknown Error"
 }

@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react"
-import { ModalDataType } from "~/routes/app.home"
 import generateRandomRotation from "~/utils/getRandomRotation"
 
 type CommentsType = {
@@ -14,14 +13,10 @@ type CommentsType = {
 
 const Comments = ({
   comments,
-  artwork,
-  setModalData,
-  setIsOpen,
+  artworkId,
 }: {
   comments: CommentsType
-  artwork: ModalDataType
-  setModalData: React.Dispatch<React.SetStateAction<ModalDataType | null>>
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  artworkId: string
 }) => {
   const hasComments = comments.length > 0
 
@@ -52,11 +47,9 @@ const Comments = ({
           ))
         : null}
 
-      <button
-        onClick={() => {
-          setModalData(artwork)
-          setIsOpen(true)
-        }}
+      <Link
+        to={`/app/home/comment/${artworkId}`}
+        preventScrollReset
         data-text={
           hasComments
             ? "View more..."
@@ -67,7 +60,7 @@ const Comments = ({
         {hasComments
           ? "View more..."
           : "Be the first to comment on this artwork"}
-      </button>
+      </Link>
     </div>
   )
 }

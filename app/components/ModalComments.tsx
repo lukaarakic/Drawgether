@@ -19,36 +19,10 @@ const ModalComments = ({
     <div className="mx-auto h-[41.5rem] w-[90%] overflow-y-scroll">
       {comments.length > 0 ? (
         comments.map((comment) => (
-          <div
+          <ModalComment
+            comment={comment}
             key={`${comment.id}${comment.artist.id}`}
-            className="mb-24 flex items-start gap-5"
-          >
-            <Link to={`/app/artist/${comment.artist.username}`}>
-              <ArtistCircle
-                size={6}
-                avatar={{
-                  avatarUrl: comment.artist.avatar,
-                  seed: comment.artist.username,
-                }}
-              />
-            </Link>
-
-            <div>
-              <div className="w-min">
-                <BoxLabel>
-                  <p
-                    className="text-border text-border-sm text-16 py-2 text-justify"
-                    data-text={`@${comment.artist.username}`}
-                  >
-                    @{comment.artist.username}
-                  </p>
-                </BoxLabel>
-              </div>
-              <p className="text-22 mt-4 w-[40rem] leading-none text-black">
-                {comment.content}
-              </p>
-            </div>
-          </div>
+          />
         ))
       ) : (
         <p
@@ -63,3 +37,46 @@ const ModalComments = ({
 }
 
 export default ModalComments
+
+export function ModalComment({
+  comment,
+}: {
+  comment: {
+    artist: {
+      id: string
+      username: string
+      avatar: string | null
+    }
+    content: string
+  }
+}) {
+  return (
+    <div className="mb-24 flex items-start gap-5">
+      <Link to={`/app/artist/${comment.artist.username}`}>
+        <ArtistCircle
+          size={6}
+          avatar={{
+            avatarUrl: comment.artist.avatar,
+            seed: comment.artist.username,
+          }}
+        />
+      </Link>
+
+      <div>
+        <div className="w-min">
+          <BoxLabel>
+            <p
+              className="text-border text-border-sm py-2 text-justify text-16"
+              data-text={`@${comment.artist.username}`}
+            >
+              @{comment.artist.username}
+            </p>
+          </BoxLabel>
+        </div>
+        <p className="mt-4 w-[40rem] text-22 leading-none text-black">
+          {comment.content}
+        </p>
+      </div>
+    </div>
+  )
+}
