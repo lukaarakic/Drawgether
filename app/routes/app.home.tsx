@@ -72,13 +72,18 @@ export async function action({ request }: ActionFunctionArgs) {
     await like({ artist, artworkId })
   }
 
+  if (intent === "delete") {
+    invariantResponse(artworkId, "Artwork ID not found 🥲")
+    await prisma.artwork.delete({
+      where: { id: artworkId },
+    })
+  }
+
   return null
 }
 
 const Home = () => {
   const { artworks } = useLoaderData<typeof loader>()
-
-  console.log(artworks)
 
   return (
     <div className="mt-60">

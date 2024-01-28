@@ -18,7 +18,9 @@ const Modal: FC<ModalProps> = ({
   setIsOpen,
 }) => {
   useEffect(() => {
-    document.body.classList.toggle("stop-scroll")
+    if (isModalOpen) {
+      document.body.classList.toggle("stop-scroll")
+    }
   }, [isModalOpen])
 
   return (

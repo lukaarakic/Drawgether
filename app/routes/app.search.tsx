@@ -40,8 +40,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 const SearchPage = () => {
   const data = useLoaderData<typeof loader>()
 
-  console.log(data.artists.length)
-
   return (
     <main className="mt-60">
       <Form method="GET" className="flex items-center justify-center gap-12">

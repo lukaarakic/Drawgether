@@ -6,7 +6,7 @@ import ArtistCircle from "./ArtistCircle"
 import Comments from "./Comments"
 import { useArtist } from "~/utils/artist"
 import CommentIcon from "~/assets/misc/comment.svg"
-import TrashIcon from "~/assets/misc/trash.svg"
+import DeleteArtwork from "./DeleteArtwork"
 
 type ArtworkPostType = {
   id: string
@@ -78,7 +78,7 @@ const ArtworkPost = ({
           </Link>
           {artwork.artists.filter((artistF) => artistF.id === artist.id)
             .length > 0 ? (
-            <img src={TrashIcon} alt="" className="h-24 w-24" />
+            <DeleteArtwork artworkId={artwork.id} />
           ) : null}
         </div>
 
@@ -91,6 +91,7 @@ const ArtworkPost = ({
                   avatarUrl: artist.avatar,
                   seed: artist.username,
                 }}
+                className="-mr-10"
               />
             </Link>
           ))}
