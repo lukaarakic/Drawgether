@@ -17,7 +17,7 @@ export default function Index() {
   return (
     <main className="grid h-svh place-items-center bg-blue">
       <div className="mx-auto mb-8 flex w-[42rem] items-center justify-center pt-8">
-        <img src={PinkLogo} alt="Drawgether logo" className="w-full" />
+        <img src={PinkLogo} alt="Drawgether logo" width={420} />
       </div>
 
       <div className=" flex w-full flex-col items-center justify-center">

@@ -46,7 +46,7 @@ const ArtworkPost = ({
       <BoxLabel degree={generateRandomRotation((index % 12) + 1)}>
         <p
           data-text={artwork.theme}
-          className="text-border p-2 text-25 md:text-32"
+          className="text-border whitespace-break-spaces p-2 text-25 md:text-32"
         >
           {artwork.theme}
         </p>
@@ -67,7 +67,7 @@ const ArtworkPost = ({
         <div className="absolute -bottom-12 -left-5 flex">
           <LikePost
             artworkId={artwork.id}
-            likes={artwork.likes}
+            likesCount={artwork.likesCount}
             isLiked={
               artwork.likes.filter((like) => like.artistId === artist.id)
                 .length > 0

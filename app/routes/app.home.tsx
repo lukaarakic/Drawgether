@@ -1,5 +1,5 @@
-import { ActionFunctionArgs, json } from "@remix-run/node"
-import { Outlet, useLoaderData } from "@remix-run/react"
+import { ActionFunctionArgs, defer } from "@remix-run/node"
+import { Await, Outlet, useLoaderData } from "@remix-run/react"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
 import { prisma } from "~/utils/db.server"
@@ -7,6 +7,7 @@ import { invariantResponse } from "~/utils/misc"
 import { like } from "~/utils/socalFunctions.server"
 
 import ArtworkPost from "~/components/ArtworkPost"
+import { Suspense } from "react"
 
 export async function loader() {
   const artworks = await prisma.artwork.findMany({
@@ -42,12 +43,17 @@ export async function loader() {
         },
       },
     },
-    orderBy: {
-      created_at: "desc",
-    },
+    orderBy: [
+      {
+        created_at: "desc",
+      },
+      {
+        theme: "asc",
+      },
+    ],
   })
 
-  return json({
+  return defer({
     artworks,
   })
 }
@@ -70,15 +76,23 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 const Home = () => {
-  const data = useLoaderData<typeof loader>()
+  const { artworks } = useLoaderData<typeof loader>()
+
+  console.log(artworks)
 
   return (
     <div className="mt-60">
       <Outlet />
       <div className="flex flex-col">
-        {data.artworks.map((artwork, index) => (
-          <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
-        ))}
+        <Suspense fallback={<div>Loading...</div>} key="jhgf&^%$#1209">
+          <Await resolve={artworks}>
+            {(artworks) =>
+              artworks.map((artwork, index) => (
+                <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
+              ))
+            }
+          </Await>
+        </Suspense>
       </div>
     </div>
   )
