@@ -35,7 +35,7 @@ type ArtworkPostType = {
 const ArtworkPost = ({
   artwork,
   index,
-  className = "mx-auto mb-80 w-[90%] xs:w-[57.2rem]",
+  className = "mx-auto mb-80 w-[80%] xs:w-[57.2rem]",
   showComments = true,
 }: {
   artwork: ArtworkPostType

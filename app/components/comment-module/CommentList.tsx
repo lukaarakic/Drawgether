@@ -24,7 +24,7 @@ const CommentList = ({
         ))
       ) : (
         <p
-          className="text-border mb-24 p-8 text-25 text-white"
+          className="text-border text-border-sm mb-24 p-8 text-25 text-white"
           data-text="There are no comments on this artwork"
         >
           There are no comments on this artwork

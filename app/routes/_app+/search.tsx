@@ -41,7 +41,7 @@ const SearchPage = () => {
   const data = useLoaderData<typeof loader>()
 
   return (
-    <main className="mt-60">
+    <main className="">
       <Form method="GET" className="flex items-center justify-center gap-12">
         <input
           type="text"

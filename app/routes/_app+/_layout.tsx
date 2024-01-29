@@ -25,7 +25,7 @@ const AppIndex = () => {
       <header>
         <Navbar username={artist.username} />
       </header>
-      <main className="mt-20 flex items-center justify-center">
+      <main className="mt-20 flex items-center justify-center md:mt-72">
         <Outlet />
       </main>
     </>

@@ -81,7 +81,7 @@ const Home = () => {
   const { artworks } = useLoaderData<typeof loader>()
 
   return (
-    <div className="mt-60">
+    <div className="">
       <div className="flex flex-col">
         {artworks.map((artwork, index) => (
           <ArtworkPost artwork={artwork} key={artwork.id} index={index} />

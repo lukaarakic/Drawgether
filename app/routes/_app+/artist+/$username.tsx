@@ -43,8 +43,8 @@ const Profile = () => {
 
   return (
     <>
-      <div className="mx-auto mt-24 w-[90%] xs:w-[80rem]">
-        <div className="mb-32 mt-44 flex flex-col items-center justify-center gap-16 md:flex-row">
+      <div className="mx-auto w-[90%] xs:w-[80rem]">
+        <div className="mb-32 flex flex-col items-center justify-center gap-16 md:flex-row">
           <ArtistCircle
             size={16.9}
             avatar={{
