@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchTerm = new URL(request.url).searchParams.get("search")
 
   if (searchTerm === "") {
-    throw redirect("/app/search")
+    throw redirect("/search")
   }
 
   const artists = searchTerm
