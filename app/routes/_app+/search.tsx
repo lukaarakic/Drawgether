@@ -1,13 +1,13 @@
 import { Form, Link, useLoaderData } from "@remix-run/react"
-import BoxButton from "~/components/BoxButton"
+import BoxButton from "~/components/ui/BoxButton"
 import SearchIcon from "~/assets/misc/searchIcon.svg"
 
-import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import { prisma } from "~/utils/db.server"
-import ArtistCircle from "~/components/ArtistCircle"
-import BoxLabel from "~/components/BoxLabel"
-import generateRandomRotation from "~/utils/getRandomRotation"
+import ArtistCircle from "~/components/ui/ArtistCircle"
+import BoxLabel from "~/components/ui/BoxLabel"
+import generateRandomRotation from "~/utils/generate-random-rotation"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchTerm = new URL(request.url).searchParams.get("search")
@@ -71,7 +71,7 @@ const SearchPage = () => {
         {data.artists.length ? (
           data.artists.map((artist, index) => (
             <Link
-              to={`/app/artist/${artist.username}`}
+              to={`/artist/${artist.username}`}
               key={artist.id}
               className="mb-8 flex items-center gap-8"
             >

@@ -13,7 +13,7 @@ const Navbar = ({ username }: { username: string }) => {
       <nav className="box-shadow fixed left-1/2 top-11 z-50 hidden h-[11.3rem] w-[90%] -translate-x-1/2 items-center justify-between rounded-full bg-blue px-28 text-32 md:flex lg:w-[147rem] lg:px-[11.2rem] lg:text-40">
         <NavLink
           data-text="HOME"
-          to={"/app/home"}
+          to={"/home"}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border uppercase text-white"
@@ -26,7 +26,7 @@ const Navbar = ({ username }: { username: string }) => {
         </NavLink>
         <NavLink
           data-text="SEARch"
-          to={"/app/search"}
+          to={"/search"}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border uppercase text-white"
@@ -38,7 +38,7 @@ const Navbar = ({ username }: { username: string }) => {
           Search
         </NavLink>
 
-        <NavLink to={"/app/home"} onClick={() => play()}>
+        <NavLink to={"/home"} onClick={() => play()}>
           <img
             src={LogoOnly}
             alt="Logo of drawgether"
@@ -47,7 +47,7 @@ const Navbar = ({ username }: { username: string }) => {
         </NavLink>
         <NavLink
           data-text="profile"
-          to={`/app/artist/${username}`}
+          to={`/artist/${username}`}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border uppercase text-white"
@@ -60,7 +60,7 @@ const Navbar = ({ username }: { username: string }) => {
         </NavLink>
         <NavLink
           data-text="play"
-          to={"/app/play"}
+          to={"/play"}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border uppercase text-white"

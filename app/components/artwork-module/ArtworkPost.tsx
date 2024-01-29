@@ -1,12 +1,12 @@
-import generateRandomRotation from "~/utils/getRandomRotation"
-import BoxLabel from "./BoxLabel"
+import generateRandomRotation from "~/utils/generate-random-rotation"
+import BoxLabel from "../ui/BoxLabel"
 import { Link } from "@remix-run/react"
-import LikePost from "./Like"
-import ArtistCircle from "./ArtistCircle"
-import Comments from "./Comments"
+import ArtworkLikeButton from "./ArtworkLikeButton"
+import ArtistCircle from "../ui/ArtistCircle"
+import ArtworkComments from "./ArtworkComments"
 import { useArtist } from "~/utils/artist"
 import CommentIcon from "~/assets/misc/comment.svg"
-import DeleteArtwork from "./DeleteArtwork"
+import ArtworkDeleteButton from "./ArtworkDeleteButton"
 
 type ArtworkPostType = {
   id: string
@@ -35,14 +35,18 @@ type ArtworkPostType = {
 const ArtworkPost = ({
   artwork,
   index,
+  className = "mx-auto mb-80 w-[90%] xs:w-[57.2rem]",
+  showComments = true,
 }: {
   artwork: ArtworkPostType
   index: number
+  className?: string
+  showComments?: boolean
 }) => {
   const artist = useArtist()
 
   return (
-    <article className="mx-auto mb-80 w-[90%] xs:w-[57.2rem]">
+    <article className={className}>
       <BoxLabel degree={generateRandomRotation((index % 12) + 1)}>
         <p
           data-text={artwork.theme}
@@ -61,11 +65,11 @@ const ArtworkPost = ({
         <img
           src={artwork.artworkImage}
           alt={artwork.theme}
-          className="box-shadow mt-5 h-[57.2rem] w-[57.2rem] object-cover"
+          className="box-shadow mt-5 h-[57.2rem] w-[57.2rem] object-cover "
         />
 
         <div className="absolute -bottom-12 -left-5 flex">
-          <LikePost
+          <ArtworkLikeButton
             artworkId={artwork.id}
             likesCount={artwork.likesCount}
             isLiked={
@@ -73,18 +77,20 @@ const ArtworkPost = ({
                 .length > 0
             }
           />
-          <Link to={`/app/home/comment/${artwork.id}`}>
-            <img src={CommentIcon} alt="" className="h-24 w-24" />
-          </Link>
+          {showComments ? (
+            <Link to={`/home/comment/${artwork.id}`} preventScrollReset>
+              <img src={CommentIcon} alt="" className="h-24 w-24" />
+            </Link>
+          ) : null}
           {artwork.artists.filter((artistF) => artistF.id === artist.id)
             .length > 0 ? (
-            <DeleteArtwork artworkId={artwork.id} />
+            <ArtworkDeleteButton artworkId={artwork.id} />
           ) : null}
         </div>
 
         <div className="absolute -bottom-16 -right-8 flex items-baseline">
           {artwork.artists.map((artist) => (
-            <Link to={`/app/artist/${artist.username}`} key={artist.id}>
+            <Link to={`/artist/${artist.username}`} key={artist.id}>
               <ArtistCircle
                 size={6.8}
                 avatar={{
@@ -98,7 +104,9 @@ const ArtworkPost = ({
         </div>
       </div>
 
-      <Comments comments={artwork.comments} artworkId={artwork.id} />
+      {showComments ? (
+        <ArtworkComments comments={artwork.comments} artworkId={artwork.id} />
+      ) : null}
     </article>
   )
 }

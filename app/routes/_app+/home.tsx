@@ -1,13 +1,12 @@
 import { ActionFunctionArgs, defer } from "@remix-run/node"
-import { Await, Outlet, useLoaderData } from "@remix-run/react"
+import { Outlet, useLoaderData } from "@remix-run/react"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
 import { prisma } from "~/utils/db.server"
 import { invariantResponse } from "~/utils/misc"
-import { like } from "~/utils/socalFunctions.server"
+import { like } from "~/utils/social-function.server"
 
-import ArtworkPost from "~/components/ArtworkPost"
-import { Suspense } from "react"
+import ArtworkPost from "~/components/artwork-module/ArtworkPost"
 
 export async function loader() {
   const artworks = await prisma.artwork.findMany({
@@ -41,6 +40,9 @@ export async function loader() {
             },
           },
         },
+        orderBy: {
+          created_at: "desc",
+        },
       },
     },
     orderBy: [
@@ -72,13 +74,6 @@ export async function action({ request }: ActionFunctionArgs) {
     await like({ artist, artworkId })
   }
 
-  if (intent === "delete") {
-    invariantResponse(artworkId, "Artwork ID not found 🥲")
-    await prisma.artwork.delete({
-      where: { id: artworkId },
-    })
-  }
-
   return null
 }
 
@@ -87,18 +82,12 @@ const Home = () => {
 
   return (
     <div className="mt-60">
-      <Outlet />
       <div className="flex flex-col">
-        <Suspense fallback={<div>Loading...</div>} key="jhgf&^%$#1209">
-          <Await resolve={artworks}>
-            {(artworks) =>
-              artworks.map((artwork, index) => (
-                <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
-              ))
-            }
-          </Await>
-        </Suspense>
+        {artworks.map((artwork, index) => (
+          <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
+        ))}
       </div>
+      <Outlet />
     </div>
   )
 }

@@ -1,11 +1,11 @@
-import generateRandomRotation from "~/utils/getRandomRotation";
+import generateRandomRotation from "~/utils/generate-random-rotation"
 
 const SmallArt = ({ art, index }: { art: string; index: number }) => {
-  const rotations = [-1.02, 0.78, -1.21, 1.08, -0.93, 1.24];
+  const rotations = [-1.02, 0.78, -1.21, 1.08, -0.93, 1.24]
 
   return (
     <div
-      className="w-[23rem] h-[23rem] box-shadow bg-black bg-opacity-30 overflow-hidden cursor-pointer"
+      className="box-shadow h-[23rem] w-[23rem] cursor-pointer overflow-hidden bg-black bg-opacity-30"
       style={{
         rotate: `${generateRandomRotation(index % 6, rotations)}deg`,
       }}
@@ -13,10 +13,10 @@ const SmallArt = ({ art, index }: { art: string; index: number }) => {
       <img
         src={art}
         alt=""
-        className="object-center object-fill w-full h-full"
+        className="h-full w-full object-fill object-center"
       />
     </div>
-  );
-};
+  )
+}
 
-export default SmallArt;
+export default SmallArt

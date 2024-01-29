@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import generateRandomRotation from "~/utils/getRandomRotation"
+import generateRandomRotation from "~/utils/generate-random-rotation"
 
 type CommentsType = {
   id: string
@@ -11,7 +11,7 @@ type CommentsType = {
   }
 }[]
 
-const Comments = ({
+const ArtworkComments = ({
   comments,
   artworkId,
 }: {
@@ -37,13 +37,16 @@ const Comments = ({
             return (
               <div key={comment.id}>
                 <Link
-                  to={`/app/artist/${comment.artist.username}`}
-                  className="text-border text-pink"
+                  to={`/artist/${comment.artist.username}`}
+                  className="text-border text-border-sm text-pink"
                   data-text={`@${comment.artist.username}:`}
                 >
                   @{comment.artist.username}:
                 </Link>
-                <p className="text-border ml-2" data-text={content}>
+                <p
+                  className="text-border text-border-sm ml-2"
+                  data-text={content}
+                >
                   {content}
                 </p>
               </div>
@@ -52,14 +55,14 @@ const Comments = ({
         : null}
 
       <Link
-        to={`/app/home/comment/${artworkId}`}
+        to={`/home/comment/${artworkId}`}
         preventScrollReset
         data-text={
           hasComments
             ? "View more..."
             : "Be the first to comment on this artwork"
         }
-        className={`text-border ${hasComments ? "mt-5" : ""}`}
+        className={`text-border text-border-sm ${hasComments ? "mt-5" : ""}`}
       >
         {hasComments
           ? "View more..."
@@ -69,4 +72,4 @@ const Comments = ({
   )
 }
 
-export default Comments
+export default ArtworkComments

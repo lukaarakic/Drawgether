@@ -1,38 +1,35 @@
 import { conform, useForm } from "@conform-to/react"
 import { getFieldsetConstraint, parse } from "@conform-to/zod"
-import {
-  type MetaFunction,
-  ActionFunctionArgs,
-  json,
-  redirect,
-} from "@remix-run/node"
-import { Form, Link, useActionData } from "@remix-run/react"
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
+import { Form, useActionData } from "@remix-run/react"
+import { useState } from "react"
+import { Link } from "react-router-dom"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { HoneypotInputs } from "remix-utils/honeypot/react"
+import { useDebounce } from "use-debounce"
 import { z } from "zod"
-import BoxButton from "~/components/BoxButton"
-import ErrorList from "~/components/ErrorList"
-import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
+import BoxButton from "~/components/ui/BoxButton"
+import ErrorList from "~/components/error/ErrorList"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 import { checkCSRF } from "~/utils/csrf.server"
 import { checkHoneypot } from "~/utils/honeypot.server"
-import { EmailSchema, PasswordSchema } from "~/utils/user-validation"
-import { sessionStorage } from "~/utils/session.server"
+import {
+  EmailSchema,
+  PasswordSchema,
+  UsernameSchema,
+} from "~/utils/user-validation"
+import { prisma } from "~/utils/db.server"
 import {
   getSessionExpirationDate,
-  login,
   requireAnonymous,
+  signup,
 } from "~/utils/auth.server"
+import { sessionStorage } from "~/utils/session.server"
 import scribbleSfx from "~/assets/audio/scribble.wav"
 import { useIsPending } from "~/utils/misc"
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Drawgether | Login" },
-    { name: "description", content: "Login into drawgether" },
-  ]
-}
-
-const LoginSchema = z.object({
+const RegisterSchema = z.object({
+  username: UsernameSchema,
   email: EmailSchema,
   password: PasswordSchema,
   remember: z.boolean().optional(),
@@ -40,35 +37,35 @@ const LoginSchema = z.object({
 
 export async function action({ request }: ActionFunctionArgs) {
   await requireAnonymous(request)
-
   const formData = await request.formData()
 
   await checkCSRF(formData, request)
   checkHoneypot(formData)
 
   const submission = await parse(formData, {
-    schema: (intent) =>
-      LoginSchema.transform(async (data, ctx) => {
-        if (intent !== "submit") return { ...data, artist: null }
+    schema: RegisterSchema.superRefine(async (data, ctx) => {
+      const existingArtist = await prisma.artist.findUnique({
+        where: { username: data.username },
+        select: {
+          id: true,
+        },
+      })
 
-        const artist = await login(data)
-        if (!artist) {
-          ctx.addIssue({
-            code: "custom",
-            message: "Invalid username or password",
-          })
-          return z.NEVER
-        }
-
-        return { ...data, artist }
-      }),
+      if (existingArtist) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "An Artist already exists with this username",
+        })
+        return
+      }
+    }).transform(async (data) => {
+      const artist = await signup(data)
+      return { ...data, artist }
+    }),
     async: true,
   })
-  delete submission.payload.password
 
   if (submission.intent !== "submit") {
-    // @ts-expect-error - conform
-    delete submission.value?.password
     return json({ status: "idle", submission } as const)
   }
 
@@ -83,7 +80,7 @@ export async function action({ request }: ActionFunctionArgs) {
   )
   cookieSession.set("artistId", artist.id)
 
-  return redirect("/app/home", {
+  throw redirect("/home", {
     headers: {
       "set-cookie": await sessionStorage.commitSession(cookieSession, {
         expires: remember ? getSessionExpirationDate() : undefined,
@@ -92,16 +89,19 @@ export async function action({ request }: ActionFunctionArgs) {
   })
 }
 
-export default function Index() {
+const SignUpPage = () => {
   const actionData = useActionData<typeof action>()
   const isPending = useIsPending()
 
+  const [username, setUsername] = useState("")
+  const [debouncedUsername] = useDebounce(username, 500)
+
   const [form, fields] = useForm({
-    id: "login-form",
-    constraint: getFieldsetConstraint(LoginSchema),
+    id: "register-form",
+    constraint: getFieldsetConstraint(RegisterSchema),
     lastSubmission: actionData?.submission,
     onValidate({ formData }) {
-      return parse(formData, { schema: LoginSchema })
+      return parse(formData, { schema: RegisterSchema })
     },
   })
 
@@ -110,32 +110,69 @@ export default function Index() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div>
       <Form
         method="POST"
-        className="mb-8 flex flex-col items-center gap-4"
+        className="mb-12 flex flex-col items-center gap-4 text-20"
         {...form.props}
       >
         <HoneypotInputs />
         <AuthenticityTokenInput />
 
-        <input
-          placeholder="lets@drawgether.com"
-          className="input rotate-[1.4deg]"
-          {...conform.input(fields.email)}
-        />
-        <ErrorList id={fields.email.errorId} errors={fields.email.errors} />
+        <div className="relative text-center">
+          <div className="border-only absolute -top-2 left-0 z-10 flex h-36 w-36 items-center justify-center rounded-full bg-white">
+            <img
+              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${
+                debouncedUsername ? debouncedUsername : "drawgether"
+              }`}
+              alt="Usernames avatar"
+              width="95%"
+              height="95%"
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="********"
-          className="input mb-4 -rotate-[1.18deg]"
-          {...conform.input(fields.password)}
-        />
-        <ErrorList
-          id={fields.password.errorId}
-          errors={fields.password.errors}
-        />
+          <input
+            type="text"
+            placeholder="Username"
+            className={`input rotate-[1.4deg] pl-40 ${
+              fields.username.error ? "mb-4" : ""
+            }`}
+            defaultValue={username}
+            onChange={(e) => setUsername(e.target.value)}
+            {...conform.input(fields.username)}
+          />
+          <div className="w-[55rem]">
+            <ErrorList
+              id={fields.username.errorId}
+              errors={fields.username.errors}
+            />
+          </div>
+        </div>
+
+        <div className="text-center">
+          <input
+            type="email"
+            placeholder="lets@drawgether.com"
+            className={`input -rotate-[1.18deg] ${
+              fields.email.error ? "mb-4" : ""
+            }`}
+            {...conform.input(fields.email)}
+          />
+          <ErrorList id={fields.email.errorId} errors={fields.email.errors} />
+        </div>
+
+        <div className="text-center">
+          <input
+            type="password"
+            placeholder="********"
+            className="input mb-4 rotate-[1.7deg]"
+            {...conform.input(fields.password)}
+          />
+          <ErrorList
+            id={fields.password.errorId}
+            errors={fields.password.errors}
+          />
+        </div>
 
         <div>
           <div className="checkbox">
@@ -184,46 +221,34 @@ export default function Index() {
         </div>
 
         <ErrorList id={form.errorId} errors={form.errors} />
-        <BoxButton degree={1.35} type="submit" className="px-32">
+
+        <BoxButton degree={1} type="submit" className="px-32">
           <p className={`text-60 ${isPending ? "animate-spin" : ""}`}>
-            {isPending ? "🌀" : "Log in"}
+            {isPending ? "🌀" : "Register"}
           </p>
         </BoxButton>
       </Form>
 
-      <div className="flex flex-col text-center text-25 text-white">
+      <div className="text-center text-25 text-white">
         <p
-          data-text="Don’t have an account?"
           className="text-border text-border-sm"
+          data-text="Already registered? "
         >
-          Don’t have an account?{" "}
+          Already registered?{" "}
           <Link
-            to={"/auth/sign-up"}
+            to={"/login"}
             className="text-border text-border-sm text-pink underline"
-            data-text="Register."
-            prefetch="intent"
+            data-text="Log in."
           >
-            Register.
-          </Link>
-        </p>
-        <p
-          data-text="Forgot your password?"
-          className="text-border text-border-sm"
-        >
-          Forgot your password?{" "}
-          <Link
-            to={"/auth/login"}
-            className="text-border text-border-sm text-pink underline"
-            data-text="Reset it."
-            prefetch="intent"
-          >
-            Reset it.
+            Log in.
           </Link>
         </p>
       </div>
     </div>
   )
 }
+
+export default SignUpPage
 
 export function ErrorBoundary() {
   return <GeneralErrorBoundary />

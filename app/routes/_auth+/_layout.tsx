@@ -23,7 +23,7 @@ export default function Index() {
   return (
     <div className="relative grid h-svh place-items-center gap-6 bg-blue">
       <header className="mb-36 flex items-center justify-center pt-8">
-        <Link to={"/"}>
+        <Link to="/">
           <img
             src={FullPinkLogo}
             alt="Drawgether logo"

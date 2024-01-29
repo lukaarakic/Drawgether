@@ -8,6 +8,7 @@
     font-size: calc(100vw / 3440 * 10);
     box-sizing: border-box;
   }
+
   @media only screen and (max-width: 160em) {
     html {
       font-size: calc(100vw / 2560 * 12);
@@ -122,6 +123,24 @@
 
   .check:checked + label svg g path {
     stroke-dashoffset: 0;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #212112;
+    border-radius: 2rem;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4d4d4d;
   }
 }
 

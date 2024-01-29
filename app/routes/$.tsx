@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useLocation } from "@remix-run/react"
 import { Link } from "react-router-dom"
-import { GeneralErrorBoundary } from "~/components/ErrorBoundry"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 
 export async function loader() {
   throw new Response("Not found", { status: 404 })
@@ -35,7 +35,7 @@ export function ErrorBoundary() {
               </pre>
             </div>
             <Link
-              to="/app/home"
+              to="/home"
               className="text-border underline"
               data-text="Back to home"
             >

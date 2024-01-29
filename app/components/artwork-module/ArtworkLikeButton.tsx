@@ -2,7 +2,7 @@ import { Form } from "@remix-run/react"
 
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 
-const LikePost = ({
+const ArtworkLikeButton = ({
   artworkId,
   likesCount,
   isLiked,
@@ -12,7 +12,7 @@ const LikePost = ({
   isLiked: boolean
 }) => {
   return (
-    <Form method="POST" action="/app/home" id={`like-${artworkId}`}>
+    <Form method="POST" id={`like-${artworkId}`}>
       <AuthenticityTokenInput />
       <input
         type="text"
@@ -55,4 +55,4 @@ const LikePost = ({
   )
 }
 
-export default LikePost
+export default ArtworkLikeButton
