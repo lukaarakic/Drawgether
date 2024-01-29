@@ -24,6 +24,7 @@ import {
 } from "~/utils/auth.server"
 import scribbleSfx from "~/assets/audio/scribble.wav"
 import { useIsPending } from "~/utils/misc"
+import Spinner from "~/components/ui/Spinner/Spinner"
 
 export const meta: MetaFunction = () => {
   return [
@@ -186,7 +187,7 @@ export default function Index() {
         <ErrorList id={form.errorId} errors={form.errors} />
         <BoxButton degree={1.35} type="submit" className="px-32">
           <p className={`text-60 ${isPending ? "animate-spin" : ""}`}>
-            {isPending ? "🌀" : "Log in"}
+            {isPending ? <Spinner /> : "Log in"}
           </p>
         </BoxButton>
       </Form>

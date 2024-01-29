@@ -27,6 +27,7 @@ import {
 import { sessionStorage } from "~/utils/session.server"
 import scribbleSfx from "~/assets/audio/scribble.wav"
 import { useIsPending } from "~/utils/misc"
+import Spinner from "~/components/ui/Spinner/Spinner"
 
 const RegisterSchema = z.object({
   username: UsernameSchema,
@@ -224,7 +225,7 @@ const SignUpPage = () => {
 
         <BoxButton degree={1} type="submit" className="px-32">
           <p className={`text-60 ${isPending ? "animate-spin" : ""}`}>
-            {isPending ? "🌀" : "Register"}
+            {isPending ? <Spinner /> : "Register"}
           </p>
         </BoxButton>
       </Form>

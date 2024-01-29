@@ -7,6 +7,7 @@ import { type action as commentAction } from "~/routes/comment.$artworkId"
 import { CommentSchema } from "~/utils/social-function.server"
 import CommentList from "./CommentList"
 import ErrorList from "../error/ErrorList"
+import Spinner from "../ui/Spinner/Spinner"
 
 const CommentContainer = ({
   artwork,
@@ -72,7 +73,7 @@ const CommentContainer = ({
               <div
                 className={`text-16 text-white ${isPending ? "animate-spin" : ""}`}
               >
-                {isPending ? "🌀" : "Post"}
+                {isPending ? <Spinner className="h-24 w-24" /> : "Post"}
               </div>
             </button>
           </div>
