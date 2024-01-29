@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react"
+import { useFetcher } from "@remix-run/react"
 
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 
@@ -11,22 +11,16 @@ const ArtworkLikeButton = ({
   likesCount: number
   isLiked: boolean
 }) => {
+  const fetcher = useFetcher()
+
   return (
-    <Form method="POST" id={`like-${artworkId}`}>
+    <fetcher.Form
+      method="POST"
+      action={`/like/${artworkId}`}
+      id={`like-${artworkId}`}
+    >
       <AuthenticityTokenInput />
-      <input
-        type="text"
-        className="hidden"
-        name="artworkId"
-        value={artworkId}
-        readOnly
-      />
-      <button
-        type="submit"
-        name="intent"
-        value="like"
-        className="relative rotate-12"
-      >
+      <button type="submit" className="relative rotate-12">
         <svg
           id="Layer_2"
           xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +45,7 @@ const ArtworkLikeButton = ({
           {likesCount}
         </p>
       </button>
-    </Form>
+    </fetcher.Form>
   )
 }
 

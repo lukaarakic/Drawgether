@@ -1,6 +1,6 @@
 import generateRandomRotation from "~/utils/generate-random-rotation"
 
-const SmallArt = ({ art, index }: { art: string; index: number }) => {
+const SmallArtwork = ({ art, index }: { art: string; index: number }) => {
   const rotations = [-1.02, 0.78, -1.21, 1.08, -0.93, 1.24]
 
   return (
@@ -19,4 +19,4 @@ const SmallArt = ({ art, index }: { art: string; index: number }) => {
   )
 }
 
-export default SmallArt
+export default SmallArtwork

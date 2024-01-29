@@ -2,32 +2,22 @@ import ArtistCircle from "~/components/ui/ArtistCircle"
 import BoxLabel from "~/components/ui/BoxLabel"
 import SettingsIcon from "~/assets/misc/settings.svg"
 import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
-import { useOptionalArtist } from "~/utils/artist"
+import { useArtist } from "~/utils/artist"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
-import { prisma } from "~/utils/db.server"
 import { invariantResponse } from "~/utils/misc"
-import SmallArt from "~/components/SmallArt"
+
+import { fetchArtworksByUsername } from "~/utils/fetch-data.server"
+import { useEffect, useState } from "react"
+import SmallArtworkContainer from "~/components/artwork-module/profile-artworks/SmallArtworkContainer"
+import ArtworksContainer from "~/components/artwork-module/profile-artworks/ArtworksContainer"
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const artist = await prisma.artist.findFirst({
-    select: {
-      id: true,
-      username: true,
-      artworks: {
-        select: {
-          artworkImage: true,
-          id: true,
-        },
-      },
-      avatar: true,
-      email: true,
-      email_verified: true,
-    },
-    where: {
-      username: params.username,
-    },
-  })
+  const username = params.username
+
+  invariantResponse(username, "Can not find artist with that username")
+
+  const artist = await fetchArtworksByUsername(username)
 
   invariantResponse(artist, "User not found", { status: 404 })
 
@@ -35,11 +25,24 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 const Profile = () => {
-  const data = useLoaderData<typeof loader>()
-  const artist = data.artist
+  const { artist } = useLoaderData<typeof loader>()
+  const loggedInArtist = useArtist()
+  const isLoggedInArtist = artist.id === loggedInArtist?.id
+  const hasArtworks = artist.artworks.length > 0
 
-  const loggedInArtist = useOptionalArtist()
-  const isLoggedInArtist = data.artist.id === loggedInArtist?.id
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   return (
     <>
@@ -74,14 +77,12 @@ const Profile = () => {
           </BoxLabel>
         </div>
 
-        {artist.artworks.length > 0 ? (
-          <div className="grid grid-cols-auto-fit items-center justify-items-center gap-x-4 gap-y-8">
-            {artist.artworks.map((artwork, index) => (
-              <Link key={artwork.id} to={`artwork/${artwork.id}`}>
-                <SmallArt art={artwork.artworkImage} index={index} />
-              </Link>
-            ))}
-          </div>
+        {hasArtworks ? (
+          screenWidth > 768 ? (
+            <SmallArtworkContainer artist={artist} />
+          ) : (
+            <ArtworksContainer artworks={artist.artworks} />
+          )
         ) : (
           <BoxLabel>
             <p

@@ -10,7 +10,9 @@ import BoxLabel from "~/components/ui/BoxLabel"
 import generateRandomRotation from "~/utils/generate-random-rotation"
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const searchTerm = new URL(request.url).searchParams.get("search")
+  const searchTerm = new URL(request.url).searchParams
+    .get("search")
+    ?.toLowerCase()
 
   if (searchTerm === "") {
     throw redirect("/search")

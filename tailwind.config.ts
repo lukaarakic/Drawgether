@@ -36,7 +36,7 @@ export default {
         "auto-fit": "repeat(auto-fit, minmax(20rem, 25rem))",
       },
       screens: {
-        xs: "560px",
+        xs: "580px",
       },
     },
   },

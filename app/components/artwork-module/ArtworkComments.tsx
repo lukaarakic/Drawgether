@@ -17,6 +17,7 @@ const ArtworkComments = ({
 }: {
   comments: CommentsType
   artworkId: string
+  artistRoute?: boolean
 }) => {
   const hasComments = comments.length > 0
 

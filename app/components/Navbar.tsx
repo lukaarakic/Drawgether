@@ -12,15 +12,15 @@ const Navbar = ({ username }: { username: string }) => {
       <div className="fixed left-0 top-0 z-30 hidden h-12 w-screen bg-white md:block"></div>
       <nav
         className="box-shadow fixed bottom-11 left-1/2 z-50 flex h-[11.3rem] w-[90%] -translate-x-1/2 items-center justify-between
-       rounded-full bg-blue px-12 text-25 xs:px-[11rem] xs:text-32 md:top-11 lg:w-[147rem] lg:text-40"
+       rounded-full bg-blue px-12 text-25 xs:px-44 xs:text-32 md:top-11 md:px-28 lg:w-[147rem] lg:px-44 lg:text-40"
       >
         <NavLink
           data-text="HOME"
           to={"/home"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink text-border text-border-sm uppercase text-white"
-              : "text-border text-border-sm uppercase text-white"
+              ? "activeNavLink text-border md:text-border-lg uppercase text-white"
+              : "text-border md:text-border-lg uppercase text-white"
           }
           prefetch="intent"
           onClick={() => play()}
@@ -28,12 +28,12 @@ const Navbar = ({ username }: { username: string }) => {
           Home
         </NavLink>
         <NavLink
-          data-text="SEARch"
+          data-text="SEARCH"
           to={"/search"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink text-border text-border-sm uppercase text-white"
-              : "text-border text-border-sm uppercase text-white"
+              ? "activeNavLink text-border md:text-border-lg uppercase text-white"
+              : "text-border md:text-border-lg uppercase text-white"
           }
           prefetch="intent"
           onClick={() => play()}
@@ -41,7 +41,11 @@ const Navbar = ({ username }: { username: string }) => {
           Search
         </NavLink>
 
-        <NavLink to={"/home"} onClick={() => play()} className="hidden">
+        <NavLink
+          to={"/home"}
+          onClick={() => play()}
+          className="hidden md:block"
+        >
           <img
             src={LogoOnly}
             alt="Logo of drawgether"
@@ -53,8 +57,8 @@ const Navbar = ({ username }: { username: string }) => {
           to={`/artist/${username}`}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink text-border text-border-sm uppercase text-white"
-              : "text-border text-border-sm uppercase text-white"
+              ? "activeNavLink text-border md:text-border-lg uppercase text-white"
+              : "text-border md:text-border-lg uppercase text-white"
           }
           prefetch="intent"
           onClick={() => play()}
@@ -66,8 +70,8 @@ const Navbar = ({ username }: { username: string }) => {
           to={"/play"}
           className={({ isActive }) =>
             isActive
-              ? "activeNavLink text-border text-border-sm uppercase text-white"
-              : "text-border text-border-sm uppercase text-white"
+              ? "activeNavLink text-border md:text-border-lg uppercase text-white"
+              : "text-border md:text-border-lg uppercase text-white"
           }
           prefetch="intent"
           onClick={() => play()}

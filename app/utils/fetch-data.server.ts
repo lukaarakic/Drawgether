@@ -62,3 +62,62 @@ export async function fetchArtistByUsername(username: string) {
     },
   })
 }
+
+export async function fetchArtworksByUsername(username: string) {
+  return await prisma.artist.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      username: true,
+      artworks: {
+        select: {
+          id: true,
+          theme: true,
+          artworkImage: true,
+          likesCount: true,
+          artists: {
+            select: {
+              id: true,
+              username: true,
+              avatar: true,
+            },
+          },
+          likes: {
+            select: {
+              artistId: true,
+            },
+          },
+          comments: {
+            select: {
+              id: true,
+              content: true,
+              artist: {
+                select: {
+                  id: true,
+                  username: true,
+                  avatar: true,
+                },
+              },
+            },
+            orderBy: {
+              created_at: "desc",
+            },
+          },
+        },
+        orderBy: [
+          {
+            created_at: "desc",
+          },
+          {
+            theme: "asc",
+          },
+        ],
+      },
+      avatar: true,
+      email: true,
+      email_verified: true,
+    },
+  })
+}

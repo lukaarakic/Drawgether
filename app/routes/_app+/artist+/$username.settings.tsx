@@ -4,26 +4,30 @@ import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import ArtistCircle from "~/components/ui/ArtistCircle"
 import BoxButton from "~/components/ui/BoxButton"
 import Modal from "~/components/ui/Modal"
+import { requireArtist } from "~/utils/auth.server"
 import { fetchArtistByUsername } from "~/utils/fetch-data.server"
 import { invariantResponse } from "~/utils/misc"
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const artist = await requireArtist(request)
   const username = params.username
   invariantResponse(username, "Username is required")
 
-  const artist = await fetchArtistByUsername(username)
+  const owner = await fetchArtistByUsername(username)
 
-  if (!artist)
-    return new Response("An Artist with this username does not exist!", {
-      status: 404,
-    })
+  invariantResponse(owner, "An Artist with this username does not exist!", {
+    status: 404,
+  })
+  invariantResponse(artist.id === owner.id, "You are unauthorized", {
+    status: 401,
+  })
 
-  return json({ artist })
+  return json({ owner })
 }
 
 const ArtsitSettings = () => {
-  const { artist } = useLoaderData<typeof loader>()
-  const maskedEmail = maskEmail(artist.email)
+  const { owner } = useLoaderData<typeof loader>()
+  const maskedEmail = maskEmail(owner.email)
 
   return (
     <Modal>
@@ -36,16 +40,16 @@ const ArtsitSettings = () => {
         </p>
         <ArtistCircle
           size={16.9}
-          avatar={{ avatarUrl: artist.avatar, seed: artist.username }}
+          avatar={{ avatarUrl: owner.avatar, seed: owner.username }}
         />
-        <p className="mt-8 text-29 text-black">Username: @{artist.username}</p>
+        <p className="mt-8 text-29 text-black">Username: @{owner.username}</p>
         <p className="text-29 text-black">Email: {maskedEmail}</p>
         <p
           className={`mb-10 mt-8 text-29 capitalize ${
-            artist.email_verified ? "text-blue" : "text-pink"
+            owner.email_verified ? "text-blue" : "text-pink"
           }`}
         >
-          {artist.email_verified ? "Email Verified" : "email not verified!"}
+          {owner.email_verified ? "Email Verified" : "email not verified!"}
         </p>
         <Form method="POST" action="/logout">
           <AuthenticityTokenInput />

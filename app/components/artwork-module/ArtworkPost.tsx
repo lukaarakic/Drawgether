@@ -7,30 +7,7 @@ import ArtworkComments from "./ArtworkComments"
 import { useArtist } from "~/utils/artist"
 import CommentIcon from "~/assets/misc/comment.svg"
 import ArtworkDeleteButton from "./ArtworkDeleteButton"
-
-type ArtworkPostType = {
-  id: string
-  theme: string
-  likesCount: number
-  artworkImage: string
-  artists: {
-    id: string
-    username: string
-    avatar: string | null
-  }[]
-  likes: {
-    artistId: string
-  }[]
-  comments: {
-    id: string
-    content: string
-    artist: {
-      id: string
-      username: string
-      avatar: string | null
-    }
-  }[]
-}
+import { ArtworkPostType } from "~/utils/types"
 
 const ArtworkPost = ({
   artwork,
