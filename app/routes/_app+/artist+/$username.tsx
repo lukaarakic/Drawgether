@@ -58,7 +58,7 @@ const Profile = () => {
           <BoxLabel degree={-2}>
             <div className="flex h-40 w-[41.3rem] items-center justify-between gap-20 px-4">
               <p
-                className="text-border text-32"
+                className="text-border text-border-lg text-32"
                 data-text={`@${artist.username}`}
               >
                 @{artist.username}
@@ -81,7 +81,10 @@ const Profile = () => {
           screenWidth > 768 ? (
             <SmallArtworkContainer artist={artist} />
           ) : (
-            <ArtworksContainer artworks={artist.artworks} />
+            <ArtworksContainer
+              artworks={artist.artworks}
+              profileRoute={artist.username}
+            />
           )
         ) : (
           <BoxLabel>

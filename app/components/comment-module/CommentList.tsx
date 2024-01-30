@@ -5,12 +5,12 @@ const CommentList = ({
 }: {
   comments: {
     id: string
+    content: string
     artist: {
       id: string
       username: string
       avatar: string | null
     }
-    content: string
   }[]
 }) => {
   return (

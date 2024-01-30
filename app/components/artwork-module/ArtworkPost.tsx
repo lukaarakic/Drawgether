@@ -14,11 +14,13 @@ const ArtworkPost = ({
   index,
   className = "mx-auto mb-80 w-[80%] xs:w-[57.2rem]",
   showComments = true,
+  profileRoute,
 }: {
   artwork: ArtworkPostType
   index: number
   className?: string
   showComments?: boolean
+  profileRoute?: string | null
 }) => {
   const artist = useArtist()
 
@@ -27,7 +29,7 @@ const ArtworkPost = ({
       <BoxLabel degree={generateRandomRotation((index % 12) + 1)}>
         <p
           data-text={artwork.theme}
-          className="text-border whitespace-break-spaces p-2 text-25 md:text-32"
+          className="text-border text-border-lg whitespace-break-spaces p-2 text-25 md:text-32"
         >
           {artwork.theme}
         </p>
@@ -55,7 +57,14 @@ const ArtworkPost = ({
             }
           />
           {showComments ? (
-            <Link to={`/home/comment/${artwork.id}`} preventScrollReset>
+            <Link
+              to={
+                profileRoute
+                  ? `/artist/${profileRoute}/artwork/comment/${artwork.id}`
+                  : `/home/comment/${artwork.id}`
+              }
+              preventScrollReset
+            >
               <img src={CommentIcon} alt="" className="h-24 w-24" />
             </Link>
           ) : null}
@@ -82,7 +91,11 @@ const ArtworkPost = ({
       </div>
 
       {showComments ? (
-        <ArtworkComments comments={artwork.comments} artworkId={artwork.id} />
+        <ArtworkComments
+          comments={artwork.comments}
+          artworkId={artwork.id}
+          profileRoute={profileRoute}
+        />
       ) : null}
     </article>
   )

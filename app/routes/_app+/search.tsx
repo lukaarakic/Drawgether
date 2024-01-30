@@ -88,7 +88,7 @@ const SearchPage = () => {
               <BoxLabel degree={generateRandomRotation(index % 4)}>
                 <div className="flex h-28 w-[29rem] items-center justify-between gap-20 px-4">
                   <p
-                    className="text-border text-32"
+                    className="text-border text-border-lg text-32"
                     data-text={artist.username}
                   >
                     {artist.username}

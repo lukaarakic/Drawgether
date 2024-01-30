@@ -14,10 +14,11 @@ type CommentsType = {
 const ArtworkComments = ({
   comments,
   artworkId,
+  profileRoute,
 }: {
   comments: CommentsType
   artworkId: string
-  artistRoute?: boolean
+  profileRoute?: string | null
 }) => {
   const hasComments = comments.length > 0
 
@@ -56,7 +57,11 @@ const ArtworkComments = ({
         : null}
 
       <Link
-        to={`/home/comment/${artworkId}`}
+        to={
+          profileRoute
+            ? `/artist/${profileRoute}/artwork/comment/${artworkId}`
+            : `/home/comment/${artworkId}`
+        }
         preventScrollReset
         data-text={
           hasComments

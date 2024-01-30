@@ -1,5 +1,4 @@
 import { useFetcher } from "@remix-run/react"
-
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 
 const ArtworkLikeButton = ({
