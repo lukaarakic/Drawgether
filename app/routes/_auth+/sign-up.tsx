@@ -1,6 +1,11 @@
 import { conform, useForm } from "@conform-to/react"
 import { getFieldsetConstraint, parse } from "@conform-to/zod"
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node"
 import { Form, useActionData } from "@remix-run/react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -35,6 +40,11 @@ const RegisterSchema = z.object({
   password: PasswordSchema,
   remember: z.boolean().optional(),
 })
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireAnonymous(request)
+  return json({})
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   await requireAnonymous(request)

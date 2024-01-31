@@ -5,6 +5,7 @@ import {
   ActionFunctionArgs,
   json,
   redirect,
+  LoaderFunctionArgs,
 } from "@remix-run/node"
 import { Form, Link, useActionData } from "@remix-run/react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
@@ -38,6 +39,11 @@ const LoginSchema = z.object({
   password: PasswordSchema,
   remember: z.boolean().optional(),
 })
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireAnonymous(request)
+  return json({})
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   await requireAnonymous(request)

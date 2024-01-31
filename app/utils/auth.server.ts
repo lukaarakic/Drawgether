@@ -16,7 +16,7 @@ export async function requireArtist(request: Request) {
 
   const artist = await prisma.artist.findUnique({
     where: { id: artistId },
-    select: { id: true, username: true },
+    select: { id: true, username: true, email: true, email_verified: true },
   })
 
   if (!artist) throw await logout({ request })

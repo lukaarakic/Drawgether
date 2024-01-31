@@ -1,16 +1,16 @@
-import { redirect } from "@remix-run/node";
-import { sessionStorage } from "~/utils/session.server";
+import { redirect } from "@remix-run/node"
+import { sessionStorage } from "~/utils/session.server"
 
 export async function loader() {
-  return redirect("/");
+  return redirect("/")
 }
 
 export async function action() {
-  const cookieSession = await sessionStorage.getSession();
+  const cookieSession = await sessionStorage.getSession()
 
   return redirect("/", {
     headers: {
       "set-cookie": await sessionStorage.destroySession(cookieSession),
     },
-  });
+  })
 }

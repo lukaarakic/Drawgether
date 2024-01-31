@@ -14,11 +14,9 @@ import ArtworksContainer from "~/components/artwork-module/profile-artworks/Artw
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const username = params.username
-
   invariantResponse(username, "Can not find artist with that username")
 
   const artist = await fetchArtworksByUsername(username)
-
   invariantResponse(artist, "User not found", { status: 404 })
 
   return json({ artist })

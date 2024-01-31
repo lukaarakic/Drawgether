@@ -1,11 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/node"
 
 // Assets
 import FullPinkLogo from "~/assets/logos/full_pink_logo.svg"
 import LeftCloud from "~/assets/clouds/left_white.svg"
 import RightCloud from "~/assets/clouds/right_white.svg"
-import { Link, Outlet, json } from "@remix-run/react"
-import { requireAnonymous } from "~/utils/auth.server"
+import { Link, Outlet } from "@remix-run/react"
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,15 +13,10 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  await requireAnonymous(request)
-  return json({})
-}
-
 export default function Index() {
   return (
-    <div className="relative grid h-svh place-items-center gap-6 bg-blue">
-      <header className="mb-36 flex items-center justify-center pt-8">
+    <div className="relative h-svh  bg-blue">
+      <header className="mb-44 flex items-center justify-center pt-8">
         <Link to="/">
           <img
             src={FullPinkLogo}
@@ -32,7 +26,7 @@ export default function Index() {
         </Link>
       </header>
 
-      <main className="-mt-40 flex items-center justify-center">
+      <main className="grid place-items-center gap-6">
         <Outlet />
       </main>
 

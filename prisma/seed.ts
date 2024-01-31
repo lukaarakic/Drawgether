@@ -14,6 +14,7 @@ async function seed() {
 
   console.time("🧹 Cleaned up the database...")
   await prisma.artist.deleteMany()
+  await prisma.verification.deleteMany()
   await prisma.artwork.deleteMany()
   await prisma.permission.deleteMany()
   await prisma.role.deleteMany()

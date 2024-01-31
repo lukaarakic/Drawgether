@@ -1,10 +1,12 @@
-import { ActionFunctionArgs, json } from "@remix-run/node"
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
 import { invariantResponse } from "~/utils/misc"
 import { like } from "~/utils/social-function.server"
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireArtist(request)
+
   return json({})
 }
 
