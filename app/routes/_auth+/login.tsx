@@ -219,7 +219,7 @@ export default function Index() {
         >
           Forgot your password?{" "}
           <Link
-            to={"/login"}
+            to={"/forgot-password"}
             className="text-border text-border-sm text-pink underline"
             data-text="Reset it."
             prefetch="intent"

@@ -1,23 +1,20 @@
-import { generateTOTP } from "@epic-web/totp"
+/* eslint-disable react/no-unescaped-entities */
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from "@remix-run/node"
+import * as E from "@react-email/components"
 import { Form, useLoaderData } from "@remix-run/react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import ArtistCircle from "~/components/ui/ArtistCircle"
 import BoxButton from "~/components/ui/BoxButton"
 import Modal from "~/components/ui/Modal"
-import {
-  codeQueryParam,
-  targetQueryParam,
-  typeQueryParam,
-} from "~/routes/_auth+/verify"
+import { prepareVerification } from "~/routes/_auth+/verify"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
-import { prisma } from "~/utils/db.server"
+
 import { sendEmail } from "~/utils/email.server"
 import { fetchArtistByUsername } from "~/utils/fetch-data.server"
 import { getDomainUrl, invariantResponse } from "~/utils/misc"
@@ -44,46 +41,57 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   await checkCSRF(formData, request)
 
-  const { otp, ...verificationConfig } = generateTOTP({
-    algorithm: "SHA256",
+  const redirectToUrl = String(new URL(`${getDomainUrl(request)}`))
+
+  const { verifyUrl, redirectTo, otp } = await prepareVerification({
     period: 10 * 60,
-  })
-
-  const redirectToUrl = new URL(`${getDomainUrl(request)}/verify`)
-
-  const type = "verification"
-  redirectToUrl.searchParams.set(typeQueryParam, type)
-  redirectToUrl.searchParams.set(targetQueryParam, email)
-  const verifyUrl = new URL(redirectToUrl)
-  verifyUrl.searchParams.set(codeQueryParam, otp)
-
-  const verificationData = {
-    type,
+    request,
+    type: "verification",
     target: email,
-    ...verificationConfig,
-    expiresAt: new Date(Date.now() + verificationConfig.period * 1000),
-  }
-
-  await prisma.verification.upsert({
-    where: { target_type: { type, target: email } },
-    create: verificationData,
-    update: verificationData,
+    redirectTo: redirectToUrl,
   })
 
   const response = await sendEmail({
     to: email,
     subject: `Welcome to Drawgether`,
-    text: `Here is your code ${otp}! ${verifyUrl}`,
+    react: <VerificationEmail otp={otp} redirectTo={verifyUrl.toString()} />,
   })
 
   if (response.status === "success") {
-    return redirect(redirectToUrl.toString())
+    return redirect(redirectTo.toString())
   } else {
     return json(
       { status: "error", message: "Please try later" },
       { status: 400 },
     )
   }
+}
+
+function VerificationEmail({
+  redirectTo,
+  otp,
+}: {
+  redirectTo: string
+  otp: string
+}) {
+  return (
+    <E.Html lang="en" dir="ltr">
+      <E.Container>
+        <h1>
+          <E.Text>Drawgether Email Verification</E.Text>
+        </h1>
+        <p>
+          <E.Text>
+            Here's your verification code: <strong>{otp}</strong>
+          </E.Text>
+        </p>
+        <p>
+          <E.Text>Or click the link:</E.Text>
+        </p>
+        <E.Link href={redirectTo}>{redirectTo}</E.Link>
+      </E.Container>
+    </E.Html>
+  )
 }
 
 const ArtsitSettings = () => {
@@ -112,7 +120,7 @@ const ArtsitSettings = () => {
             Email verified
           </p>
         ) : (
-          <Form method="POST">
+          <Form method="POST" id="email-form">
             <AuthenticityTokenInput />
             <button
               type="submit"
@@ -123,7 +131,7 @@ const ArtsitSettings = () => {
           </Form>
         )}
 
-        <Form method="POST" action="/logout">
+        <Form method="POST" action="/logout" id="logout-form">
           <AuthenticityTokenInput />
           <BoxButton>
             <p

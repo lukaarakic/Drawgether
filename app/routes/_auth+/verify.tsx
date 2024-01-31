@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
-import { conform, useForm } from "@conform-to/react"
+import { Submission, conform, useForm } from "@conform-to/react"
 import { getFieldsetConstraint, parse } from "@conform-to/zod"
-import { verifyTOTP } from "@epic-web/totp"
+import { generateTOTP, verifyTOTP } from "@epic-web/totp"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -21,15 +21,18 @@ import BoxButton from "~/components/ui/BoxButton"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
 import { prisma } from "~/utils/db.server"
-import { useIsPending } from "~/utils/misc"
+import { getDomainUrl, useIsPending } from "~/utils/misc"
+import { handleResetPasswordVerification } from "./reset-password"
+// import { handleResetPasswordVerification } from "./reset-password"
 
 export const codeQueryParam = "code"
 export const targetQueryParam = "target"
 export const typeQueryParam = "type"
 export const redirectToQueryParam = "redirectTo"
 
-const types = ["verification"] as const
+const types = ["verification", "reset-password"] as const
 const VerificationTypeSchema = z.enum(types)
+export type VerificationTypes = z.infer<typeof VerificationTypeSchema>
 
 const VerifySchema = z.object({
   [codeQueryParam]: z.string().min(6).max(6),
@@ -39,9 +42,6 @@ const VerifySchema = z.object({
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const artist = await requireArtist(request)
-  if (artist.email_verified) return redirect("/home")
-
   const params = new URL(request.url).searchParams
   if (!params.has(codeQueryParam)) {
     return json({
@@ -62,38 +62,113 @@ export async function action({ request }: ActionFunctionArgs) {
   return validateRequest(request, formData)
 }
 
+export function getRedirectToUrl({
+  request,
+  type,
+  target,
+}: {
+  request: Request
+  type: VerificationTypes
+  target: string
+  redirectTo?: string
+}) {
+  const redirectToUrl = new URL(`${getDomainUrl(request)}/verify`)
+  redirectToUrl.searchParams.set(typeQueryParam, type)
+  redirectToUrl.searchParams.set(targetQueryParam, target)
+
+  return redirectToUrl
+}
+
+export async function prepareVerification({
+  period,
+  request,
+  type,
+  target,
+  // redirectTo: postVerificationRedirectTo,
+}: {
+  period: number
+  request: Request
+  type: VerificationTypes
+  target: string
+  redirectTo?: string
+}) {
+  const verifyUrl = getRedirectToUrl({
+    request,
+    type,
+    target,
+  })
+  const redirectTo = new URL(verifyUrl.toString())
+
+  const { otp, ...verificationConfig } = generateTOTP({
+    algorithm: "SHA256",
+    period,
+  })
+
+  const verificationData = {
+    type,
+    target,
+    ...verificationConfig,
+    expiresAt: new Date(Date.now() + verificationConfig.period * 1000),
+  }
+  await prisma.verification.upsert({
+    where: { target_type: { target, type } },
+    create: verificationData,
+    update: verificationData,
+  })
+
+  verifyUrl.searchParams.set(codeQueryParam, otp)
+
+  return { otp, redirectTo, verifyUrl }
+}
+
+export async function isCodeValid({
+  code,
+  type,
+  target,
+}: {
+  code: string
+  type: VerificationTypes
+  target: string
+}) {
+  const verification = await prisma.verification.findUnique({
+    where: {
+      target_type: { target, type },
+      OR: [{ expiresAt: { gt: new Date() } }, { expiresAt: null }],
+    },
+    select: { algorithm: true, secret: true, period: true, charSet: true },
+  })
+  if (!verification) return false
+  const result = verifyTOTP({
+    otp: code,
+    secret: verification.secret,
+    algorithm: verification.algorithm,
+    period: verification.period,
+    charSet: verification.charSet,
+  })
+  if (!result) return false
+
+  return true
+}
+
+export type VerifyFunctionArgs = {
+  request: Request
+  submission: Submission<z.infer<typeof VerifySchema>>
+  body: FormData | URLSearchParams
+}
+
 async function validateRequest(
   request: Request,
   body: URLSearchParams | FormData,
 ) {
-  const artist = await requireArtist(request)
   const submission = await parse(body, {
     schema: () =>
       VerifySchema.superRefine(async (data, ctx) => {
-        console.log("verify tis", data)
-        const verification = await prisma.verification.findUnique({
-          where: {
-            target_type: {
-              target: data[targetQueryParam],
-              type: data[typeQueryParam],
-            },
-            OR: [{ expiresAt: { gt: new Date() } }, { expiresAt: null }],
-          },
+        const codeIsValid = await isCodeValid({
+          code: data[codeQueryParam],
+          type: data[typeQueryParam],
+          target: data[targetQueryParam],
         })
 
-        if (!verification) {
-          ctx.addIssue({
-            path: ["code"],
-            code: z.ZodIssueCode.custom,
-            message: "Invalid code",
-          })
-          return z.NEVER
-        }
-
-        const codeIsValid = verifyTOTP({
-          otp: data[codeQueryParam],
-          ...verification,
-        })
         if (!codeIsValid) {
           ctx.addIssue({
             path: ["code"],
@@ -116,25 +191,37 @@ async function validateRequest(
 
   const { value: submissionValue } = submission
 
-  await prisma.$transaction([
-    prisma.verification.delete({
-      where: {
-        target_type: {
-          target: submissionValue[targetQueryParam],
-          type: submissionValue[typeQueryParam],
-        },
+  await prisma.verification.delete({
+    where: {
+      target_type: {
+        target: submissionValue[targetQueryParam],
+        type: submissionValue[typeQueryParam],
       },
-    }),
+    },
+  })
 
-    prisma.artist.update({
-      where: {
-        id: artist.id,
-      },
-      data: {
-        email_verified: true,
-      },
-    }),
-  ])
+  switch (submissionValue[typeQueryParam]) {
+    case "verification":
+      return handleEmalVerification(request)
+    case "reset-password":
+      return handleResetPasswordVerification({ request, body, submission })
+
+    default:
+      throw new Response("Invalid verification type", { status: 400 })
+  }
+}
+
+async function handleEmalVerification(request: Request) {
+  const artist = await requireArtist(request)
+
+  await prisma.artist.update({
+    where: {
+      id: artist.id,
+    },
+    data: {
+      email_verified: true,
+    },
+  })
 
   return redirect("/home")
 }

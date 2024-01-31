@@ -63,6 +63,33 @@ export async function login({
   return verifyArtistPassword({ email }, password)
 }
 
+export async function resetUserPassword({
+  username,
+  password,
+}: {
+  username: Artist["username"]
+  password: string
+}) {
+  const hashedPassword = await getPasswordHash(password)
+  const artist = await prisma.artist.update({
+    where: {
+      username,
+    },
+    data: {
+      password: {
+        update: {
+          hash: hashedPassword,
+        },
+      },
+    },
+    select: {
+      id: true,
+    },
+  })
+
+  return artist
+}
+
 export async function signup({
   email,
   username,
