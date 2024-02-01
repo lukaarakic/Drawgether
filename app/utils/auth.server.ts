@@ -43,7 +43,7 @@ export async function getArtistId(request: Request) {
 
 export async function requireAnonymous(request: Request) {
   const artistId = await getArtistId(request)
-  if (artistId) throw redirect("/home")
+  if (artistId) throw redirect("/home/0")
 }
 
 export async function requireArtistId(request: Request) {

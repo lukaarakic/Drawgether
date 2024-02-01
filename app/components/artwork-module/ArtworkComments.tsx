@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"
+import { Link, useParams } from "@remix-run/react"
 import generateRandomRotation from "~/utils/generate-random-rotation"
 
 type CommentsType = {
@@ -21,6 +21,7 @@ const ArtworkComments = ({
   profileRoute?: string | null
 }) => {
   const hasComments = comments.length > 0
+  const { page } = useParams()
 
   return (
     <div
@@ -60,7 +61,7 @@ const ArtworkComments = ({
         to={
           profileRoute
             ? `/artist/${profileRoute}/artwork/comment/${artworkId}`
-            : `/home/comment/${artworkId}`
+            : `/home/${page}/comment/${artworkId}`
         }
         preventScrollReset
         data-text={

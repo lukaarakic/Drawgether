@@ -223,7 +223,7 @@ async function handleEmalVerification(request: Request) {
     },
   })
 
-  return redirect("/home")
+  return redirect("/home/0")
 }
 
 const Verify = () => {

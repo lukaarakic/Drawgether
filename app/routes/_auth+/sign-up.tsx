@@ -108,7 +108,7 @@ export async function action({ request }: ActionFunctionArgs) {
   )
   cookieSession.set("artistId", artist.id)
 
-  throw redirect("/home", {
+  throw redirect("/home/0", {
     headers: {
       "set-cookie": await sessionStorage.commitSession(cookieSession, {
         expires: remember ? getSessionExpirationDate() : undefined,
