@@ -19,7 +19,7 @@
       font-size: calc(100vw / 1920 * 10);
     }
   }
-  @media only screen and (max-width: 64em) {
+  @media only screen and (max-width: 63.8em) {
     html {
       font-size: calc(100vw / 1024 * 10);
     }
@@ -141,6 +141,11 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #4d4d4d;
+  }
+  /* Grid */
+  .grid-auto-min {
+    grid-auto-rows: min-content;
+    grid-auto-columns: min-content;
   }
 }
 

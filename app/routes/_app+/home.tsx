@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, defer } from "@remix-run/node"
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { requireArtist } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
@@ -8,9 +8,17 @@ import { like } from "~/utils/social-function.server"
 
 import ArtworkPost from "~/components/artwork-module/ArtworkPost"
 
-export async function loader() {
+const getPage = (searchParams: URLSearchParams) => ({
+  page: Number(searchParams.get("page") || "0"),
+})
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { page } = getPage(new URL(request.url).searchParams)
+  const skip = page * 10
+
   const artworks = await prisma.artwork.findMany({
-    take: 5,
+    take: 10,
+    skip,
     select: {
       id: true,
       theme: true,
@@ -55,7 +63,7 @@ export async function loader() {
     ],
   })
 
-  return defer({
+  return json({
     artworks,
   })
 }
@@ -78,12 +86,13 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 const Home = () => {
-  const { artworks } = useLoaderData<typeof loader>()
+  const data = useLoaderData<typeof loader>()
+  // const [artworks, setArtworks] = useState(data.artworks)
 
   return (
     <div className="">
       <div className="flex flex-col">
-        {artworks.map((artwork, index) => (
+        {data.artworks.map((artwork, index) => (
           <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
         ))}
       </div>
