@@ -1,7 +1,6 @@
 import { Form, Link, useLoaderData } from "@remix-run/react"
 import BoxButton from "~/components/ui/BoxButton"
 import SearchIcon from "~/assets/misc/searchIcon.svg"
-
 import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import { prisma } from "~/utils/db.server"

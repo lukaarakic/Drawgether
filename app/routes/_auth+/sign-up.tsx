@@ -55,17 +55,34 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const submission = await parse(formData, {
     schema: RegisterSchema.superRefine(async (data, ctx) => {
-      const existingArtist = await prisma.artist.findUnique({
-        where: { username: data.username },
-        select: {
-          id: true,
-        },
-      })
+      const [existingArtistWithUsername, existingArtistWithEmail] =
+        await prisma.$transaction([
+          prisma.artist.findFirst({
+            where: { username: data.username },
+            select: {
+              id: true,
+            },
+          }),
+          prisma.artist.findFirst({
+            where: { email: data.email },
+            select: {
+              id: true,
+            },
+          }),
+        ])
 
-      if (existingArtist) {
+      if (existingArtistWithUsername) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "An Artist already exists with this username",
+        })
+        return
+      }
+
+      if (existingArtistWithEmail) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "An Artist already exists with this email",
         })
         return
       }

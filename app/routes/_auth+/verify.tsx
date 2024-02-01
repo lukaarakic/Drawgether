@@ -248,16 +248,16 @@ const Verify = () => {
   })
 
   return (
-    <div className="-mt-16 flex flex-col items-center">
+    <div className="flex flex-col items-center md:-mt-20">
       <div className="mb-20 text-center">
         <h1
-          className="text-border text-border-lg -mb-4 block text-90 text-white"
+          className="text-border md:text-border-lg block text-45 text-white md:text-90"
           data-text="Check your email"
         >
           Check your email
         </h1>
         <p
-          className="text-border text-border-lg text-40 text-white opacity-90"
+          className="text-border md:text-border-lg text-22 text-white opacity-90 md:-mt-4 md:text-40"
           data-text="We've sent you a code to verify your email adderss"
         >
           We've sent you a code to verify your email adderss
@@ -266,11 +266,11 @@ const Verify = () => {
 
       <Form method="POST" {...form.props}>
         <AuthenticityTokenInput />
-        <div className="flex items-baseline">
+        <div className="flex flex-col items-center xs:flex-row">
           <div className="text-center">
             <input
               type="text"
-              className="input mb-4"
+              className="input mb-4 w-full md:w-[55rem]"
               placeholder="Your code goes here"
               {...conform.input(fields[codeQueryParam])}
             />

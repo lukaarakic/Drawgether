@@ -22,7 +22,7 @@ export default function Index() {
 
       <div className=" flex w-full flex-col items-center justify-center">
         <h1
-          className="text-border text-border-lg drop-shadow-filter mb-10 rotate-2 text-75 leading-none tracking-tighter text-white md:text-90 lg:text-128"
+          className="text-border text-border-lg drop-shadow-filter mb-10 rotate-2 text-center text-75 leading-none tracking-tighter text-white md:text-90 lg:text-128"
           data-text="UNLEASH YOUR
         CREATIVE SIDE"
         >
