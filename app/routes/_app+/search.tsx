@@ -2,11 +2,23 @@ import { Form, Link, useLoaderData } from "@remix-run/react"
 import BoxButton from "~/components/ui/BoxButton"
 import SearchIcon from "~/assets/misc/searchIcon.svg"
 import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
+import {
+  LoaderFunctionArgs,
+  MetaFunction,
+  json,
+  redirect,
+} from "@remix-run/node"
 import { prisma } from "~/utils/db.server"
 import ArtistCircle from "~/components/ui/ArtistCircle"
 import BoxLabel from "~/components/ui/BoxLabel"
 import generateRandomRotation from "~/utils/generate-random-rotation"
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Find Artist" },
+    { name: "description", content: "Find Artist" },
+  ]
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchTerm = new URL(request.url).searchParams
@@ -33,9 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       })
     : []
 
-  const noSearch = searchTerm === null
-
-  return json({ artists, noSearch })
+  return json({ artists, searchTerm })
 }
 
 const SearchPage = () => {
@@ -62,14 +72,14 @@ const SearchPage = () => {
       <div className="mt-16 flex flex-col items-center">
         {data.artists.length ? (
           <p
-            className="text-border mb-12 text-center text-32 tracking-[1rem] text-blue"
+            className="text-border mb-12 text-center text-32 tracking-[.5rem] text-blue"
             data-text="Search results:"
           >
             Search results:
           </p>
         ) : null}
 
-        {data.artists.length ? (
+        {data.artists.length > 0 ? (
           data.artists.map((artist, index) => (
             <Link
               to={`/artist/${artist.username}`}
@@ -96,9 +106,9 @@ const SearchPage = () => {
               </BoxLabel>
             </Link>
           ))
-        ) : !data.noSearch ? (
+        ) : data.searchTerm?.length ? (
           <p
-            className="text-border mb-12 text-center text-32 tracking-[1rem] text-white"
+            className="text-border mb-12 text-center text-32 tracking-[.5rem] text-white"
             data-text="No artists found"
           >
             No artists found

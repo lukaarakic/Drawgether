@@ -4,13 +4,20 @@ import SettingsIcon from "~/assets/misc/settings.svg"
 import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 import { useArtist } from "~/utils/artist"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
-import { LoaderFunctionArgs, json } from "@remix-run/node"
+import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node"
 import { invariantResponse } from "~/utils/misc"
 
 import { fetchArtworksByUsername } from "~/utils/fetch-data.server"
 import { useEffect, useState } from "react"
 import SmallArtworkContainer from "~/components/artwork-module/profile-artworks/SmallArtworkContainer"
 import ArtworksContainer from "~/components/artwork-module/profile-artworks/ArtworksContainer"
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    { title: `${data?.artist.username} | Profile` },
+    { name: "description", content: "Where AI and creativity connect" },
+  ]
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const username = params.username

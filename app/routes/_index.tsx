@@ -9,7 +9,7 @@ import RightCloud from "~/assets/clouds/right_white.svg"
 export const meta: MetaFunction = () => {
   return [
     { title: "Drawgether" },
-    { name: "description", content: "Welcome to Remix!" },
+    { name: "description", content: "Where AI and creativity connect" },
   ]
 }
 
