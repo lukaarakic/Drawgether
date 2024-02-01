@@ -16,7 +16,7 @@ const Navbar = ({ username }: { username: string }) => {
       >
         <NavLink
           data-text="HOME"
-          to={"/home"}
+          to={"/home/0"}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border md:text-border-lg uppercase text-white"
@@ -42,7 +42,7 @@ const Navbar = ({ username }: { username: string }) => {
         </NavLink>
 
         <NavLink
-          to={"/home"}
+          to={"/home/0"}
           onClick={() => play()}
           className="hidden md:block"
         >

@@ -1,6 +1,6 @@
 import generateRandomRotation from "~/utils/generate-random-rotation"
 import BoxLabel from "../ui/BoxLabel"
-import { Link } from "@remix-run/react"
+import { Link, useParams } from "@remix-run/react"
 import ArtworkLikeButton from "./ArtworkLikeButton"
 import ArtistCircle from "../ui/ArtistCircle"
 import ArtworkComments from "./ArtworkComments"
@@ -23,6 +23,7 @@ const ArtworkPost = ({
   profileRoute?: string | null
 }) => {
   const artist = useArtist()
+  const { page } = useParams()
 
   return (
     <article className={className}>
@@ -61,7 +62,7 @@ const ArtworkPost = ({
               to={
                 profileRoute
                   ? `/artist/${profileRoute}/artwork/comment/${artwork.id}`
-                  : `/home/comment/${artwork.id}`
+                  : `/home/${page}/comment/${artwork.id}`
               }
               preventScrollReset
             >

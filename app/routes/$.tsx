@@ -35,7 +35,7 @@ export function ErrorBoundary() {
               </pre>
             </div>
             <Link
-              to="/home"
+              to="/home/0"
               className="text-border underline"
               data-text="Back to home"
             >
