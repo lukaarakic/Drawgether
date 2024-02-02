@@ -24,6 +24,7 @@ export default {
         43: "4.3rem",
         40: "4rem",
         38: "3.8rem",
+        34: "3.4rem",
         36: "3.6rem",
         32: "3.2rem",
         29: "2.9rem",

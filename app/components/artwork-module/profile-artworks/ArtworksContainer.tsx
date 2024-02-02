@@ -1,4 +1,3 @@
-import { ArtworkPostType } from "~/utils/types"
 import ArtworkPost from "../ArtworkPost"
 
 const ArtworksContainer = ({

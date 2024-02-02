@@ -7,7 +7,6 @@ import ArtworkComments from "./ArtworkComments"
 import { useArtist } from "~/utils/artist"
 import CommentIcon from "~/assets/misc/comment.svg"
 import ArtworkDeleteButton from "./ArtworkDeleteButton"
-import { ArtworkPostType } from "~/utils/types"
 
 const ArtworkPost = ({
   artwork,

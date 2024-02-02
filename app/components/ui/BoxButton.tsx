@@ -6,6 +6,7 @@ interface BoxButtonProps {
   degree?: number
   className?: string
   disabled?: boolean
+  onClick?: () => void
 }
 
 const BoxButton: FC<BoxButtonProps> = ({
@@ -14,6 +15,7 @@ const BoxButton: FC<BoxButtonProps> = ({
   degree = 0,
   className,
   disabled,
+  onClick,
 }) => {
   return (
     <button
@@ -23,6 +25,7 @@ const BoxButton: FC<BoxButtonProps> = ({
       style={{
         rotate: `${degree}deg`,
       }}
+      onClick={onClick}
     >
       {children}
     </button>

@@ -45,7 +45,7 @@ export default function Index() {
         </Link>
       </div>
 
-      <div className="">
+      <div>
         <img
           src={LeftCloud}
           alt="Left corner cloud"

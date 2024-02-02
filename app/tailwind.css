@@ -147,6 +147,17 @@
     grid-auto-rows: min-content;
     grid-auto-columns: min-content;
   }
+
+  /* Color picker */
+
+  .w-color-alpha-pointer {
+    top: 50% !important;
+  }
+  .w-color-alpha-fill {
+    transform: translate(-9px, -50%);
+    width: 0.8rem;
+    height: 0.8rem;
+  }
 }
 
 @font-face {

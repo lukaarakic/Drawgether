@@ -1,4 +1,4 @@
-export type ArtistType = {
+type ArtistType = {
   id: string
   username: string
   artworks: {
@@ -39,7 +39,7 @@ export type ArtistType = {
   email_verified: string
 }
 
-export type ArtworkPostType = {
+type ArtworkPostType = {
   id: string
   theme: string
   likesCount: number
@@ -62,3 +62,16 @@ export type ArtworkPostType = {
     }
   }[]
 }
+
+type Draw = {
+  ctx: CanvasRenderingContext2D
+  currentPoint: Point
+  prevPoint: Point | null
+}
+
+type Point = {
+  x: number
+  y: number
+}
+
+type HsvaColor = { h: number; s: number; v: number; a: number }

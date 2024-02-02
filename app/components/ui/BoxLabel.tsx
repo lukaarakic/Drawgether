@@ -1,23 +1,24 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react"
 
 interface BoxLabelProps {
-  children: ReactNode;
-  degree?: number;
+  className?: string
+  children: ReactNode
+  degree?: number
 }
 
-const BoxLabel: FC<BoxLabelProps> = ({ children, degree = 0 }) => {
+const BoxLabel: FC<BoxLabelProps> = ({ children, degree = 0, className }) => {
   return (
     <div
-      className="bg-black p-2 drop-shadow-filter-lg"
+      className={`drop-shadow-filter-lg bg-black p-2 ${className}`}
       style={{
         rotate: `${degree}deg`,
       }}
     >
-      <div className="bg-pink text-white px-2 flex items-center justify-start">
+      <div className="flex items-center justify-start bg-pink px-2 text-white">
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BoxLabel;
+export default BoxLabel

@@ -1,4 +1,4 @@
-import { NavLink } from "@remix-run/react"
+import { NavLink, useLocation } from "@remix-run/react"
 import LogoOnly from "~/assets/logos/logo_only.svg"
 import BloopSFX from "~/assets/audio/bloop.wav"
 
@@ -7,8 +7,10 @@ const Navbar = ({ username }: { username: string }) => {
     new Audio(BloopSFX).play()
   }
 
+  const location = useLocation()
+
   return (
-    <>
+    <div className={`${location.pathname.includes("play/") ? "hidden" : null}`}>
       <div className="fixed left-0 top-0 z-30 hidden h-12 w-screen bg-white md:block"></div>
       <nav
         className="box-shadow fixed bottom-11 left-1/2 z-50 flex h-[11.3rem] w-[90%] -translate-x-1/2 items-center justify-between
@@ -79,7 +81,7 @@ const Navbar = ({ username }: { username: string }) => {
           Play
         </NavLink>
       </nav>
-    </>
+    </div>
   )
 }
 
