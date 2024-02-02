@@ -121,3 +121,6 @@ export function getDomainUrl(request: Request) {
   const protocol = host.includes("localhost") ? "http" : "https"
   return `${protocol}://${host}`
 }
+
+export const randomInt = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min

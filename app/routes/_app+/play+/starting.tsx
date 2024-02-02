@@ -4,17 +4,17 @@ import GPTLogo from "~/assets/logos/gpt_logo.svg"
 import OpenAI from "openai"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
 import data from "~/themes/themes.json"
-import { faker } from "@faker-js/faker"
 import { useLoaderData, useNavigate } from "@remix-run/react"
 import { themeStorage } from "~/utils/theme.server"
 import { useEffect, useState } from "react"
+import { randomInt } from "~/utils/misc"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   })
 
-  const theme = data.themes[faker.number.int({ min: 0, max: 250 })]
+  const theme = data.themes[randomInt(0, 250)]
 
   const response = await openai.chat.completions.create({
     messages: [
@@ -79,7 +79,7 @@ const Starting = () => {
             alt=""
             className="absolute -z-10 h-[48rem] w-[48rem]"
           />
-          <div className="text-34 ml-36 mr-20 mt-8 flex h-full flex-col justify-between pb-16 leading-none">
+          <div className="ml-36 mr-20 mt-8 flex h-full flex-col justify-between pb-16 text-34 leading-none">
             <div>
               {formatResponse?.map((sentence) => (
                 <>
@@ -95,8 +95,21 @@ const Starting = () => {
           </div>
         </div>
       </div>
-      <div>
-        <p>{remainingSeconds}</p>
+      <div className="mt-44 flex flex-col items-center justify-center">
+        <div className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90">
+          <p
+            className="text-65 text-border text-border-lg rotate-[10deg] text-white"
+            data-text={remainingSeconds}
+          >
+            {remainingSeconds}
+          </p>
+        </div>
+        <p
+          className="text-border text-border-lg text-25 text-blue"
+          data-text="Timer"
+        >
+          Timer
+        </p>
       </div>
     </>
   )

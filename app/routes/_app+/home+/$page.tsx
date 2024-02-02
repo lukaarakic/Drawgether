@@ -81,7 +81,7 @@ const Home = () => {
           <ArtworkPost artwork={artwork} key={artwork.id} index={index} />
         ))}
       </div>
-      <div className="-mt-20 mb-4 flex items-center justify-between text-32">
+      <div className="mx-auto -mt-32 mb-64 flex w-[80%] items-center justify-between text-32">
         {page === (null || 0) || data.artworks.length === 0 ? (
           <div></div>
         ) : (
