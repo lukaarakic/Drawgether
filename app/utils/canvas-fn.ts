@@ -1,24 +1,45 @@
 import { useEffect, useRef, useState } from "react"
+import { hsvaToHex } from "@uiw/color-convert"
 
-export const useDraw = (
-  onDraw: ({ ctx, currentPoint, prevPoint }: Draw) => void,
-) => {
+export const useDraw = (hsva: HsvaColor, brushWidth: number) => {
   const [mouseDown, setMouseDown] = useState(false)
+  const [step, setStep] = useState(0)
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const prevPoint = useRef<null | Point>(null)
+  const ctx = canvasRef.current?.getContext("2d")
 
   const onMouseDown = () => setMouseDown(true)
+
+  function drawLine({ prevPoint, currentPoint, ctx }: Draw) {
+    const { x: currX, y: currY } = currentPoint
+    const lineColor = hsvaToHex(hsva)
+    const lineWidth = brushWidth
+
+    const startPoint = prevPoint ?? currentPoint
+    ctx.beginPath()
+    ctx.lineWidth = lineWidth
+    ctx.strokeStyle = lineColor
+    ctx.moveTo(startPoint.x, startPoint.y)
+    ctx.lineTo(currX, currY)
+    ctx.lineCap = "round"
+    ctx.lineJoin = "round"
+    ctx.stroke()
+
+    ctx.fillStyle = lineColor
+    ctx.beginPath()
+    ctx.arc(startPoint.x, startPoint.y, 2, 0, 2 * Math.PI)
+    ctx.fill()
+  }
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (!mouseDown) return
       const currentPoint = computePointInCanvas(e)
 
-      const ctx = canvasRef.current?.getContext("2d")
       if (!ctx || !currentPoint) return
 
-      onDraw({ ctx, currentPoint, prevPoint: prevPoint.current })
+      drawLine({ ctx, currentPoint, prevPoint: prevPoint.current })
       prevPoint.current = currentPoint
     }
 
@@ -36,6 +57,12 @@ export const useDraw = (
     const mouseUpHandler = () => {
       setMouseDown(false)
       prevPoint.current = null
+
+      ctx?.stroke()
+      ctx?.closePath()
+
+      setStep((prev) => prev + 1)
+      console.log(step)
     }
 
     // Add event listeners
@@ -44,12 +71,10 @@ export const useDraw = (
 
     // Remove event listeners
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       canvasRef.current?.removeEventListener("mousemove", handler)
       window.removeEventListener("mouseup", mouseUpHandler)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onDraw])
+  }, [drawLine])
 
   return { canvasRef, onMouseDown }
 }

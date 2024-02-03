@@ -150,13 +150,15 @@
 
   /* Color picker */
 
-  .w-color-alpha-pointer {
+  .fix-pointer .w-color-alpha-pointer {
     top: 50% !important;
   }
-  .w-color-alpha-fill {
-    transform: translate(-9px, -50%);
+  .fix-pointer .w-color-alpha-fill {
+    transform: translate(-9px, -50%) !important;
     width: 0.8rem;
     height: 0.8rem;
+
+    @apply border-only border-4;
   }
 }
 

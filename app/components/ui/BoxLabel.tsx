@@ -14,9 +14,7 @@ const BoxLabel: FC<BoxLabelProps> = ({ children, degree = 0, className }) => {
         rotate: `${degree}deg`,
       }}
     >
-      <div className="flex items-center justify-start bg-pink px-2 text-white">
-        {children}
-      </div>
+      <div className="bg-pink px-2 text-white">{children}</div>
     </div>
   )
 }
