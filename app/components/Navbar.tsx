@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "@remix-run/react"
 import LogoOnly from "~/assets/logos/logo_only.svg"
 import BloopSFX from "~/assets/audio/bloop.wav"
+import { isMobile } from "react-device-detect"
 
 const Navbar = ({ username }: { username: string }) => {
   function play() {
@@ -67,19 +68,21 @@ const Navbar = ({ username }: { username: string }) => {
         >
           Profile
         </NavLink>
-        <NavLink
-          data-text="play"
-          to={"/play"}
-          className={({ isActive }) =>
-            isActive
-              ? "activeNavLink text-border md:text-border-lg uppercase text-white"
-              : "text-border md:text-border-lg uppercase text-white"
-          }
-          prefetch="intent"
-          onClick={() => play()}
-        >
-          Play
-        </NavLink>
+        {isMobile ? null : (
+          <NavLink
+            data-text="play"
+            to={"/play"}
+            className={({ isActive }) =>
+              isActive
+                ? "activeNavLink text-border md:text-border-lg uppercase text-white"
+                : "text-border md:text-border-lg uppercase text-white"
+            }
+            prefetch="intent"
+            onClick={() => play()}
+          >
+            Play
+          </NavLink>
+        )}
       </nav>
     </div>
   )

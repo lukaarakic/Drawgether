@@ -8,9 +8,15 @@ interface ModalProps {
   children: ReactNode
   className?: string
   boxClassName?: string
+  closeTo?: string
 }
 
-const Modal: FC<ModalProps> = ({ children, className, boxClassName }) => {
+const Modal: FC<ModalProps> = ({
+  children,
+  className,
+  boxClassName,
+  closeTo,
+}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden"
 
@@ -32,8 +38,9 @@ const Modal: FC<ModalProps> = ({ children, className, boxClassName }) => {
       >
         <Link
           className="fixed right-5 top-5 h-8 w-8"
-          to=".."
+          to={closeTo ? closeTo : ".."}
           preventScrollReset
+          relative="route"
         >
           <img src={CloseSVG} alt="" className="h-full w-full" />
         </Link>

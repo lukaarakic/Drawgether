@@ -96,14 +96,17 @@ const Starting = () => {
         </div>
       </div>
       <div className="mt-44 flex flex-col items-center justify-center">
-        <div className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90">
+        <button
+          onClick={() => setRemainingSeconds((prev) => prev - 1)}
+          className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"
+        >
           <p
-            className="text-65 text-border text-border-lg rotate-[10deg] text-white"
+            className="text-border text-border-lg rotate-[10deg] text-65 text-white"
             data-text={remainingSeconds}
           >
             {remainingSeconds}
           </p>
-        </div>
+        </button>
         <p
           className="text-border text-border-lg text-25 text-blue"
           data-text="Timer"

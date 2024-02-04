@@ -1,20 +1,15 @@
 import { hsvaToHex } from "@uiw/color-convert"
-import {
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { MouseEvent, MouseEventHandler, useEffect, useState } from "react"
 
 export const useDraw = ({
   hsva,
   brushWidth,
+  canvasRef,
 }: {
   hsva: HsvaColor
   brushWidth: number
+  canvasRef: React.RefObject<HTMLCanvasElement>
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvas = canvasRef.current
   const ctx = canvas?.getContext("2d")
 
@@ -23,7 +18,17 @@ export const useDraw = ({
 
   const [isDrawing, setIsDrawing] = useState(false)
   const [step, setStep] = useState(0)
+  const [isBgWhite, setIsBgWhite] = useState(false)
   const [history, setHistory] = useState<string[]>([])
+
+  if (!isBgWhite) {
+    if (ctx) {
+      ctx.fillStyle = "#fff"
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+      console.log("!!!!!")
+      setIsBgWhite(true)
+    }
+  }
 
   const computeCoords = (e: MouseEvent<HTMLCanvasElement>) => {
     return { x: e.clientX - (offsetLeft || 0), y: e.clientY - (offsetTop || 0) }

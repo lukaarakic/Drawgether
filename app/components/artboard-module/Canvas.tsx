@@ -16,7 +16,7 @@ const Canvas = ({
       <canvas
         width={512}
         height={512}
-        className="box-shadow cursor-crosshair bg-white"
+        className="box-shadow cursor-crosshair"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

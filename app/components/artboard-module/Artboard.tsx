@@ -4,12 +4,19 @@ import Canvas from "./Canvas"
 import ArtboardTools from "./ArtboardTools"
 import { useDraw } from "~/utils/canvas-functions"
 
-const Artboard = () => {
+const Artboard = ({
+  canvasRef,
+}: {
+  canvasRef: React.RefObject<HTMLCanvasElement>
+}) => {
   const [hsva, setHsva] = useState({ h: 0, s: 0, v: 100, a: 1 })
   const [brushWidth, setBrushWidth] = useState(5)
 
-  const { handleMouseDown, handleMouseMove, handleMouseUp, canvasRef, undo } =
-    useDraw({ brushWidth, hsva })
+  const { handleMouseDown, handleMouseMove, handleMouseUp, undo } = useDraw({
+    brushWidth,
+    hsva,
+    canvasRef,
+  })
 
   return (
     <div className="flex gap-8">

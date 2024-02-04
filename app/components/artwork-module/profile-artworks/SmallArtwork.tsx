@@ -5,7 +5,7 @@ const SmallArtwork = ({ art, index }: { art: string; index: number }) => {
 
   return (
     <div
-      className="box-shadow h-[23rem] w-[23rem] cursor-pointer overflow-hidden bg-black bg-opacity-30"
+      className="box-shadow h-[23rem] w-[23rem] cursor-pointer overflow-hidden bg-white bg-opacity-30"
       style={{
         rotate: `${generateRandomRotation(index % 6, rotations)}deg`,
       }}

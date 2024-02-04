@@ -1,14 +1,23 @@
 import {
+  ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
   json,
   redirect,
 } from "@remix-run/node"
 import { themeStorage } from "~/utils/theme.server"
-import { useLoaderData } from "@remix-run/react"
+import {
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react"
 import Artboard from "~/components/artboard-module/Artboard"
 import BoxLabel from "~/components/ui/BoxLabel"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { formatTime } from "~/utils/time"
+import { requireArtist } from "~/utils/auth.server"
+import { prisma } from "~/utils/db.server"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -27,25 +36,65 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ theme })
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+  const artist = await requireArtist(request)
+  const formData = await request.formData()
+
+  const artwork = formData.get("artwork")
+  const theme = formData.get("theme")
+
+  const themeSession = await themeStorage.getSession(
+    request.headers.get("cookie"),
+  )
+
+  await prisma.artwork.create({
+    data: {
+      artworkImage: artwork as string,
+      theme: theme as string,
+      artists: {
+        connect: {
+          id: artist.id,
+        },
+      },
+    },
+  })
+
+  return json(
+    {},
+    {
+      headers: {
+        "set-cookie": await themeStorage.destroySession(themeSession),
+      },
+    },
+  )
+}
+
 const Draw = () => {
   const { theme } = useLoaderData<typeof loader>()
-  const [remainingSeconds, setRemainingSeconds] = useState(10)
-
-  const minutes = Math.floor(remainingSeconds / 60)
-  const seconds = remainingSeconds - minutes * 60
-
-  function formatTime(string: number, pad: string, length: number) {
-    return (new Array(length + 1).join(pad) + string).slice(-length)
-  }
-
-  const finalTime =
-    formatTime(minutes, "0", 2) + ":" + formatTime(seconds, "0", 2)
+  const [remainingSeconds, setRemainingSeconds] = useState(15)
+  const navigate = useNavigate()
+  const fetcher = useFetcher()
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const remainingTime = formatTime(remainingSeconds)
 
   useEffect(() => {
     const interval = setInterval(() => {
       setRemainingSeconds((prev) => prev - 1)
     }, 1000)
     if (remainingSeconds <= 0) clearInterval(interval)
+
+    if (remainingSeconds <= 0) {
+      const formData = new FormData()
+      const artwork = canvasRef.current?.getContext("2d")?.canvas.toDataURL()
+
+      if (!artwork) return navigate("/home/0")
+
+      formData.append("artwork", artwork)
+      formData.append("theme", theme)
+      fetcher.submit(formData, { method: "POST" })
+
+      return navigate("finished")
+    }
 
     return () => clearInterval(interval)
   }, [remainingSeconds])
@@ -60,15 +109,16 @@ const Draw = () => {
           {theme}
         </p>
       </BoxLabel>
-      <Artboard />
+
+      <Artboard canvasRef={canvasRef} />
 
       <div className="mt-8 flex flex-col items-center justify-center">
         <BoxLabel className="w-[25.7rem]" degree={-1.3}>
           <p
             className="text-border text-border-lg px-12 text-65"
-            data-text={finalTime}
+            data-text={remainingTime}
           >
-            {finalTime}
+            {remainingTime}
           </p>
         </BoxLabel>
         <p
@@ -78,6 +128,8 @@ const Draw = () => {
           Timer
         </p>
       </div>
+
+      <Outlet />
     </div>
   )
 }
