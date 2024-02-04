@@ -1,4 +1,5 @@
 import ArtistCircle from "../ui/ArtistCircle"
+import UndoSVG from "~/assets/misc/undo.svg"
 import { useArtist } from "~/utils/artist"
 
 const LeftPanel = ({ undo }: { undo?: () => void }) => {
@@ -17,13 +18,13 @@ const LeftPanel = ({ undo }: { undo?: () => void }) => {
         onClick={undo}
       >
         <p
-          className="text-border text-border-lg text-25 text-blue"
+          className="text-border text-border-lg text-25 text-pink"
           data-text="Undo"
         >
           Undo
         </p>
-        <div className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90">
-          UNDO
+        <div className="box-shadow flex h-32 w-32 items-center justify-center rounded-full bg-blue uppercase transition-transform hover:scale-105 active:scale-90">
+          <img src={UndoSVG} alt="" />
         </div>
       </button>
     </div>

@@ -2,18 +2,24 @@ import { useState } from "react"
 import LeftPanel from "./LeftPanel"
 import Canvas from "./Canvas"
 import ArtboardTools from "./ArtboardTools"
-import { useDraw } from "~/utils/canvas-fn"
+import { useDraw } from "~/utils/canvas-functions"
 
 const Artboard = () => {
-  const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 })
+  const [hsva, setHsva] = useState({ h: 0, s: 0, v: 100, a: 1 })
   const [brushWidth, setBrushWidth] = useState(5)
 
-  const { canvasRef, onMouseDown } = useDraw(hsva, brushWidth)
+  const { handleMouseDown, handleMouseMove, handleMouseUp, canvasRef, undo } =
+    useDraw({ brushWidth, hsva })
 
   return (
     <div className="flex gap-8">
-      <LeftPanel />
-      <Canvas canvasRef={canvasRef} setMouseDown={onMouseDown} />
+      <LeftPanel undo={undo} />
+      <Canvas
+        canvasRef={canvasRef}
+        handleMouseDown={handleMouseDown}
+        handleMouseMove={handleMouseMove}
+        handleMouseUp={handleMouseUp}
+      />
       <ArtboardTools
         brushWidth={brushWidth}
         hsva={hsva}

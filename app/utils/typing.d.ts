@@ -1,3 +1,7 @@
+declare module "@uiw/color-convert" {
+  export function hsvaToHex(hsva: HsvaColor): string
+}
+
 type ArtistType = {
   id: string
   username: string
