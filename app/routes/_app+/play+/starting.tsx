@@ -14,7 +14,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     apiKey: process.env.OPENAI_API_KEY,
   })
 
-  const theme = data.themes[randomInt(0, 250)]
+  const theme = data.themes[randomInt(0, 239)]
 
   const response = await openai.chat.completions.create({
     messages: [

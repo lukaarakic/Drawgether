@@ -71,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 const Draw = () => {
   const { theme } = useLoaderData<typeof loader>()
-  const [remainingSeconds, setRemainingSeconds] = useState(15)
+  const [remainingSeconds, setRemainingSeconds] = useState(320)
   const navigate = useNavigate()
   const fetcher = useFetcher()
   const canvasRef = useRef<HTMLCanvasElement>(null)
