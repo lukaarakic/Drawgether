@@ -92,9 +92,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation: scaleIn 0.2s both;
 
-    @apply border-only absolute -z-10 inline-block h-[130%] w-[140%] bg-pink
-      transition-transform;
+    @apply border-only absolute -z-10 inline-block h-[130%] w-[140%] bg-pink;
+  }
+
+  @keyframes scaleIn {
+    0% {
+      transform: translate(-50%, -50%);
+      scale: 0.1;
+    }
+    100% {
+      transform: translate(-50%, -50%);
+      scale: 1;
+    }
   }
 
   /* Input */
