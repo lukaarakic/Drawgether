@@ -8,7 +8,7 @@ const BrushSize = ({
   setBrushWidth: React.Dispatch<React.SetStateAction<number>>
 }) => {
   return (
-    <div className="mb-8 flex flex-col items-center justify-center gap-1">
+    <div className="flex flex-col items-center justify-center gap-1">
       <label htmlFor="brushSize" className="text-center text-16 leading-none">
         Brush Size
       </label>

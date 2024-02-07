@@ -2,6 +2,10 @@ declare module "@uiw/color-convert" {
   export function hsvaToHex(hsva: HsvaColor): string
 }
 
+declare module "@uiw/color-convert" {
+  export function rgbStringToHsva(rgb: string): string
+}
+
 type ArtistType = {
   id: string
   username: string
@@ -79,3 +83,5 @@ type Point = {
 }
 
 type HsvaColor = { h: number; s: number; v: number; a: number }
+
+type toolType = "pencil" | "eyedropper" | "eraser"

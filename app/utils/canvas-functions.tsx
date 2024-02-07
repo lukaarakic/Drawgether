@@ -1,14 +1,25 @@
-import { hsvaToHex } from "@uiw/color-convert"
+import { hsvaToHex, rgbStringToHsva } from "@uiw/color-convert"
 import { MouseEvent, MouseEventHandler, useEffect, useState } from "react"
 
 export const useDraw = ({
   hsva,
   brushWidth,
   canvasRef,
+  type,
+  setHsva,
 }: {
   hsva: HsvaColor
   brushWidth: number
   canvasRef: React.RefObject<HTMLCanvasElement>
+  type: toolType
+  setHsva: React.Dispatch<
+    React.SetStateAction<{
+      h: number
+      s: number
+      v: number
+      a: number
+    }>
+  >
 }) => {
   const canvas = canvasRef.current
   const ctx = canvas?.getContext("2d")
@@ -31,11 +42,22 @@ export const useDraw = ({
     return { x: e.clientX - (offsetLeft || 0), y: e.clientY - (offsetTop || 0) }
   }
 
+  function eyedropper(e: MouseEvent<HTMLCanvasElement>) {
+    if (!ctx) return
+
+    const { x, y } = computeCoords(e)
+    const imagesData = ctx.getImageData(x, y, 1, 1)
+    const colors = [imagesData.data[0], imagesData.data[1], imagesData.data[2]]
+    const rgbString = `rgb(${colors.join()})`
+
+    // @ts-expect-error bad return type :(
+    setHsva(rgbStringToHsva(rgbString))
+  }
+
   function fillCanvasWhite() {
     if (ctx) {
       ctx.fillStyle = "#fff"
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-      console.log("!!!!!")
       setIsBgWhite(true)
     }
   }
@@ -58,6 +80,12 @@ export const useDraw = ({
     setHistory((prev) => [...prev.slice(0, step - 1)])
   }
 
+  const handleClick: MouseEventHandler<HTMLCanvasElement> = (e) => {
+    if (type === "eyedropper") {
+      eyedropper(e)
+    }
+  }
+
   const handleMouseDown: MouseEventHandler<HTMLCanvasElement> = (e) => {
     if (!ctx) return
 
@@ -73,24 +101,30 @@ export const useDraw = ({
   const handleMouseMove: MouseEventHandler<HTMLCanvasElement> = (e) => {
     if (!isDrawing || !ctx) return
 
-    const { x, y } = computeCoords(e)
+    if (type === "eyedropper") {
+      eyedropper(e)
+    } else {
+      const { x, y } = computeCoords(e)
 
-    ctx.lineTo(x, y)
-    ctx.strokeStyle = hsvaToHex(hsva)
-    ctx.lineWidth = brushWidth
-    ctx.lineCap = "round"
-    ctx.lineJoin = "round"
-    ctx.stroke()
+      ctx.lineTo(x, y)
+      ctx.strokeStyle = type === "eraser" ? "#fff" : hsvaToHex(hsva)
+      ctx.lineWidth = brushWidth
+      ctx.lineCap = "round"
+      ctx.lineJoin = "round"
+      ctx.stroke()
+    }
   }
 
   const handleMouseUp: MouseEventHandler<HTMLCanvasElement> = () => {
     if (!isDrawing || !ctx) return
 
-    ctx.stroke()
-    ctx.closePath()
-    setIsDrawing(false)
-    setStep((prev) => prev + 1)
-    setHistory((prev) => [...prev.slice(0, step), ctx.canvas.toDataURL()])
+    if (type === "pencil") {
+      ctx.stroke()
+      ctx.closePath()
+      setIsDrawing(false)
+      setStep((prev) => prev + 1)
+      setHistory((prev) => [...prev.slice(0, step), ctx.canvas.toDataURL()])
+    }
   }
 
   useEffect(() => {
@@ -110,5 +144,6 @@ export const useDraw = ({
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    handleClick,
   }
 }

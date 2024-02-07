@@ -3,6 +3,7 @@ interface CanvasProps {
   handleMouseDown: React.MouseEventHandler<HTMLCanvasElement>
   handleMouseMove: React.MouseEventHandler<HTMLCanvasElement>
   handleMouseUp: React.MouseEventHandler<HTMLCanvasElement>
+  handleClick: React.MouseEventHandler<HTMLCanvasElement>
 }
 
 const Canvas = ({
@@ -10,6 +11,7 @@ const Canvas = ({
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
+  handleClick,
 }: CanvasProps) => {
   return (
     <>
@@ -20,6 +22,7 @@ const Canvas = ({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onClick={handleClick}
         ref={canvasRef}
       />
     </>

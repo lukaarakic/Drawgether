@@ -9,14 +9,18 @@ const Artboard = ({
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement>
 }) => {
-  const [hsva, setHsva] = useState({ h: 0, s: 0, v: 100, a: 1 })
+  const [hsva, setHsva] = useState({ h: 255, s: 255, v: 100, a: 1 })
   const [brushWidth, setBrushWidth] = useState(5)
+  const [type, setType] = useState<toolType>("pencil")
 
-  const { handleMouseDown, handleMouseMove, handleMouseUp, undo } = useDraw({
-    brushWidth,
-    hsva,
-    canvasRef,
-  })
+  const { handleMouseDown, handleMouseMove, handleMouseUp, undo, handleClick } =
+    useDraw({
+      brushWidth,
+      hsva,
+      canvasRef,
+      type,
+      setHsva,
+    })
 
   return (
     <div className="flex gap-8">
@@ -26,12 +30,15 @@ const Artboard = ({
         handleMouseDown={handleMouseDown}
         handleMouseMove={handleMouseMove}
         handleMouseUp={handleMouseUp}
+        handleClick={handleClick}
       />
       <ArtboardTools
         brushWidth={brushWidth}
         hsva={hsva}
+        type={type}
         setBrushWidth={setBrushWidth}
         setHsva={setHsva}
+        setType={setType}
       />
     </div>
   )
