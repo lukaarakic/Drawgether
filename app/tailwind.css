@@ -160,6 +160,24 @@
 
     @apply border-only border-4;
   }
+
+  /* Slider */
+
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply drop-shadow-filter-lg h-6 w-44 rounded-full bg-black bg-opacity-10 opacity-80 outline-none transition-colors duration-300;
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply h-8 w-8 cursor-pointer rounded-full bg-pink;
+  }
 }
 
 @font-face {

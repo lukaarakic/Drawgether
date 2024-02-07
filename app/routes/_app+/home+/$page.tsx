@@ -3,6 +3,7 @@ import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react"
 import { prisma } from "~/utils/db.server"
 
 import ArtworkPost from "~/components/artwork-module/ArtworkPost"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 
 export const meta: MetaFunction = () => {
   return [
@@ -94,9 +95,9 @@ const Home = () => {
           </Link>
         )}
         {data.artworks.length === 0 ? (
-          <div className="flex flex-col items-center">
+          <div className="mt-12 flex flex-col items-center">
             <p
-              className="text-border mt-24 text-40 text-white"
+              className="text-border ml-24 mt-24 text-40 text-white"
               data-text="There are no more artworks 😢"
             >
               There are no more artworks 😢
@@ -115,6 +116,8 @@ const Home = () => {
               </Link>
             </p>
           </div>
+        ) : data.artworks.length < 7 ? (
+          <div />
         ) : (
           <Link
             to={`/home/${nextPage}`}
@@ -131,3 +134,7 @@ const Home = () => {
 }
 
 export default Home
+
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />
+}

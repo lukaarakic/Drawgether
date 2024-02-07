@@ -19,7 +19,7 @@ const Navbar = ({ username }: { username: string }) => {
       >
         <NavLink
           data-text="HOME"
-          to={"/home/0"}
+          to={"/home/"}
           className={({ isActive }) =>
             isActive
               ? "activeNavLink text-border md:text-border-lg uppercase text-white"

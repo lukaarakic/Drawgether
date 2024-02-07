@@ -4,8 +4,10 @@ import Modal from "~/components/ui/Modal"
 const DrawFinish = () => {
   const navigate = useNavigate()
 
+  localStorage.clear()
+
   setTimeout(() => {
-    navigate("/home/0")
+    navigate("/home/")
   }, 5000)
 
   return (

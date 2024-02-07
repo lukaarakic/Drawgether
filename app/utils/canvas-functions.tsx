@@ -23,10 +23,7 @@ export const useDraw = ({
 
   if (!isBgWhite) {
     if (ctx) {
-      ctx.fillStyle = "#fff"
-      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-      console.log("!!!!!")
-      setIsBgWhite(true)
+      fillCanvasWhite()
     }
   }
 
@@ -34,8 +31,17 @@ export const useDraw = ({
     return { x: e.clientX - (offsetLeft || 0), y: e.clientY - (offsetTop || 0) }
   }
 
-  const undo = () => {
-    if (step <= 0 || !ctx) return
+  function fillCanvasWhite() {
+    if (ctx) {
+      ctx.fillStyle = "#fff"
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+      console.log("!!!!!")
+      setIsBgWhite(true)
+    }
+  }
+
+  function undo() {
+    if (step <= 1 || !ctx) return
 
     setStep((prev) => prev - 1)
 

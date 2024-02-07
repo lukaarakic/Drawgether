@@ -1,6 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
+import { MetaFunction } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { isMobile } from "react-device-detect"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Let's Draw" }, { name: "description", content: "Draw" }]
+}
 
 const Index = () => {
   if (isMobile) {
@@ -47,3 +53,7 @@ const Index = () => {
   )
 }
 export default Index
+
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />
+}

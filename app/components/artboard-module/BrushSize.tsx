@@ -8,22 +8,16 @@ const BrushSize = ({
   setBrushWidth: React.Dispatch<React.SetStateAction<number>>
 }) => {
   return (
-    <div className="mb-8 flex items-center justify-center gap-6">
-      <label
-        htmlFor="brushSize"
-        className="w-min text-center text-25 leading-none"
-      >
-        Brush
-        <br />
-        Size
+    <div className="mb-8 flex flex-col items-center justify-center gap-1">
+      <label htmlFor="brushSize" className="text-center text-16 leading-none">
+        Brush Size
       </label>
       <input
         id="brushSize"
-        type="number"
-        min={5}
-        max={50}
-        step={2}
-        className="box-shadow h-16 w-28 text-32"
+        type="range"
+        min={0}
+        max={100}
+        className="slider"
         defaultValue={brushWidth}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setBrushWidth(+e.target.value)

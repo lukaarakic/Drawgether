@@ -18,6 +18,8 @@ import { useEffect, useRef, useState } from "react"
 import { formatTime } from "~/utils/time"
 import { requireArtist } from "~/utils/auth.server"
 import { prisma } from "~/utils/db.server"
+import FullLogo from "~/assets/logos/full_both_logo.svg"
+import { useLocalStorage } from "usehooks-ts"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -71,7 +73,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
 const Draw = () => {
   const { theme } = useLoaderData<typeof loader>()
-  const [remainingSeconds, setRemainingSeconds] = useState(320)
+  const [time, saveTime] = useLocalStorage("time", 300)
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(time)
   const navigate = useNavigate()
   const fetcher = useFetcher()
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -81,7 +84,9 @@ const Draw = () => {
     const interval = setInterval(() => {
       setRemainingSeconds((prev) => prev - 1)
     }, 1000)
+
     if (remainingSeconds <= 0) clearInterval(interval)
+    saveTime(remainingSeconds)
 
     if (remainingSeconds <= 0) {
       const formData = new FormData()
@@ -100,7 +105,11 @@ const Draw = () => {
   }, [remainingSeconds])
 
   return (
-    <div>
+    <div className="-mt-64">
+      <div className="mb-12 flex items-center justify-center">
+        <img src={FullLogo} alt="" className="w-72" />
+      </div>
+
       <BoxLabel className="mx-auto mb-8 max-w-max" degree={2}>
         <p
           className="text-border text-border-lg px-4 text-center text-36"
