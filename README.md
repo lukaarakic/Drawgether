@@ -69,8 +69,20 @@ To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) in
 
 4. **Populate .env template**
 
-   ```shell
-   npm run dev
+   ```ts
+    # Secrets
+    HONEYPOT_SECRET=""
+    SESSION_SECRET=""
+
+    # Database
+    DATABASE_URL=""
+    DIRECT_URL=""
+
+    # Email
+    RESEND_API_KEY=""
+
+    # OpenAi
+    OPENAI_API_KEY=""
    ```
 
 5. **Start the development server:**
