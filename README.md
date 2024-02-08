@@ -123,12 +123,10 @@ To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) in
 
 ## Contact
 
-If you have any questions, suggestions, or feature requests, please feel free to reach out to me:
+If you have any questions, suggestions, or feature requests, please feel free to reach out to me trough [Mail](mailto:rakic@netrunners.work) or [LinkedIn](https://www.linkedin.com/in/lukaarakic/)
 
-- Mail: [Luka Rakić](mailto:rakic@netrunners.work)
+## Credits
 
-# Credits
-
-- **Designer:** Nikola
-  - GitHub: [nikolchaa](https://github.com/nikolchaa)
-  - LinkedIn: [Nikola Ranđelović](https://www.linkedin.com/in/nikolchaa/)
+- **Designer** - @nikolchaa
+  - [GitHub](https://github.com/nikolchaa)
+  - [LinkedIn](https://www.linkedin.com/in/nikolchaa/)
