@@ -15,7 +15,7 @@ const Navbar = ({ username }: { username: string }) => {
       <div className="fixed left-0 top-0 z-30 hidden h-12 w-screen bg-white md:block"></div>
       <nav
         className="box-shadow fixed bottom-11 left-1/2 z-50 flex h-[11.3rem] w-[90%] -translate-x-1/2 items-center justify-between
-       rounded-full bg-blue px-12 text-25 xs:px-44 xs:text-32 md:top-11 md:px-28 lg:w-[147rem] lg:px-44 lg:text-40"
+       rounded-full bg-blue px-20 align-middle text-25 xs:px-44 xs:text-32 md:top-11 md:px-28 lg:w-[147rem] lg:px-44 lg:text-40"
       >
         <NavLink
           data-text="HOME"

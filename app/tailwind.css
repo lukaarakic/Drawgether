@@ -73,7 +73,7 @@
   }
 
   .border-only {
-    border: 0.6rem solid #212121;
+    border: 0.5rem solid #212121;
   }
 
   .stop-scroll {
@@ -93,8 +93,9 @@
     left: 50%;
     transform: translate(-100%, -100%);
     animation: scaleIn 0.2s both;
+    border: 2px solid #212121;
 
-    @apply border-only absolute -z-10 inline-block h-[130%] w-[140%] bg-pink;
+    @apply md:border-only absolute -z-10 inline-block h-[130%] w-[140%] border-black bg-pink;
   }
 
   @keyframes scaleIn {

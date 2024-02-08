@@ -11,7 +11,7 @@ import ArtworkDeleteButton from "./ArtworkDeleteButton"
 const ArtworkPost = ({
   artwork,
   index,
-  className = "mx-auto mb-80 w-[80%] xs:w-[57.2rem]",
+  className = "mx-auto mb-52 w-[80%] xs:w-[57.2rem]",
   showComments = true,
   profileRoute,
 }: {
