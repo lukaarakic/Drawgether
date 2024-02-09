@@ -190,6 +190,11 @@
     appearance: none;
     @apply drop-shadow-filter h-8 w-8 cursor-pointer rounded-full bg-pink;
   }
+
+  /* Gradient */
+  .tutorial-bg {
+    background: linear-gradient(180deg, #de6b9b 0%, #de6b9b 25.5%, #496eb5 33%);
+  }
 }
 
 @font-face {
