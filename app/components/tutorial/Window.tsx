@@ -12,7 +12,7 @@ const Window = ({ index, text, type, details, style }: WindowProps) => {
       className={
         type === "rule" ? `floatAnim absolute max-h-[22rem] w-[36rem] ` : ""
       }
-      style={type === "rule" ? { ...style } : {}}
+      style={style}
     >
       <div
         className={`border-only flex h-24 items-center ${type === "rule" ? "justify-between rounded-t-[3.5rem] bg-blue px-8" : "w-28 justify-center rounded-t-full border-b-0 bg-pink"}`}
