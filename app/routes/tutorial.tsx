@@ -1,42 +1,23 @@
-import BlueLogo from "~/assets/logos/blue_logo.svg"
-import BoxLabel from "~/components/ui/BoxLabel"
-import Hearts from "~/assets/misc/hearts.svg"
-import Stars from "~/assets/misc/stars.svg"
-import Marks from "~/assets/misc/marks.svg"
+import { MetaFunction } from "@remix-run/node"
 
-const rules = [
-  {
-    type: Hearts,
-    rule: "Keep it family friendly!",
-    style: {
-      top: 0,
-      left: "-67rem",
-      rotate: "5.75deg",
-    },
-  },
-  {
-    type: Stars,
-    rule: "Stay positive!",
-    style: {
-      top: "10rem",
-      left: "-15rem",
-      rotate: "-4.56deg",
-    },
-  },
-  {
-    type: Marks,
-    rule: "BE CREATIVE!",
-    style: {
-      top: 0,
-      right: "-69rem",
-    },
-  },
-]
+import BoxLabel from "~/components/ui/BoxLabel"
+import Window from "~/components/tutorial/Window"
+import Text from "~/components/Text"
+
+import { howTo, rules } from "~/data/tutorial"
+import BlueLogo from "~/assets/logos/blue_logo.svg"
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tutorial" },
+    { name: "description", content: "How to play" },
+  ]
+}
 
 const Tutorial = () => {
   return (
-    <main className="h-[200vh] overflow-x-hidden bg-pink">
-      <div className="mx-auto w-[192rem]">
+    <main className="overflow-x-hidden bg-pink pb-24 transition-colors duration-500">
+      <div className="relative mx-auto w-[192rem]">
         <header className="mx-auto flex h-svh w-max flex-col items-center justify-center">
           <img
             src={BlueLogo}
@@ -61,53 +42,46 @@ const Tutorial = () => {
 
           <div className="relative mt-40 h-[35rem]">
             {rules.map((rule, index) => (
-              <RuleWindow
-                index={index + 1}
-                rule={rule.rule}
-                type={rule.type}
-                style={rule.style}
+              <Window
                 key={`${index}-${rule.rule}`}
+                index={index + 1}
+                text={rule.rule}
+                details={rule.type}
+                style={rule.style}
+                type="rule"
               />
             ))}
           </div>
         </header>
 
-        <div></div>
+        <section className="timeline flex w-full overflow-hidden">
+          <div className="flex w-1/2 flex-col items-center leading-none">
+            <Text largeShadow className="text-90 uppercase">
+              so, this is
+            </Text>
+            <Text largeShadow className="text-90 uppercase">
+              how you
+            </Text>
+            <Text largeShadow className="text-165 uppercase !text-pink">
+              Play
+            </Text>
+          </div>
+
+          <div className="w-10 origin-top bg-black" />
+
+          <div className="flex w-1/2 flex-col items-center gap-80">
+            {howTo.map((item, index) => (
+              <Window
+                key={`${item.text}-${index}`}
+                type="play"
+                index={index + 1}
+                text={item.text}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   )
 }
 export default Tutorial
-
-interface RuleWindow {
-  index: number
-  type: string
-  rule: string
-  style: any
-}
-
-const RuleWindow = ({ index, rule, type, style }: RuleWindow) => {
-  return (
-    <div className="absolute max-h-[22rem] w-[36rem]" style={style}>
-      <div className="border-only flex h-24 items-center justify-between rounded-t-[3.5rem] bg-blue px-8">
-        <span
-          className="text-border drop-shadow-filter-lg text-25 text-white"
-          data-text={`${index}.`}
-        >
-          {index}.
-        </span>
-
-        <img src={type} alt="" />
-      </div>
-
-      <div className="border-only flex h-64 items-center border-t-0 bg-white py-8">
-        <p
-          className="text-border text-border-lg drop-shadow-filter-lg mx-auto w-[27.6rem] text-40 text-white"
-          data-text={rule}
-        >
-          {rule}
-        </p>
-      </div>
-    </div>
-  )
-}

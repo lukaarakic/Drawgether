@@ -16,6 +16,7 @@ export default {
     },
     extend: {
       fontSize: {
+        165: "16.5rem",
         132: "13.2rem",
         128: "12.8rem",
         90: "9rem",

@@ -191,9 +191,21 @@
     @apply drop-shadow-filter h-8 w-8 cursor-pointer rounded-full bg-pink;
   }
 
-  /* Gradient */
-  .tutorial-bg {
-    background: linear-gradient(180deg, #de6b9b 0%, #de6b9b 25.5%, #496eb5 33%);
+  .floatAnim {
+    animation: float 2s ease-out infinite;
+    transition: all 0.4s;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-2rem);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
 }
 

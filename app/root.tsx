@@ -19,6 +19,7 @@ import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { GeneralErrorBoundary } from "./components/error/ErrorBoundry"
 import { sessionStorage } from "./utils/session.server"
 import { prisma } from "./utils/db.server"
+import { ReactLenis, useLenis } from "@studio-freight/react-lenis"
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -112,11 +113,15 @@ export function Document({ children }: { children?: React.ReactNode }) {
 
 export default function AppWithProvider() {
   const data = useLoaderData<typeof loader>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const lenis = useLenis(({ scroll }) => {})
 
   return (
     <AuthenticityTokenProvider token={data.csrfToken}>
       <HoneypotProvider {...data.honeyProps}>
-        <App />
+        <ReactLenis root>
+          <App />
+        </ReactLenis>
       </HoneypotProvider>
     </AuthenticityTokenProvider>
   )
