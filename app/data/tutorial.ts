@@ -39,24 +39,28 @@ export const howTo = [
     text: "Join a lobby with 1-4 friends",
     style: {
       rotate: "-6.26deg",
+      animationDelay: "0s",
     },
   },
   {
     text: "Host will start the game",
     style: {
       rotate: "5.45deg",
+      animationDelay: ".5s",
     },
   },
   {
     text: "Get the theme",
     style: {
       rotate: "-13.54deg",
+      animationDelay: "1s",
     },
   },
   {
     text: "Start drawing!",
     style: {
       rotate: "8.29deg",
+      animationDelay: "1.5s",
     },
   },
 ]

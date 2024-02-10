@@ -191,8 +191,13 @@
     @apply drop-shadow-filter h-8 w-8 cursor-pointer rounded-full bg-pink;
   }
 
-  .floatAnim {
-    animation: float 2s ease-out infinite;
+  .floatAnimation {
+    animation: float 2s cubic-bezier(0.39, 0.02, 0.5, 0.98) infinite;
+    transition: all 0.4s;
+  }
+
+  .floatAnimationSmall {
+    animation: floatSmall 2s cubic-bezier(0.39, 0.02, 0.5, 0.98) infinite;
     transition: all 0.4s;
   }
 
@@ -202,6 +207,18 @@
     }
     50% {
       transform: translateY(-2rem);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  @keyframes floatSmall {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-1rem);
     }
     100% {
       transform: translateY(0px);

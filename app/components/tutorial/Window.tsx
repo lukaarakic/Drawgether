@@ -10,7 +10,9 @@ const Window = ({ index, text, type, details, style }: WindowProps) => {
   return (
     <div
       className={
-        type === "rule" ? `floatAnim absolute max-h-[22rem] w-[36rem] ` : ""
+        type === "rule"
+          ? `floatAnimation absolute max-h-[22rem] w-[36rem] `
+          : "floatAnimationSmall"
       }
       style={style}
     >
