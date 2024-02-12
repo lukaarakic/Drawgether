@@ -8,6 +8,8 @@ import Text from "~/components/Text"
 import { howTo, rules } from "~/data/tutorial"
 import BlueLogo from "~/assets/logos/blue_logo.svg"
 import { Link } from "@remix-run/react"
+import { useLenis } from "@studio-freight/react-lenis"
+import { useRef, useState } from "react"
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +21,12 @@ export const meta: MetaFunction = () => {
 const Tutorial = () => {
   const { isIntersecting, ref: headerRef } = useIntersectionObserver({
     threshold: 0.7,
+  })
+  const [height, setHeight] = useState(0)
+  const timelineRef = useRef<HTMLElement>(null)
+
+  const lenis = useLenis(({ scroll }) => {
+    setHeight(scroll)
   })
 
   return (
@@ -65,7 +73,7 @@ const Tutorial = () => {
           </div>
         </header>
 
-        <section className="timeline relative flex w-full">
+        <section className="relative flex w-full" ref={timelineRef}>
           <div
             className={`sticky top-72 flex w-1/2 flex-col items-center self-start leading-none`}
           >
@@ -83,7 +91,20 @@ const Tutorial = () => {
             </Text>
           </div>
 
-          <div className="w-10 bg-black" />
+          <div
+            className="box-shadow w-12 overflow-hidden rounded-full bg-white"
+            style={{
+              height: timelineRef.current?.clientHeight,
+            }}
+          >
+            <div
+              className="h-0 bg-pink transition-all"
+              style={{
+                height: lenis?.progress > 0.95 ? height : (height / 3) * 2,
+                maxHeight: timelineRef.current?.clientHeight,
+              }}
+            ></div>
+          </div>
 
           <div className="flex w-1/2 flex-col items-center gap-80">
             {howTo.map((item, index) => (
