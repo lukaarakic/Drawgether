@@ -1,8 +1,14 @@
 import { useNavigate } from "@remix-run/react"
 import Modal from "~/components/ui/Modal"
+import StartSFX from "~/assets/audio/start.wav"
+import { useEffect } from "react"
 
 const DrawFinish = () => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    new Audio(StartSFX).play()
+  }, [])
 
   localStorage.clear()
 

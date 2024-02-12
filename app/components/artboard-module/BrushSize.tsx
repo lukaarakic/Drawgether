@@ -15,7 +15,7 @@ const BrushSize = ({
       <input
         id="brushSize"
         type="range"
-        min={0}
+        min={1}
         max={100}
         className="slider"
         defaultValue={brushWidth}

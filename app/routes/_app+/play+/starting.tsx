@@ -8,6 +8,7 @@ import { useLoaderData, useNavigate } from "@remix-run/react"
 import { themeStorage } from "~/utils/theme.server"
 import { useEffect, useState } from "react"
 import { randomInt } from "~/utils/misc"
+import CounddownSFX from "~/assets/audio/countdown.wav"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const openai = new OpenAI({
@@ -54,10 +55,15 @@ const Starting = () => {
   const [remainingSeconds, setRemainingSeconds] = useState(12)
   const navigate = useNavigate()
 
+  function play() {
+    new Audio(CounddownSFX).play()
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setRemainingSeconds((prev) => prev - 1)
     }, 1000)
+    play()
 
     if (remainingSeconds <= 0) {
       return navigate("/play/draw")
@@ -97,7 +103,10 @@ const Starting = () => {
       </div>
       <div className="mt-44 flex flex-col items-center justify-center">
         <button
-          onClick={() => setRemainingSeconds((prev) => prev - 1)}
+          onClick={() => {
+            setRemainingSeconds((prev) => prev - 1)
+            play()
+          }}
           className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"
         >
           <p

@@ -1,5 +1,6 @@
 import { useFetcher } from "@remix-run/react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
+import BloopSFX from "~/assets/audio/bloop.wav"
 
 const ArtworkLikeButton = ({
   artworkId,
@@ -12,6 +13,10 @@ const ArtworkLikeButton = ({
 }) => {
   const fetcher = useFetcher()
 
+  function play() {
+    new Audio(BloopSFX).play()
+  }
+
   return (
     <fetcher.Form
       method="POST"
@@ -19,7 +24,7 @@ const ArtworkLikeButton = ({
       id={`like-${artworkId}`}
     >
       <AuthenticityTokenInput />
-      <button type="submit" className="relative rotate-12">
+      <button type="submit" className="relative rotate-12" onClick={play}>
         <svg
           id="Layer_2"
           xmlns="http://www.w3.org/2000/svg"

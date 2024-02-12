@@ -31,18 +31,20 @@ const Tutorial = () => {
 
   return (
     <main
-      className={`${isIntersecting ? "bg-pink" : "bg-blue"} pb-24 transition-colors duration-500`}
+      className={`${isIntersecting ? "bg-pink" : "!bg-blue"} bg-pink pb-24 transition-colors duration-500`}
     >
       <div className="relative mx-auto max-w-[192rem]">
         <header
           className="mx-auto flex h-svh w-max flex-col items-center justify-center"
           ref={headerRef}
         >
-          <img
-            src={BlueLogo}
-            alt=""
-            className="absolute left-16 top-16 h-20 w-[35rem]"
-          />
+          <Link to={"/home/"}>
+            <img
+              src={BlueLogo}
+              alt=""
+              className="absolute left-16 top-16 h-20 w-[35rem]"
+            />
+          </Link>
 
           <div>
             <h1

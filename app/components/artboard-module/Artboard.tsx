@@ -9,7 +9,7 @@ const Artboard = ({
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement>
 }) => {
-  const [hsva, setHsva] = useState({ h: 255, s: 255, v: 100, a: 1 })
+  const [hsva, setHsva] = useState({ h: 0, s: 0, v: 100, a: 1 })
   const [brushWidth, setBrushWidth] = useState(5)
   const [type, setType] = useState<toolType>("pencil")
 

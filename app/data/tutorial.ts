@@ -36,14 +36,14 @@ export const rules = [
 
 export const howTo = [
   {
-    text: "Join a lobby with 1-4 friends",
+    text: "Go to play tab",
     style: {
       rotate: "-6.26deg",
       animationDelay: "0s",
     },
   },
   {
-    text: "Host will start the game",
+    text: "Press DRAW",
     style: {
       rotate: "5.45deg",
       animationDelay: ".5s",

@@ -24,7 +24,7 @@ const LeftPanel = ({ undo }: { undo?: () => void }) => {
           Undo
         </p>
         <div className="box-shadow flex h-32 w-32 items-center justify-center rounded-full bg-blue uppercase transition-transform hover:scale-105 active:scale-90">
-          <img src={UndoSVG} alt="" />
+          <img src={UndoSVG} alt="" className="h-24 w-24" />
         </div>
       </button>
     </div>
