@@ -244,6 +244,10 @@
   .lenis.lenis-scrolling iframe {
     pointer-events: none;
   }
+
+  .h-calc {
+    height: calc(100svh - 20rem);
+  }
 }
 
 @font-face {

@@ -15,8 +15,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="relative h-svh  bg-blue">
-      <header className="mb-44 flex items-center justify-center pt-8">
+    <div className="relative grid h-svh place-items-center bg-blue">
+      <header className="flex items-center justify-center pt-8">
         <Link to="/">
           <img
             src={FullPinkLogo}

@@ -42,6 +42,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
           id: true,
           username: true,
           avatar: true,
+          roles: {
+            select: {
+              name: true,
+              permissions: {
+                select: { entity: true, access: true, action: true },
+              },
+            },
+          },
         },
       })
     : null

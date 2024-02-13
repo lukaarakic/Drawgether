@@ -2,7 +2,7 @@ import FullLogo from "~/assets/logos/full_both_logo.svg"
 import Bubble from "~/assets/misc/chat_bubble.svg"
 import GPTLogo from "~/assets/logos/gpt_logo.svg"
 import OpenAI from "openai"
-import { LoaderFunctionArgs, json } from "@remix-run/node"
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import data from "~/data/themes.json"
 import { useLoaderData, useNavigate } from "@remix-run/react"
 import { themeStorage } from "~/utils/theme.server"
@@ -11,6 +11,16 @@ import { randomInt } from "~/utils/misc"
 import CounddownSFX from "~/assets/audio/countdown.wav"
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const themeSession = await themeStorage.getSession(
+    request.headers.get("cookie"),
+  )
+
+  const isThereTheme = themeSession.get("theme")
+
+  if (isThereTheme) {
+    return redirect("/play/draw")
+  }
+
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   })
@@ -34,9 +44,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     model: "gpt-3.5-turbo-1106",
   })
 
-  const themeSession = await themeStorage.getSession(
-    request.headers.get("cookie"),
-  )
   themeSession.set("theme", theme)
 
   return json(

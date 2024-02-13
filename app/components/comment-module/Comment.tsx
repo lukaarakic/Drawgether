@@ -5,6 +5,7 @@ import BoxLabel from "../ui/BoxLabel"
 import TrashSVG from "~/assets/misc/trash.svg"
 import { useArtist } from "~/utils/artist"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
+import { artistHasRole } from "~/utils/permissions"
 
 export default function Comment({
   comment,
@@ -22,6 +23,7 @@ export default function Comment({
   const fetcher = useFetcher()
   const isPending = fetcher.state === "submitting"
   const artist = useArtist()
+  const isAdmin = artistHasRole(artist, "admin")
 
   const isOwner = comment.artist.id === artist.id
 
@@ -48,7 +50,7 @@ export default function Comment({
             </p>
           </BoxLabel>
 
-          {isOwner ? (
+          {isOwner || isAdmin ? (
             <fetcher.Form
               method="POST"
               action={`/delete-comment/${comment.id}`}

@@ -1,18 +1,24 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
-import { requireArtist } from "~/utils/auth.server"
+import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
+import { requireArtistWithRole } from "~/utils/auth.server"
 import { checkCSRF } from "~/utils/csrf.server"
 import { prisma } from "~/utils/db.server"
 import { invariantResponse } from "~/utils/misc"
+import { artistHasRole } from "~/utils/permissions"
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requireArtist(request)
+  await requireArtistWithRole(request)
 
   return json({})
 }
 
+export default function DeleteArtwork() {
+  return <ErrorBoundary />
+}
+
 export async function action({ request, params }: ActionFunctionArgs) {
   const artworkId = params.artworkId
-  const artist = await requireArtist(request)
+  const artist = await requireArtistWithRole(request)
 
   invariantResponse(artworkId, "Artwork ID is missing")
 
@@ -34,8 +40,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const isOwner =
     artworkArtist.filter((artistF) => artistF.id === artist.id).length > 0
+  const isAdmin = artistHasRole(artist, "admin")
 
-  if (!isOwner) throw new Response("You are not authorized", { status: 401 })
+  if (!isOwner && !isAdmin)
+    throw new Response("Not authorized 🚓", { status: 401 })
 
   await prisma.artwork.delete({
     where: {
@@ -44,4 +52,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   })
 
   return json({})
+}
+
+export function ErrorBoundary() {
+  return (
+    <GeneralErrorBoundary
+      defaultStatusHandler={() => <p>Something went wront 😢</p>}
+      statusHandlers={{
+        401: () => {
+          return <p>You are not authorized for this action</p>
+        },
+      }}
+    />
+  )
 }

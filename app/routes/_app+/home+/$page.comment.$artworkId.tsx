@@ -5,6 +5,7 @@ import { invariantResponse } from "~/utils/misc"
 import CommentContainer from "~/components/comment-module/CommentsContainer"
 import { useEffect } from "react"
 import Modal from "~/components/ui/Modal"
+import { useLenis } from "@studio-freight/react-lenis"
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const artworkId = params.artworkId
@@ -41,13 +42,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 const CommentRoute = () => {
   const { artwork, artworkId } = useLoaderData<typeof loader>()
+  const lenis = useLenis()
 
   useEffect(() => {
-    document.body.style.overflow = "hidden"
+    lenis.stop()
 
-    return () => {
-      document.body.style.overflow = "auto"
-    }
+    return () => lenis.start()
   }, [])
 
   return (

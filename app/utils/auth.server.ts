@@ -24,6 +24,32 @@ export async function requireArtist(request: Request) {
   return artist
 }
 
+export async function requireArtistWithRole(request: Request) {
+  const artistId = await requireArtistId(request)
+
+  const artist = await prisma.artist.findUnique({
+    where: { id: artistId },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      email_verified: true,
+      roles: {
+        select: {
+          name: true,
+          permissions: {
+            select: { entity: true, access: true, action: true },
+          },
+        },
+      },
+    },
+  })
+
+  if (!artist) throw await logout({ request })
+
+  return artist
+}
+
 export async function getArtistId(request: Request) {
   const cookieSession = await sessionStorage.getSession(
     request.headers.get("cookie"),

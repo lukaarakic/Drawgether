@@ -8,6 +8,8 @@ import Modal from "~/components/ui/Modal"
 import { like } from "~/utils/social-function.server"
 import { useLoaderData } from "@remix-run/react"
 import { fetchUniqueArtwork } from "~/utils/fetch-data.server"
+import { useEffect } from "react"
+import { useLenis } from "@studio-freight/react-lenis"
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireArtist(request)
@@ -40,6 +42,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
 const ShowArtwork = () => {
   const { artwork } = useLoaderData<typeof loader>()
+
+  const lenis = useLenis()
+
+  useEffect(() => {
+    lenis.stop()
+
+    return () => lenis.start()
+  }, [])
 
   return (
     <Modal

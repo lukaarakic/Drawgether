@@ -46,15 +46,15 @@ const Index = () => {
 
   return (
     <>
-      <div className="mt-16 flex flex-col items-center justify-between gap-20">
-        <img src={FullLogo} alt="" className="h-[33rem] w-[45rem]" />
+      <div className="h-calc flex flex-col items-center justify-evenly">
+        <img src={FullLogo} alt="" className="h-[30svh]" />
         <Link
           onClick={play}
-          className="box-shadow flex h-[14.5rem] w-[14.5rem] items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"
+          className="box-shadow flex h-[17svh] w-[17svh] items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"
           to={`/play/starting`}
           prefetch="intent"
         >
-          <div className="rotate-[10deg] text-32 text-white">Draw!</div>
+          <div className="rotate-[10deg] text-[3.5svh] text-white">Draw!</div>
         </Link>
         <Link
           to={"/tutorial"}
@@ -63,6 +63,11 @@ const Index = () => {
         >
           Tutorial
         </Link>
+        <noscript>
+          <h1 className="text-25">
+            This game will not work properly without javascript 😢
+          </h1>
+        </noscript>
       </div>
     </>
   )

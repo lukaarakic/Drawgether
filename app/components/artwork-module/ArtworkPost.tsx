@@ -7,6 +7,7 @@ import ArtworkComments from "./ArtworkComments"
 import { useArtist } from "~/utils/artist"
 import CommentIcon from "~/assets/misc/comment.svg"
 import ArtworkDeleteButton from "./ArtworkDeleteButton"
+import { artistHasRole } from "~/utils/permissions"
 
 const ArtworkPost = ({
   artwork,
@@ -23,6 +24,7 @@ const ArtworkPost = ({
 }) => {
   const artist = useArtist()
   const { page } = useParams()
+  const isAdmin = artistHasRole(artist, "admin")
 
   return (
     <article className={className}>
@@ -69,7 +71,7 @@ const ArtworkPost = ({
             </Link>
           ) : null}
           {artwork.artists.filter((artistF) => artistF.id === artist.id)
-            .length > 0 ? (
+            .length > 0 || isAdmin ? (
             <ArtworkDeleteButton artworkId={artwork.id} />
           ) : null}
         </div>

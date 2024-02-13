@@ -104,6 +104,20 @@ const Draw = () => {
     return () => clearInterval(interval)
   }, [remainingSeconds])
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: { returnValue: string }) => {
+      const message = "Are you sure you want to leave?"
+      event.returnValue = message
+      return message
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+    }
+  }, [])
+
   return (
     <div className="-mt-64">
       <div className="mb-12 flex items-center justify-center">

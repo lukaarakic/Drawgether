@@ -35,14 +35,18 @@ const Profile = () => {
   const isLoggedInArtist = artist.id === loggedInArtist?.id
   const hasArtworks = artist.artworks.length > 0
 
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+  const [screenWidth, setScreenWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0,
+  )
 
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth)
     }
 
-    window.addEventListener("resize", handleResize)
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", handleResize)
+    }
 
     return () => {
       window.removeEventListener("resize", handleResize)
@@ -82,8 +86,8 @@ const Profile = () => {
           </BoxLabel>
         </div>
 
-        {hasArtworks ? (
-          screenWidth > 768 ? (
+        {hasArtworks && screenWidth !== 0 ? (
+          screenWidth >= 768 ? (
             <SmallArtworkContainer artist={artist} />
           ) : (
             <ArtworksContainer
