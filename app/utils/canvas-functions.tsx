@@ -84,15 +84,6 @@ export const useDraw = ({
     if (type === "eyedropper") {
       return eyedropper(e)
     }
-
-    if (type === "pencil" && ctx) {
-      const { x, y } = computeCoords(e)
-
-      ctx.fillStyle = hsvaToHex(hsva)
-      ctx.beginPath()
-      ctx.arc(x, y, brushWidth, 0, 2 * Math.PI)
-      ctx.fill()
-    }
   }
 
   const handleMouseDown: MouseEventHandler<HTMLCanvasElement> = (e) => {
@@ -103,6 +94,8 @@ export const useDraw = ({
     const { x, y } = computeCoords(e)
 
     ctx.beginPath()
+    ctx.arc(x, y, brushWidth / 50, 0, 2 * Math.PI)
+    ctx.fill()
     ctx.moveTo(x, y)
     e.preventDefault()
   }
