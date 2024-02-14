@@ -9,7 +9,7 @@ import { themeStorage } from "~/utils/theme.server"
 import { useEffect, useState } from "react"
 import { randomInt } from "~/utils/misc"
 import CountdownSFX from "~/assets/audio/countdown.wav"
-import { motion } from "framer-motion"
+import gsap from "gsap"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const themeSession = await themeStorage.getSession(
@@ -74,7 +74,25 @@ const Starting = () => {
     play()
 
     if (remainingSeconds <= 0) {
-      return navigate("/play/draw")
+      clearInterval(interval)
+
+      gsap.fromTo(
+        ".transitionBlock",
+        {
+          transformOrigin: "bottom",
+          scaleY: 0,
+        },
+        {
+          transformOrigin: "bottom",
+          scaleY: 1,
+          duration: 1,
+          ease: "power3.inOut",
+        },
+      )
+
+      setTimeout(() => {
+        return navigate("/play/draw")
+      }, 2000)
     }
 
     return () => clearInterval(interval)
@@ -82,20 +100,8 @@ const Starting = () => {
 
   return (
     <>
-      <motion.div
-        className="slide-in"
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 0 }}
-        exit={{ scaleY: 1 }}
-        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.div
-        className="slide-out"
-        initial={{ scaleY: 1 }}
-        animate={{ scaleY: 0 }}
-        exit={{ scaleY: 0 }}
-        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-      />
+      <div className="transitionBlock origin-bottom scale-y-0" />
+
       <div className="flex">
         <div>
           <img src={FullLogo} alt="" className="h-[51rem] w-[70rem]" />

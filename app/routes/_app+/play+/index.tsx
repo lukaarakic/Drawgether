@@ -5,7 +5,6 @@ import { isMobile } from "react-device-detect"
 import { GeneralErrorBoundary } from "~/components/error/ErrorBoundry"
 import FullLogo from "~/assets/logos/full_both_logo.svg"
 import StartSFX from "~/assets/audio/start.wav"
-import { motion } from "framer-motion"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Let's Draw" }, { name: "description", content: "Draw" }]
@@ -47,13 +46,6 @@ const Index = () => {
 
   return (
     <>
-      <motion.div
-        className="slide-in"
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 0 }}
-        exit={{ scaleY: 1 }}
-        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-      />
       <div className="h-calc flex flex-col items-center justify-evenly">
         <img src={FullLogo} alt="" className="h-[30svh]" />
         <Link

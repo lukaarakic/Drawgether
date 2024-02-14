@@ -20,7 +20,8 @@ import { requireArtist } from "~/utils/auth.server"
 import { prisma } from "~/utils/db.server"
 import FullLogo from "~/assets/logos/full_both_logo.svg"
 import { useLocalStorage } from "usehooks-ts"
-import { motion } from "framer-motion"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -74,7 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 const Draw = () => {
   const { theme } = useLoaderData<typeof loader>()
-  const [time, saveTime] = useLocalStorage("time", 300)
+  const [time, saveTime] = useLocalStorage("time", 302)
   const [remainingSeconds, setRemainingSeconds] = useState<number>(time)
   const navigate = useNavigate()
   const fetcher = useFetcher()
@@ -119,22 +120,26 @@ const Draw = () => {
     }
   }, [])
 
+  useGSAP(() => {
+    gsap.fromTo(
+      ".transitionBlock",
+      {
+        transformOrigin: "top",
+        scaleY: 1,
+      },
+      {
+        transformOrigin: "top",
+        scaleY: 0,
+        duration: 2,
+        delay: 0.5,
+        ease: "power3.inOut",
+      },
+    )
+  }, [])
+
   return (
     <>
-      <motion.div
-        className="slide-in"
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 0 }}
-        exit={{ scaleY: 1 }}
-        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.div
-        className="slide-out"
-        initial={{ scaleY: 1 }}
-        animate={{ scaleY: 0 }}
-        exit={{ scaleY: 0 }}
-        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-      />
+      <div className="transitionBlock" />
 
       <div className="-mt-64">
         <div className="mb-12 flex items-center justify-center">

@@ -20,7 +20,6 @@ import { GeneralErrorBoundary } from "./components/error/ErrorBoundry"
 import { sessionStorage } from "./utils/session.server"
 import { prisma } from "./utils/db.server"
 import { ReactLenis, useLenis } from "@studio-freight/react-lenis"
-import { AnimatePresence } from "framer-motion"
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -129,9 +128,7 @@ export default function AppWithProvider() {
     <AuthenticityTokenProvider token={data.csrfToken}>
       <HoneypotProvider {...data.honeyProps}>
         <ReactLenis root>
-          <AnimatePresence>
-            <App />
-          </AnimatePresence>
+          <App />
         </ReactLenis>
       </HoneypotProvider>
     </AuthenticityTokenProvider>
