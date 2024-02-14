@@ -20,6 +20,7 @@ import { requireArtist } from "~/utils/auth.server"
 import { prisma } from "~/utils/db.server"
 import FullLogo from "~/assets/logos/full_both_logo.svg"
 import { useLocalStorage } from "usehooks-ts"
+import { motion } from "framer-motion"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -119,41 +120,58 @@ const Draw = () => {
   }, [])
 
   return (
-    <div className="-mt-64">
-      <div className="mb-12 flex items-center justify-center">
-        <img src={FullLogo} alt="" className="w-72" />
-      </div>
+    <>
+      <motion.div
+        className="slide-in"
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 1 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <motion.div
+        className="slide-out"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 0 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+      />
 
-      <BoxLabel className="mx-auto mb-8 max-w-max" degree={2}>
-        <p
-          className="text-border text-border-lg px-4 text-center text-36"
-          data-text={theme}
-        >
-          {theme}
-        </p>
-      </BoxLabel>
+      <div className="-mt-64">
+        <div className="mb-12 flex items-center justify-center">
+          <img src={FullLogo} alt="" className="w-72" />
+        </div>
 
-      <Artboard canvasRef={canvasRef} />
-
-      <div className="mt-8 flex flex-col items-center justify-center">
-        <BoxLabel className="w-[25.7rem]" degree={-1.3}>
+        <BoxLabel className="mx-auto mb-8 max-w-max" degree={2}>
           <p
-            className="text-border text-border-lg px-12 text-65"
-            data-text={remainingTime}
+            className="text-border text-border-lg px-4 text-center text-36"
+            data-text={theme}
           >
-            {remainingTime}
+            {theme}
           </p>
         </BoxLabel>
-        <p
-          className="text-border text-border-lg mt-2 text-25 text-blue"
-          data-text="Timer"
-        >
-          Timer
-        </p>
-      </div>
 
-      <Outlet />
-    </div>
+        <Artboard canvasRef={canvasRef} />
+
+        <div className="mt-8 flex flex-col items-center justify-center">
+          <BoxLabel className="w-[25.7rem]" degree={-1.3}>
+            <p
+              className="text-border text-border-lg px-12 text-65"
+              data-text={remainingTime}
+            >
+              {remainingTime}
+            </p>
+          </BoxLabel>
+          <p
+            className="text-border text-border-lg mt-2 text-25 text-blue"
+            data-text="Timer"
+          >
+            Timer
+          </p>
+        </div>
+
+        <Outlet />
+      </div>
+    </>
   )
 }
 export default Draw

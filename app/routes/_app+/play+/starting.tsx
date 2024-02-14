@@ -8,7 +8,8 @@ import { useLoaderData, useNavigate } from "@remix-run/react"
 import { themeStorage } from "~/utils/theme.server"
 import { useEffect, useState } from "react"
 import { randomInt } from "~/utils/misc"
-import CounddownSFX from "~/assets/audio/countdown.wav"
+import CountdownSFX from "~/assets/audio/countdown.wav"
+import { motion } from "framer-motion"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const themeSession = await themeStorage.getSession(
@@ -63,7 +64,7 @@ const Starting = () => {
   const navigate = useNavigate()
 
   function play() {
-    new Audio(CounddownSFX).play()
+    new Audio(CountdownSFX).play()
   }
 
   useEffect(() => {
@@ -81,6 +82,20 @@ const Starting = () => {
 
   return (
     <>
+      <motion.div
+        className="slide-in"
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 1 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <motion.div
+        className="slide-out"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        exit={{ scaleY: 0 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+      />
       <div className="flex">
         <div>
           <img src={FullLogo} alt="" className="h-[51rem] w-[70rem]" />

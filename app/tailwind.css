@@ -248,6 +248,16 @@
   .h-calc {
     height: calc(100svh - 20rem);
   }
+
+  .slide-in {
+    z-index: 999;
+    @apply fixed left-0 top-0 h-svh w-full origin-bottom bg-blue;
+  }
+
+  .slide-out {
+    z-index: 999;
+    @apply fixed left-0 top-0 h-svh w-full origin-top bg-blue;
+  }
 }
 
 @font-face {

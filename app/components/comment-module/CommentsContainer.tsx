@@ -63,11 +63,10 @@ const CommentContainer = ({
               placeholder="Your comment..."
               {...conform.input(fields.content)}
             />
+
             <button
               disabled={isPending}
               type="submit"
-              name="intent"
-              value="post-comment"
               className="box-shadow flex h-28 w-28 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"
             >
               <div

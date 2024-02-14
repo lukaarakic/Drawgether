@@ -64,7 +64,22 @@ export async function like({
 }
 
 export const CommentSchema = z.object({
-  content: z.string().min(3).max(150),
+  content: z
+    .string()
+    .min(3, { message: "Comment must contain at least 3 characters" })
+    .max(150, { message: "Comment must contain at most 150 characters" })
+    .superRefine((val, ctx) => {
+      const trimmed = val.trim()
+
+      if (trimmed.length < 3) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Comment must contain at least 3 characters",
+        })
+
+        return z.NEVER
+      }
+    }),
 })
 
 export async function comment({

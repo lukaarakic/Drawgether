@@ -14,7 +14,10 @@ const CommentList = ({
   }[]
 }) => {
   return (
-    <div className="mx-auto h-[41.5rem] w-[90%] overflow-y-scroll">
+    <div
+      className="mx-auto h-[41.5rem] w-[90%] overflow-y-scroll"
+      data-lenis-prevent
+    >
       {comments.length > 0 ? (
         comments.map((comment) => (
           <Comment
