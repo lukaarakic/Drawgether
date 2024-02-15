@@ -45,10 +45,12 @@ const CommentRoute = () => {
   const lenis = useLenis()
 
   useEffect(() => {
-    lenis.stop()
+    if (lenis) lenis.stop()
 
-    return () => lenis.start()
-  }, [])
+    return () => {
+      if (lenis) lenis.start()
+    }
+  }, [lenis])
 
   return (
     <Modal>

@@ -1,6 +1,5 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node"
-import { Outlet, useParams } from "@remix-run/react"
-import { useEffect } from "react"
+import { Outlet } from "@remix-run/react"
 
 import Navbar from "~/components/Navbar"
 import { useArtist } from "~/utils/artist"
@@ -14,11 +13,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 const AppIndex = () => {
   const artist = useArtist()
-  const params = useParams()
-
-  useEffect(() => {
-    document.body.classList.remove("stop-scroll")
-  }, [params])
 
   return (
     <>

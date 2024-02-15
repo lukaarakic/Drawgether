@@ -87,7 +87,6 @@ export const CommentSchema = z.object({
     }
 
     const profanityFilter = profanity.censor(trimmed, 3)
-    console.log(profanityFilter)
 
     return profanityFilter
   }),

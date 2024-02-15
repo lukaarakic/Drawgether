@@ -2,7 +2,7 @@ import { createPortal } from "react-dom"
 import { Link } from "react-router-dom"
 import generateRandomRotation from "~/utils/generate-random-rotation"
 import CloseSVG from "~/assets/misc/close.svg"
-import { FC, ReactNode, useEffect } from "react"
+import { FC, ReactNode, useEffect, useState } from "react"
 
 interface ModalProps {
   children: ReactNode
@@ -17,13 +17,15 @@ const Modal: FC<ModalProps> = ({
   boxClassName,
   closeTo,
 }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden"
+  const [loaded, setLoaded] = useState(false)
 
-    return () => {
-      document.body.style.overflow = "auto"
-    }
+  useEffect(() => {
+    setLoaded(true)
+
+    return () => setLoaded(false)
   }, [])
+
+  if (!loaded) return
 
   return createPortal(
     <div>

@@ -3,7 +3,6 @@ import { useLoaderData } from "@remix-run/react"
 import { prisma } from "~/utils/db.server"
 import { invariantResponse } from "~/utils/misc"
 import CommentContainer from "~/components/comment-module/CommentsContainer"
-import { useEffect } from "react"
 import Modal from "~/components/ui/Modal"
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -41,14 +40,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 const CommentRoute = () => {
   const { artwork, artworkId } = useLoaderData<typeof loader>()
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden"
-
-    return () => {
-      document.body.style.overflow = "auto"
-    }
-  }, [])
 
   return (
     <Modal>
