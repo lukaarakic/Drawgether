@@ -3,6 +3,7 @@ import { checkCSRF } from "./csrf.server"
 import { prisma } from "./db.server"
 import { json } from "@remix-run/node"
 import { z } from "zod"
+import { profanity } from "@2toad/profanity"
 
 export async function like({
   artworkId,
@@ -64,22 +65,32 @@ export async function like({
 }
 
 export const CommentSchema = z.object({
-  content: z
-    .string()
-    .min(3, { message: "Comment must contain at least 3 characters" })
-    .max(150, { message: "Comment must contain at most 150 characters" })
-    .superRefine((val, ctx) => {
-      const trimmed = val.trim()
+  content: z.string().transform((val, ctx) => {
+    const trimmed = val.trim()
 
-      if (trimmed.length < 3) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Comment must contain at least 3 characters",
-        })
+    if (trimmed.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Comment must contain at least 2 characters",
+      })
 
-        return z.NEVER
-      }
-    }),
+      return z.NEVER
+    }
+
+    if (trimmed.length > 150) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Comment must contain at most 150 characters",
+      })
+
+      return z.NEVER
+    }
+
+    const profanityFilter = profanity.censor(trimmed, 3)
+    console.log(profanityFilter)
+
+    return profanityFilter
+  }),
 })
 
 export async function comment({
