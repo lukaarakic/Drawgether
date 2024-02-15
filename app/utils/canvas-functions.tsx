@@ -94,6 +94,8 @@ export const useDraw = ({
     const { x, y } = computeCoords(e)
 
     ctx.beginPath()
+    ctx.strokeStyle = type === "eraser" ? "#fff" : hsvaToHex(hsva)
+    ctx.lineWidth = brushWidth
     ctx.arc(x, y, brushWidth / 50, 0, 2 * Math.PI)
     ctx.fill()
     ctx.moveTo(x, y)
@@ -107,10 +109,7 @@ export const useDraw = ({
       eyedropper(e)
     } else {
       const { x, y } = computeCoords(e)
-
       ctx.lineTo(x, y)
-      ctx.strokeStyle = type === "eraser" ? "#fff" : hsvaToHex(hsva)
-      ctx.lineWidth = brushWidth
       ctx.lineCap = "round"
       ctx.lineJoin = "round"
       ctx.stroke()
