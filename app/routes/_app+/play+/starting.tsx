@@ -131,8 +131,9 @@ const Starting = () => {
       </div>
       <div className="mt-44 flex flex-col items-center justify-center">
         <button
+          disabled={remainingSeconds <= 0 ? true : false}
           onClick={() => {
-            setRemainingSeconds((prev) => prev - 1)
+            setRemainingSeconds((prev) => (prev > 0 ? prev - 1 : 0))
             play()
           }}
           className="box-shadow flex h-44 w-44 items-center justify-center rounded-full bg-pink uppercase transition-transform hover:scale-105 active:scale-90"

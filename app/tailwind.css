@@ -178,17 +178,19 @@
   .slider {
     -webkit-appearance: none;
     appearance: none;
-    @apply h-6 w-44 rounded-full bg-black bg-opacity-10 opacity-80 outline-none transition-colors duration-300;
-  }
-
-  .slider:hover {
-    opacity: 1;
+    @apply box-shadow h-6 w-60 bg-white opacity-100 outline-none;
   }
 
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    @apply drop-shadow-filter h-8 w-8 cursor-pointer rounded-full bg-pink;
+    @apply border-only h-8 w-8 cursor-pointer rounded-full border-4 bg-white;
+  }
+
+  .slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply border-only h-8 w-8 cursor-pointer rounded-full border-4 bg-white;
   }
 
   .floatAnimation {

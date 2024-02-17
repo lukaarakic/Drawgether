@@ -2,7 +2,7 @@ import ArtistCircle from "../ui/ArtistCircle"
 import UndoSVG from "~/assets/misc/undo.svg"
 import { useArtist } from "~/utils/artist"
 
-const LeftPanel = ({ undo }: { undo?: () => void }) => {
+const LeftPanel = ({ undo }: { undo: () => void }) => {
   const artist = useArtist()
 
   return (
