@@ -4,7 +4,7 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
-![Supabase](https://img.shields.io/badge/supabase-black?logo=supabase&style=for-the-badge)](https://supabase.io/)
+[![Supabase](https://img.shields.io/badge/supabase-black?logo=supabase&style=for-the-badge)](https://supabase.io/)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
 Drawgether is a social media web application that focuses on sharing artwork created through a drawing game. In this game, the artist will have 5 minutes to draw a theme provided by ChatGPT.
@@ -47,7 +47,7 @@ Drawgether is a social media web application that focuses on sharing artwork cre
 
 ## Installation
 
-To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) installed on your machine. Follow these steps:
+To run Drawgether locally, you need to have [Node.js](https://nodejs.org) installed on your machine. Follow these steps:
 
 1. **Clone the repository:**
 
