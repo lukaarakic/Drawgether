@@ -19,7 +19,7 @@ Drawgether is a social media web application that focuses on sharing artwork cre
 
 ## Features
 
-- **MDrawing Game:** Engage in a 5-minute drawing game inspired by themes suggested by ChatGPT.
+- **Drawing Game:** Engage in a 5-minute drawing game inspired by themes suggested by ChatGPT.
 
 - **Artwork Sharing:** Share your drawings on the platform's social feed, creating a vibrant community of artists.
 
