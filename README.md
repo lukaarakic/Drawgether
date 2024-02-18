@@ -47,7 +47,7 @@ Drawgether is a social media web application that focuses on sharing artwork cre
 
 ## Installation
 
-To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) installed on your machine. Follow these steps:
+To run Drawgether locally, you need to have [Node.js](https://nodejs.org) installed on your machine. Follow these steps:
 
 1. **Clone the repository:**
 
