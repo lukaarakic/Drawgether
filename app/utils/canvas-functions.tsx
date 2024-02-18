@@ -39,7 +39,10 @@ export const useDraw = ({
   }
 
   const computeCoords = (e: MouseEvent<HTMLCanvasElement>) => {
-    return { x: e.clientX - (offsetLeft || 0), y: e.clientY - (offsetTop || 0) }
+    return {
+      x: e.clientX - (offsetLeft || 0) - 5,
+      y: e.clientY - (offsetTop || 0) - 5,
+    }
   }
 
   function eyedropper(e: MouseEvent<HTMLCanvasElement>) {
