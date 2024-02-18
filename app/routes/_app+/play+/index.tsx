@@ -34,7 +34,7 @@ const Index = () => {
         </Link>
         <Link
           to={"/tutorial"}
-          className="text-border text-border-lg box-shadow -rotate-3 bg-blue p-4 px-8 text-45 text-white"
+          className="text-border text-border-lg box-shadow -rotate-3 bg-blue p-4 px-8 text-45 text-white transition-transform hover:scale-105 active:scale-90"
           data-text="Tutorial"
         >
           Tutorial

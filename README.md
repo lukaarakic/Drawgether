@@ -4,10 +4,10 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
-[![Supabase](https://img.shields.io/badge/supabase-black?logo=supabase&style=for-the-badge)](https://supabase.io/)
+![Supabase](https://img.shields.io/badge/supabase-black?logo=supabase&style=for-the-badge)](https://supabase.io/)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
-Drawgether is a social media web application that focuses on sharing artwork created through a multiplayer drawing game. In this game, players have 5 minutes to draw a theme provided by ChatGPT. The platform allows 2-5 players to engage in collaborative drawing sessions.
+Drawgether is a social media web application that focuses on sharing artwork created through a drawing game. In this game, the artist will have 5 minutes to draw a theme provided by ChatGPT.
 
 <a href="https://drawgether.netrunners.work/" target="_blank" rel="noopener noreferrer">
   <img src="https://img.shields.io/badge/Live%20Demo-Click%20Here-success?style=for-the-badge" alt="Live Demo" />
@@ -19,7 +19,7 @@ Drawgether is a social media web application that focuses on sharing artwork cre
 
 ## Features
 
-- **Multiplayer Drawing Game:** Engage in a 5-minute drawing game with 2-5 players, inspired by themes suggested by ChatGPT.
+- **MDrawing Game:** Engage in a 5-minute drawing game inspired by themes suggested by ChatGPT.
 
 - **Artwork Sharing:** Share your drawings on the platform's social feed, creating a vibrant community of artists.
 
@@ -67,7 +67,7 @@ To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) in
    npm install
    ```
 
-4. **Populate .env template**
+4. **Create and populate .env template**
 
    ```ts
     # Secrets
@@ -117,9 +117,9 @@ To run the Drawgether locally, you need to have [Node.js](https://nodejs.org) in
    Utilize the platform's intuitive interface to navigate, explore, and engage with various features.
 
 4. **Engaging in Drawing Games:**
-   - Go to play page and join or create a drawing game session.
-   - Collaborate with 2-5 players to create artwork based on ChatGPT's suggested themes.
-   - After 5 minutes session ends and art that you draw will be published
+   - Go to play page and and click play button.
+   - Create an artwork based on ChatGPT's suggested themes.
+   - After the 5-minute session ends, the artwork you created will be published.
 
 ## Contact
 
