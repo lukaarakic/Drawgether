@@ -65,16 +65,9 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   )) as NSFW
 
-  if (output.nsfw_detected) {
-    return json(
-      {},
-      {
-        headers: {
-          "set-cookie": await themeStorage.destroySession(themeSession),
-        },
-      },
-    )
-  }
+  console.log(
+    output.nsfw_detected ? "NSFW detected 👮🚨" : "Artwork is SFW 🤵👍",
+  )
 
   await prisma.artwork.create({
     data: {
