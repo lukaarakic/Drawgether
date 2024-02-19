@@ -85,3 +85,9 @@ type Point = {
 type HsvaColor = { h: number; s: number; v: number; a: number }
 
 type toolType = "pencil" | "eyedropper" | "eraser"
+
+type NSFW = {
+  nsfw: string[]
+  nsfw_detected: true
+  special: []
+}

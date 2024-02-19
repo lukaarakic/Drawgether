@@ -60,7 +60,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 const Starting = () => {
   const { response } = useLoaderData<typeof loader>()
   const formatResponse = response.choices[0].message.content?.split("\n")
-  const [remainingSeconds, setRemainingSeconds] = useState(12)
+  const [remainingSeconds, setRemainingSeconds] = useState(10)
   const navigate = useNavigate()
 
   function play() {

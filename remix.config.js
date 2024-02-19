@@ -1,4 +1,4 @@
-import { flatRoutes } from "remix-flat-routes";
+import { flatRoutes } from "remix-flat-routes"
 
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
@@ -8,6 +8,15 @@ export default {
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
   routes: async (defineRoutes) => {
-    return flatRoutes("routes", defineRoutes);
+    return flatRoutes("routes", defineRoutes)
   },
-};
+  browserNodeBuiltinsPolyfill: {
+    modules: {
+      buffer: true,
+      events: true,
+      string_decoder: true,
+      stream: true,
+      crypto: true,
+    },
+  },
+}
