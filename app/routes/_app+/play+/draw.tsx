@@ -22,7 +22,6 @@ import FullLogo from "~/assets/logos/full_both_logo.svg"
 import { useLocalStorage } from "usehooks-ts"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
-import Replicate from "replicate"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -50,23 +49,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const themeSession = await themeStorage.getSession(
     request.headers.get("cookie"),
-  )
-
-  const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN,
-  })
-
-  const output = (await replicate.run(
-    "m1guelpf/nsfw-filter:88c3624a13d60bb5ecd0cb215e49e39d2a2135c211bcb94fc801d3def46803c4",
-    {
-      input: {
-        image: artwork,
-      },
-    },
-  )) as NSFW
-
-  console.log(
-    output.nsfw_detected ? "NSFW detected 👮🚨" : "Artwork is SFW 🤵👍",
   )
 
   await prisma.artwork.create({
