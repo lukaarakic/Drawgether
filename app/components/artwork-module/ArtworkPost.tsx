@@ -29,12 +29,12 @@ const ArtworkPost = ({
   return (
     <article className={className}>
       <BoxLabel degree={generateRandomRotation((index % 12) + 1)}>
-        <p
+        <h2
           data-text={artwork.theme}
           className="text-border text-border-lg whitespace-break-spaces p-2 text-25 md:text-32"
         >
           {artwork.theme}
-        </p>
+        </h2>
       </BoxLabel>
 
       <div

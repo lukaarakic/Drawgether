@@ -119,6 +119,7 @@ export default function Index() {
   return (
     <div className="flex flex-col">
       <Form
+        aria-label="login"
         method="POST"
         className="mb-8 flex flex-col items-center gap-4"
         {...form.props}

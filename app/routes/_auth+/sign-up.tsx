@@ -140,6 +140,7 @@ const SignUpPage = () => {
   return (
     <div>
       <Form
+        aria-label="sign-up"
         method="POST"
         className="mb-12 flex flex-col items-center gap-4 text-20"
         {...form.props}
